@@ -65,3 +65,8 @@ I can't be ask to write about this stuff but if you want to dive in deeper you c
 - Rebasing
 - Stashing
 ## Git Settings
+There are also a few settings that you would want to configure to make your Git experience better. All of these are made in the Terminal and can be done using the following commands:
+```bash
+git config --global user.name "<NAME>"
+git config --global user.email "<EMAIL>"
+```
