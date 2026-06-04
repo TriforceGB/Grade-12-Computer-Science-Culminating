@@ -1,6 +1,8 @@
 # Compiled class file
 *.class
 
+# DB file
+*.db
 # Keys
 *.p12
 # Log file
