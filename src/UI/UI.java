@@ -8,6 +8,8 @@ import java.util.EventListener;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import DB.DB;
+
 /**
  * The main UI class that extends JFrame and manages the application's window
  * and panels.
@@ -20,22 +22,27 @@ public class UI extends JFrame implements EventListener {
 	private static final String TITLE = "FTS"; // Title of the window
 	private static final Color BACKGROUND_COLOR = Color.GRAY; // Background color of the window
 	// Variables
+	private DB db; // reference to the database
+
+	// Panels
 	private CardLayout card; // Layout manager for switching between panels
 	private Container panelContainer; // Container that holds the panels
-	// Panels
 	// Each of these Load a Different Page in the UI
-	private LoginPanel loginPanel;
+	private loginPanel loginPanel;
 	private homePanel homePanel;
 	private listPanel listPanel;
 	private searchPanel searchPanel;
-	private settingPanel settingPanel;
+	private settingsPanel settingPanel;
 	private mediaPanel mediaPanel;
 	private adminPanel adminPanel;
 
 	/**
 	 * This Create the UI and Display it for the User
 	 */
-	public UI() {
+	public UI(DB db) {
+		// Taking in the Reference(s)
+		this.db = db;
+
 		// Settings
 		this.setTitle(TITLE); // Set the title of the window
 		this.setSize(WIDTH, HEIGHT); // Set the size of the window
@@ -44,13 +51,13 @@ public class UI extends JFrame implements EventListener {
 		this.setResizable(false); // Disable window resizing
 
 		// Initializing Panels
-		this.loginPanel = new loginPanel(this);
-		this.homePanel = new homePanel(this);
-		this.listPanel = new listPanel(this);
-		this.searchPanel = new searchPanel(this);
-		this.settingPanel = new settingPanel(this);
-		this.mediaPanel = new mediaPanel(this);
-		this.adminPanel = new adminPanel(this);
+		this.loginPanel = new loginPanel(this, this.db);
+		this.homePanel = new homePanel(this, this.db);
+		this.listPanel = new listPanel(this, this.db);
+		this.searchPanel = new searchPanel(this, this.db);
+		this.settingPanel = new settingsPanel(this, this.db);
+		this.mediaPanel = new mediaPanel(this, this.db);
+		this.adminPanel = new adminPanel(this, this.db);
 
 		// Setting Up Card layout
 		this.panelContainer = getContentPane();
