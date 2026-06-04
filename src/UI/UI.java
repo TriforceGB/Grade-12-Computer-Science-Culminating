@@ -7,6 +7,7 @@ import java.util.EventListener;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.xml.crypto.dsig.keyinfo.RetrievalMethod;
 
 import DB.DB;
 
@@ -86,7 +87,8 @@ public class UI extends JFrame implements EventListener {
 	 *
 	 */
 	public JPanel createHeader() {
-
+		// TODO
+		return null;
 	}
 
 	// Controls
