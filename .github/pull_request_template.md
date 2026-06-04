@@ -9,8 +9,8 @@
 
 ## 📋 Checklist
 - [] My code follows the code style/naming conventions of this project.
-- [] My code is Synatx error free
+- [] My code is Syntax error free
 - [] My code has documented all classes in this PR
 - [] My code has documented all methods in this PR
 - [] My code has documented all variables in this PR
-- [] My code has little to none useless or repetiive coding
+- [] My code has little to none useless or repetitive coding
