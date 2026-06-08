@@ -8,7 +8,6 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import java.awt.Font;
 import java.awt.Insets;
 import java.awt.GridLayout;
 import DB.DB;
