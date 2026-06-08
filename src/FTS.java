@@ -10,7 +10,8 @@ public class FTS {
 	private static DB db;
 
 	public static void main(String[] args) {
+		System.out.println("START");
 		db = new DB(DB_PATH);
-		ui = new UI(db);
+		// ui = new UI(db);
 	}
 }
