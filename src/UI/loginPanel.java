@@ -8,9 +8,9 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import java.awt.Font;
 import java.awt.Insets;
 import java.awt.GridLayout;
+
 import DB.DB;
 
 /**
@@ -29,7 +29,7 @@ public class loginPanel extends JPanel {
 	public loginPanel(UI ui, DB db) {
 		this.ui = ui;
 		this.db = db;
-		
+
 		// Set the layout for the panel
 		this.setLayout(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -51,7 +51,7 @@ public class loginPanel extends JPanel {
 
 		// add to panel
 		this.add(titleLabel, gbc); // Add to panel
-		
+
 		// create username row
 
 		// label for username
@@ -63,7 +63,7 @@ public class loginPanel extends JPanel {
 		gbc.insets = style.LABEL_PADS; // Add padding around the label
 
 		// Add to panel
-		this.add(usernameLabel, gbc); 
+		this.add(usernameLabel, gbc);
 
 		// text field for username
 		JTextField usernameField = new JTextField(20);
@@ -77,9 +77,10 @@ public class loginPanel extends JPanel {
 		this.add(usernameField, gbc);
 
 		// TODO: add extra icon to display whether username available or not
+		// NOTE ZACH Will Handle This
 
 		// create password row
-	
+
 		// label for password
 		JLabel pwdLabel = new JLabel("Password:");
 		pwdLabel.setFont(style.BASE_FONT); // Set the font of the password label
@@ -95,7 +96,8 @@ public class loginPanel extends JPanel {
 		JPasswordField passwordField = new JPasswordField(20);
 		passwordField.setFont(style.BASE_FONT); // Set the font of the password text field
 		char pwdEchoChar = (char) 0; // Character to show when password is hidden (0 means no character)
-		char pwdVisibleEchoChar = passwordField.getEchoChar(); // Character to show when password is visible (0 means no character)
+		char pwdVisibleEchoChar = passwordField.getEchoChar(); // Character to show when password is visible (0 means no
+																// character)
 		gbc.gridx = 1; // Column 1
 		gbc.gridy = 2; // Row 2
 		gbc.gridwidth = 1; // Span across 1 column
@@ -114,9 +116,11 @@ public class loginPanel extends JPanel {
 
 		// checkbox functionality to show/hide password
 		showPwdCheckBox.addActionListener(e -> {
-			// whether or not the checkbox is selected (toggled state), show or hide the password
+			// whether or not the checkbox is selected (toggled state), show or hide the
+			// password
 			if (showPwdCheckBox.isSelected()) {
-				// we show password by setting the echo char to the visible character (which is the default echo char of the password field)
+				// we show password by setting the echo char to the visible character (which is
+				// the default echo char of the password field)
 				passwordField.setEchoChar(pwdEchoChar); // Show the password
 			} else {
 				// otherwise back to original char
@@ -130,27 +134,27 @@ public class loginPanel extends JPanel {
 		// button row
 		JPanel nestedBtnPanel = new JPanel(); // Create a nested panel for the buttons to exist where they look nice
 		nestedBtnPanel.setLayout(new GridLayout(1, 2, 25, 0));
-		
+
 		// create new user buttom
 		JButton createUserButton = new JButton("Create New User");
 		createUserButton.setFont(style.BASE_FONT);
 
-		createUserButton.addActionListener(e -> { 
+		createUserButton.addActionListener(e -> {
 			ui.switchPanel("newUser"); // Switch to the create user panel when the button is clicked
 		});
 
 		// Add to nested panel
 		nestedBtnPanel.add(createUserButton);
-		
+
 		// create login button
 		JButton loginButton = new JButton("Login");
 		loginButton.setFont(style.BASE_FONT);
 
-		loginButton.addActionListener(e -> { 
+		// TODO Get Working Login
+		// NOTE ZACH ON THIS
+		loginButton.addActionListener(e -> {
 			String username = usernameField.getText(); // Get the username from the text field
 			String password = new String(passwordField.getPassword()); // Get the password from the password field
-
-			
 		});
 
 		// Add to nested panel
@@ -158,7 +162,7 @@ public class loginPanel extends JPanel {
 
 		// add to main panel
 		gbc.gridx = 1; // Column 1
-		gbc.gridy = 3; // Row 3	
+		gbc.gridy = 3; // Row 3
 		gbc.gridwidth = 1; // Span across 1 column
 		gbc.insets = style.BTN_PADS; // Add padding around the buttons
 		this.add(nestedBtnPanel, gbc);
