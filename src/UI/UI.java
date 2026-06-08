@@ -29,6 +29,7 @@ public class UI extends JFrame implements EventListener {
 	private Container panelContainer; // Container that holds the panels
 	// Each of these Load a Different Page in the UI
 	private loginPanel loginPanel;
+	private newUserPanel newUserPanel;
 	private homePanel homePanel;
 	private listPanel listPanel;
 	private searchPanel searchPanel;
@@ -52,6 +53,7 @@ public class UI extends JFrame implements EventListener {
 
 		// Initializing Panels
 		this.loginPanel = new loginPanel(this, this.db);
+		this.newUserPanel = new newUserPanel(this, this.db);
 		this.homePanel = new homePanel(this, this.db);
 		this.listPanel = new listPanel(this, this.db);
 		this.searchPanel = new searchPanel(this, this.db);
@@ -66,6 +68,7 @@ public class UI extends JFrame implements EventListener {
 
 		// Adding Panels to the Card Layout
 		this.panelContainer.add(this.loginPanel, "login");
+		this.panelContainer.add(this.newUserPanel, "newUser");
 		this.panelContainer.add(this.homePanel, "home");
 		this.panelContainer.add(this.listPanel, "list");
 		this.panelContainer.add(this.searchPanel, "search");
@@ -76,6 +79,15 @@ public class UI extends JFrame implements EventListener {
 		this.card.show(this.panelContainer, "login"); // Show the Login Panel by Default
 
 		this.setVisible(true); // Display the Window
+	}
+
+	/**
+	 * This method allows switching between panels in the UI
+	 *
+	 * @param panelName The name of the panel to switch to (e.g., "login", "home", etc.)
+	 */
+	public void switchPanel(String panelName) {
+		this.card.show(this.panelContainer, panelName);
 	}
 
 	// Create
