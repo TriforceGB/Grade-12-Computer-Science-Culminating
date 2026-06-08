@@ -1,5 +1,6 @@
 import UI.UI;
 import DB.DB;
+import TableClass.*;
 
 public class FTS {
 	// Settings
@@ -11,6 +12,11 @@ public class FTS {
 
 	public static void main(String[] args) {
 		db = new DB(DB_PATH);
-		ui = new UI(db);
+		User user = db.login("admin", "admin");
+
+		if (user != null) {
+			System.out.println("Login Successful: " + user.getUsername());
+		}
+		// ui = new UI(db);
 	}
 }
