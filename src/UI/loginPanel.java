@@ -1,17 +1,21 @@
 package UI;
 
 import javax.swing.JPasswordField;
+
+import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import java.awt.Insets;
 import java.awt.GridLayout;
 
 import DB.DB;
+import TableClass.User;
 
 /**
  * This is the Page that displays the login form.
@@ -150,11 +154,22 @@ public class loginPanel extends JPanel {
 		JButton loginButton = new JButton("Login");
 		loginButton.setFont(style.BASE_FONT);
 
-		// TODO Get Working Login
-		// NOTE ZACH ON THIS
+		// TODO Get Enter to Login Working
 		loginButton.addActionListener(e -> {
 			String username = usernameField.getText(); // Get the username from the text field
 			String password = new String(passwordField.getPassword()); // Get the password from the password field
+			User user = db.login(username, password); // Attempt to log in with the provided credentials
+			if (user == null) { // If User isn't Found
+				usernameField.setBackground(Color.RED);
+				passwordField.setBackground(Color.RED);
+				// Reset password
+				passwordField.setText("");
+				JOptionPane.showMessageDialog(this, "Invalid username or password", "Error", JOptionPane.ERROR_MESSAGE);
+				return;
+			} else { // If User is Found
+				ui.switchPanel("home"); // Sends to Homepage
+				return;
+			}
 		});
 
 		// Add to nested panel

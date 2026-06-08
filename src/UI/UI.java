@@ -28,7 +28,7 @@ public class UI extends JFrame implements EventListener {
 	private Container panelContainer; // Container that holds the panels
 	// Each of these Load a Different Page in the UI
 	private loginPanel loginPanel;
-	private newUserPanel createUserPanel;
+	private createUserPanel createUserPanel;
 	private homePanel homePanel;
 	private listPanel listPanel;
 	private searchPanel searchPanel;
@@ -52,7 +52,7 @@ public class UI extends JFrame implements EventListener {
 
 		// Initializing Panels
 		this.loginPanel = new loginPanel(this, this.db);
-		this.createUserPanel = new newUserPanel(this, this.db);
+		this.createUserPanel = new createUserPanel(this, this.db);
 		this.homePanel = new homePanel(this, this.db);
 		this.listPanel = new listPanel(this, this.db);
 		this.searchPanel = new searchPanel(this, this.db);

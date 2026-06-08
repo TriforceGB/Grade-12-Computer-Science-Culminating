@@ -13,7 +13,7 @@ import java.awt.GridLayout;
 
 import DB.DB;
 
-public class newUserPanel extends JPanel {
+class createUserPanel extends JPanel {
 	private UI ui; // Reference to the main UI
 	private DB db; // Reference to the database
 
@@ -23,7 +23,7 @@ public class newUserPanel extends JPanel {
 	 * @param ui The UI to associate with the panel
 	 * @param db The database reference
 	 */
-	public newUserPanel(UI ui, DB db) {
+	public createUserPanel(UI ui, DB db) {
 		this.ui = ui;
 		this.db = db;
 
@@ -71,6 +71,7 @@ public class newUserPanel extends JPanel {
 
 		// create password creation row
 
+		// TODO Hide the First Password
 		// label for password creation
 		JLabel pwdLabel = new JLabel("Password:");
 		pwdLabel.setFont(style.BASE_FONT); // Set the font of the password label
