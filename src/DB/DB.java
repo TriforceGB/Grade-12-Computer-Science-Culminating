@@ -1,10 +1,14 @@
 package DB;
 
+import TableClass.*;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 
 /**
  * This is the public interface for the application to interact with the
@@ -12,7 +16,7 @@ import java.sql.Statement;
  */
 public class DB {
 	// Constant
-	private static String[] DB_TABLE = { "Users", "Media", "UserData" };
+	private static String[] DB_TABLE = { "User", "Media", "UserData" };
 	// Variables
 	private static Connection dbConnect; // Connection to DB
 
@@ -72,6 +76,7 @@ public class DB {
 				switch (j) {
 					case 0: // Users Table
 						executeCommand(Query.CREATE_USERS_TABLE);
+						createUser("admin", "admin", true);
 						break;
 					case 1: // Media Table
 						executeCommand(Query.CREATE_MEDIA_TABLE);
@@ -85,7 +90,7 @@ public class DB {
 	}
 
 	/**
-	 * execute given query, Only work with normal statement not PreparedStatement.
+	 * Execute given query, Only work with normal statement not PreparedStatement.
 	 * Does not Return anything, just runs the Query.
 	 * Used for making table and other commands
 	 *
@@ -97,6 +102,68 @@ public class DB {
 		} catch (SQLException e) {
 			System.err.println("Exception while Running: ");
 			System.err.println(command);
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Finds a User Based on a Given Username and Password.
+	 *
+	 * @param username the User's username (String)
+	 * @param password the User's password (String)
+	 * @return a User Object if the username and password match, null otherwise
+	 */
+	public User login(String username, String password) {
+		try (PreparedStatement stmt = dbConnect.prepareStatement(Query.LOGIN_USER)) {
+			// Add Values into the Query
+			stmt.setString(1, username);
+			stmt.setString(2, password);
+
+			ResultSet rs = stmt.executeQuery(); // Pulls the Query
+			if (rs.next()) { // Check if anythign was returned
+				// Return the Data Formated
+				return new User(
+						rs.getInt("id"),
+						rs.getString("username"),
+						rs.getString("password"),
+						rs.getBoolean("isAdmin"),
+						rs.getString("created"),
+						rs.getString("lastLogin"));
+			} else {
+				// No User Found
+				System.err.println("Unable to Find User");
+				return null;
+			}
+		} catch (SQLException e) {
+			System.err.println("Exception while logging in:");
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	/**
+	 * Create a User into the DB with the Given Username.
+	 * Both the Creation Date and Last Login are already set to Today Date
+	 *
+	 * @param username the User's username (String)
+	 * @param password the User's password (String)
+	 * @param isAdmin  whether the User is an Admin (boolean)
+	 */
+	public void createUser(String username, String password, boolean isAdmin) {
+		// Get Today's Date as Creation
+		String created = LocalDate.now().toString();
+		String lastLogin = created;
+
+		// Try to add the User to the DB
+		try (PreparedStatement stmt = dbConnect.prepareStatement(Query.CREATE_USER)) {
+			stmt.setString(1, username);
+			stmt.setString(2, password);
+			stmt.setBoolean(3, isAdmin);
+			stmt.setString(4, created);
+			stmt.setString(5, lastLogin);
+			stmt.executeUpdate();
+		} catch (SQLException e) {
+			System.err.println("Exception while creating user:");
 			e.printStackTrace();
 		}
 	}

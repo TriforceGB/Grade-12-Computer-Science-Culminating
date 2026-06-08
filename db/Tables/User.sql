@@ -1,6 +1,6 @@
--- DROP TABLE IF EXISTS "Users"; --Delete the Users table If it Exists
+-- DROP TABLE IF EXISTS "User"; --Delete the Users table If it Exists
 
-CREATE TABLE IF NOT EXISTS "Users" (
+CREATE TABLE IF NOT EXISTS "User" (
 	"id" INTEGER NOT NULL UNIQUE PRIMARY KEY,
 	"username" TEXT NOT NULL UNIQUE,
 	"password" TEXT NOT NULL,
