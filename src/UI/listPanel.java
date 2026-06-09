@@ -22,6 +22,12 @@ public class listPanel extends JPanel implements EventListener {
 	public listPanel(UI ui, DB db) {
 		this.ui = ui;
 		this.db = db;
-		// TODO
+		
+		// filter needs:
+		// by type (movie, show, anime) checkboxes
+		// by name text field
+		// by rating 2x (1-10) spinner (one is max, one is min: if max < min -> min = max) (seperated by a dash)
+		// by status (undecided, backlog, watching, completed, dropped) dropdown
+		
 	}
 }

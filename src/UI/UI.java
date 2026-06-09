@@ -74,7 +74,6 @@ public class UI extends JFrame implements EventListener {
 		this.panelContainer.add(this.settingPanel, "setting");
 		this.panelContainer.add(this.mediaPanel, "media");
 		this.panelContainer.add(this.adminPanel, "admin");
-
 		this.card.show(this.panelContainer, "login"); // Show the Login Panel by Default
 
 		this.setVisible(true); // Display the Window
