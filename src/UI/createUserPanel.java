@@ -7,6 +7,7 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import java.awt.Insets;
 import java.awt.GridLayout;
@@ -67,7 +68,6 @@ class createUserPanel extends JPanel {
 		this.add(usernameField, gbc);
 
 		// TODO: add extra icon to display whether username available or not
-		// NOTE: DB TASK ZACH ON IT
 
 		// create password creation row
 
@@ -150,7 +150,7 @@ class createUserPanel extends JPanel {
 		JPanel nestedBtnPanel = new JPanel(); // Create a nested panel for the buttons to exist where they look nice
 		nestedBtnPanel.setLayout(new GridLayout(1, 2, 25, 0));
 
-		// create new user buttom
+		// create new user button
 		JButton cancelButton = new JButton("Cancel");
 		cancelButton.setFont(style.BASE_FONT);
 
@@ -166,7 +166,13 @@ class createUserPanel extends JPanel {
 		createButton.setFont(style.BASE_FONT);
 
 		createButton.addActionListener(e -> {
-			// TODO Create USER
+			// Try to Create New User
+			if (db.createUser(usernameField.getText(), pwdField.getText(), false)) {
+				ui.switchPanel("login");
+			} else {
+				JOptionPane.showMessageDialog(this, "Unable to Create User, Try again", "Error",
+						JOptionPane.ERROR_MESSAGE);
+			}
 		});
 
 		// Add to nested panel

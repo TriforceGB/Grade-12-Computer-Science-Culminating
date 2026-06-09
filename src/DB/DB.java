@@ -149,7 +149,7 @@ public class DB {
 	 * @param password the User's password (String)
 	 * @param isAdmin  whether the User is an Admin (boolean)
 	 */
-	public void createUser(String username, String password, boolean isAdmin) {
+	public boolean createUser(String username, String password, boolean isAdmin) {
 		// Get Today's Date as Creation
 		String created = LocalDate.now().toString();
 		String lastLogin = created;
@@ -161,10 +161,12 @@ public class DB {
 			stmt.setBoolean(3, isAdmin);
 			stmt.setString(4, created);
 			stmt.setString(5, lastLogin);
-			stmt.executeUpdate();
+			int rowsAffected = stmt.executeUpdate();
+			return rowsAffected > 0;
 		} catch (SQLException e) {
 			System.err.println("Exception while creating user:");
 			e.printStackTrace();
+			return false;
 		}
 	}
 }
