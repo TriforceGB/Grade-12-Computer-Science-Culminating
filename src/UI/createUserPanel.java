@@ -1,5 +1,7 @@
 package UI;
 
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 import javax.swing.JPasswordField;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -71,7 +73,6 @@ class createUserPanel extends JPanel {
 
 		// create password creation row
 
-		// TODO Hide the First Password
 		// label for password creation
 		JLabel pwdLabel = new JLabel("Password:");
 		pwdLabel.setFont(style.BASE_FONT); // Set the font of the password label
@@ -84,8 +85,11 @@ class createUserPanel extends JPanel {
 		this.add(pwdLabel, gbc);
 
 		// text field for password
-		JTextField pwdField = new JTextField(20);
+		JPasswordField pwdField = new JPasswordField(20);
 		pwdField.setFont(style.BASE_FONT); // Set the font of the password text field
+		char pwdEchoChar = (char) 0; // Character to show when password is hidden (0 means no character)
+		// Character to show when password is visible (0 means no character)
+		char pwdVisibleEchoChar = pwdField.getEchoChar();
 		gbc.gridx = 1; // Column 1
 		gbc.gridy = 2; // Row 2
 		gbc.gridwidth = 1; // Span across 1 column
@@ -110,9 +114,6 @@ class createUserPanel extends JPanel {
 		// password field for password
 		JPasswordField pwdConfirmField = new JPasswordField(20);
 		pwdConfirmField.setFont(style.BASE_FONT); // Set the font of the password text field
-		char pwdEchoChar = (char) 0; // Character to show when password is hidden (0 means no character)
-		// Character to show when password is visible (0 means no character)
-		char pwdVisibleEchoChar = pwdConfirmField.getEchoChar();
 		gbc.gridx = 1; // Column 1
 		gbc.gridy = 3; // Row 3
 		gbc.gridwidth = 1; // Span across 1 column
@@ -137,9 +138,11 @@ class createUserPanel extends JPanel {
 				// we show password by setting the echo char to the visible character (which is
 				// the default echo char of the password field)
 				pwdConfirmField.setEchoChar(pwdEchoChar); // Show the password
+				pwdField.setEchoChar(pwdEchoChar); // Show the password
 			} else {
 				// otherwise back to original char
 				pwdConfirmField.setEchoChar(pwdVisibleEchoChar); // Hide the password
+				pwdField.setEchoChar(pwdVisibleEchoChar); // Hide the password
 			}
 		});
 
@@ -172,6 +175,13 @@ class createUserPanel extends JPanel {
 			} else {
 				JOptionPane.showMessageDialog(this, "Unable to Create User, Try again", "Error",
 						JOptionPane.ERROR_MESSAGE);
+			}
+		});
+
+		pwdConfirmField.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				createButton.doClick(); // Trigger the create button when the enter key is pressed in the confirm password field
 			}
 		});
 
