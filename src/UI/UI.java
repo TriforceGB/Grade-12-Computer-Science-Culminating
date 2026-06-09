@@ -19,7 +19,6 @@ public class UI extends JFrame implements EventListener {
 	// Constants
 	private static final int WIDTH = 1920; // Width of the window
 	private static final int HEIGHT = 1080; // Height of the window
-	private static final String TITLE = "FTS"; // Title of the window
 	private static final Color BACKGROUND_COLOR = Color.GRAY; // Background color of the window
 	// Variables
 	private DB db; // reference to the database
@@ -29,6 +28,7 @@ public class UI extends JFrame implements EventListener {
 	private Container panelContainer; // Container that holds the panels
 	// Each of these Load a Different Page in the UI
 	private loginPanel loginPanel;
+	private createUserPanel createUserPanel;
 	private homePanel homePanel;
 	private listPanel listPanel;
 	private searchPanel searchPanel;
@@ -44,7 +44,7 @@ public class UI extends JFrame implements EventListener {
 		this.db = db;
 
 		// Settings
-		this.setTitle(TITLE); // Set the title of the window
+		this.setTitle(style.APP_TITLE); // Set the title of the window
 		this.setSize(WIDTH, HEIGHT); // Set the size of the window
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Set the default close operation
 		this.getContentPane().setBackground(BACKGROUND_COLOR); // Set Default Background Color
@@ -52,6 +52,7 @@ public class UI extends JFrame implements EventListener {
 
 		// Initializing Panels
 		this.loginPanel = new loginPanel(this, this.db);
+		this.createUserPanel = new createUserPanel(this, this.db);
 		this.homePanel = new homePanel(this, this.db);
 		this.listPanel = new listPanel(this, this.db);
 		this.searchPanel = new searchPanel(this, this.db);
@@ -66,6 +67,7 @@ public class UI extends JFrame implements EventListener {
 
 		// Adding Panels to the Card Layout
 		this.panelContainer.add(this.loginPanel, "login");
+		this.panelContainer.add(this.createUserPanel, "createUser");
 		this.panelContainer.add(this.homePanel, "home");
 		this.panelContainer.add(this.listPanel, "list");
 		this.panelContainer.add(this.searchPanel, "search");
@@ -78,7 +80,15 @@ public class UI extends JFrame implements EventListener {
 		this.setVisible(true); // Display the Window
 	}
 
-	// Create
+	/**
+	 * This method allows switching between panels in the UI
+	 *
+	 * @param panelName The name of the panel to switch to (e.g., "login", "home",
+	 *                  etc.)
+	 */
+	public void switchPanel(String panelName) {
+		this.card.show(this.panelContainer, panelName);
+	}
 
 	/**
 	 * This method creates the button header for the UI, This isn't call inside the

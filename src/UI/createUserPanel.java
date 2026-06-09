@@ -1,8 +1,6 @@
 package UI;
 
 import javax.swing.JPasswordField;
-
-import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import javax.swing.JTextField;
@@ -15,12 +13,8 @@ import java.awt.Insets;
 import java.awt.GridLayout;
 
 import DB.DB;
-import TableClass.User;
 
-/**
- * This is the Page that displays the login form.
- */
-public class loginPanel extends JPanel {
+class createUserPanel extends JPanel {
 	private UI ui; // Reference to the main UI
 	private DB db; // Reference to the database
 
@@ -30,7 +24,7 @@ public class loginPanel extends JPanel {
 	 * @param ui The UI to associate with the panel
 	 * @param db The database reference
 	 */
-	public loginPanel(UI ui, DB db) {
+	public createUserPanel(UI ui, DB db) {
 		this.ui = ui;
 		this.db = db;
 
@@ -38,15 +32,8 @@ public class loginPanel extends JPanel {
 		this.setLayout(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
 
-		// following a grid layout is 3 items long and 4 rows
-		// label on first centered
-		// then username label and text field
-		// then password label and text field and checkbox for showing password
-		// then two buttons for creating new user and logging in
-		// all items from left to right described
-
 		// create title label
-		JLabel titleLabel = new JLabel(style.APP_TITLE);
+		JLabel titleLabel = new JLabel(style.NEW_USER_TITLE);
 		titleLabel.setFont(style.TITLE_FONT); // Set the font of the title label
 		gbc.gridx = 0; // Column 0
 		gbc.gridy = 0; // Row 0
@@ -81,11 +68,11 @@ public class loginPanel extends JPanel {
 		this.add(usernameField, gbc);
 
 		// TODO: add extra icon to display whether username available or not
-		// NOTE ZACH Will Handle This
 
-		// create password row
+		// create password creation row
 
-		// label for password
+		// TODO Hide the First Password
+		// label for password creation
 		JLabel pwdLabel = new JLabel("Password:");
 		pwdLabel.setFont(style.BASE_FONT); // Set the font of the password label
 		gbc.gridx = 0; // Column 0
@@ -97,24 +84,48 @@ public class loginPanel extends JPanel {
 		this.add(pwdLabel, gbc);
 
 		// text field for password
-		JPasswordField passwordField = new JPasswordField(20);
-		passwordField.setFont(style.BASE_FONT); // Set the font of the password text field
-		char pwdEchoChar = (char) 0; // Character to show when password is hidden (0 means no character)
-		char pwdVisibleEchoChar = passwordField.getEchoChar(); // Character to show when password is visible (0 means no
-																// character)
+		JTextField pwdField = new JTextField(20);
+		pwdField.setFont(style.BASE_FONT); // Set the font of the password text field
 		gbc.gridx = 1; // Column 1
 		gbc.gridy = 2; // Row 2
 		gbc.gridwidth = 1; // Span across 1 column
 		gbc.insets = style.FIELD_PADS; // Add padding around the text field
 
 		// Add to panel
-		this.add(passwordField, gbc);
+		this.add(pwdField, gbc);
+
+		// create password row
+
+		// label for password
+		JLabel pwdConfirmLabel = new JLabel("Confirm Password:");
+		pwdConfirmLabel.setFont(style.BASE_FONT); // Set the font of the password label
+		gbc.gridx = 0; // Column 0
+		gbc.gridy = 3; // Row 3
+		gbc.gridwidth = 1; // Span across 1 column
+		gbc.insets = style.LABEL_PADS; // Add padding around the label
+
+		// Add to panel
+		this.add(pwdConfirmLabel, gbc);
+
+		// password field for password
+		JPasswordField pwdConfirmField = new JPasswordField(20);
+		pwdConfirmField.setFont(style.BASE_FONT); // Set the font of the password text field
+		char pwdEchoChar = (char) 0; // Character to show when password is hidden (0 means no character)
+		// Character to show when password is visible (0 means no character)
+		char pwdVisibleEchoChar = pwdConfirmField.getEchoChar();
+		gbc.gridx = 1; // Column 1
+		gbc.gridy = 3; // Row 3
+		gbc.gridwidth = 1; // Span across 1 column
+		gbc.insets = style.FIELD_PADS; // Add padding around the text field
+
+		// Add to panel
+		this.add(pwdConfirmField, gbc);
 
 		// Add checkbox for showing password
 		JCheckBox showPwdCheckBox = new JCheckBox("Show Password");
 		showPwdCheckBox.setFont(style.BASE_FONT); // Set the font of the checkbox
 		gbc.gridx = 2; // Column 2
-		gbc.gridy = 2; // Row 2
+		gbc.gridy = 3; // Row 3
 		gbc.gridwidth = 1; // Span across 1 column
 		gbc.insets = new java.awt.Insets(0, 0, 5, 50); // Add padding around the checkbox
 
@@ -125,10 +136,10 @@ public class loginPanel extends JPanel {
 			if (showPwdCheckBox.isSelected()) {
 				// we show password by setting the echo char to the visible character (which is
 				// the default echo char of the password field)
-				passwordField.setEchoChar(pwdEchoChar); // Show the password
+				pwdConfirmField.setEchoChar(pwdEchoChar); // Show the password
 			} else {
 				// otherwise back to original char
-				passwordField.setEchoChar(pwdVisibleEchoChar); // Hide the password
+				pwdConfirmField.setEchoChar(pwdVisibleEchoChar); // Hide the password
 			}
 		});
 
@@ -139,45 +150,37 @@ public class loginPanel extends JPanel {
 		JPanel nestedBtnPanel = new JPanel(); // Create a nested panel for the buttons to exist where they look nice
 		nestedBtnPanel.setLayout(new GridLayout(1, 2, 25, 0));
 
-		// create new user buttom
-		JButton createUserButton = new JButton("Create New User");
-		createUserButton.setFont(style.BASE_FONT);
+		// create new user button
+		JButton cancelButton = new JButton("Cancel");
+		cancelButton.setFont(style.BASE_FONT);
 
-		createUserButton.addActionListener(e -> {
-			ui.switchPanel("createUser"); // Switch to the create user panel when the button is clicked
+		cancelButton.addActionListener(e -> {
+			ui.switchPanel("login"); // Switch back to the login panel when the cancel button is clicked
 		});
 
 		// Add to nested panel
-		nestedBtnPanel.add(createUserButton);
+		nestedBtnPanel.add(cancelButton);
 
 		// create login button
-		JButton loginButton = new JButton("Login");
-		loginButton.setFont(style.BASE_FONT);
+		JButton createButton = new JButton("Create User");
+		createButton.setFont(style.BASE_FONT);
 
-		// TODO Get Enter to Login Working
-		loginButton.addActionListener(e -> {
-			String username = usernameField.getText(); // Get the username from the text field
-			String password = new String(passwordField.getPassword()); // Get the password from the password field
-			User user = db.login(username, password); // Attempt to log in with the provided credentials
-			if (user == null) { // If User isn't Found
-				usernameField.setBackground(Color.RED);
-				passwordField.setBackground(Color.RED);
-				// Reset password
-				passwordField.setText("");
-				JOptionPane.showMessageDialog(this, "Invalid username or password", "Error", JOptionPane.ERROR_MESSAGE);
-				return;
-			} else { // If User is Found
-				ui.switchPanel("home"); // Sends to Homepage
-				return;
+		createButton.addActionListener(e -> {
+			// Try to Create New User
+			if (db.createUser(usernameField.getText(), pwdField.getText(), false)) {
+				ui.switchPanel("login");
+			} else {
+				JOptionPane.showMessageDialog(this, "Unable to Create User, Try again", "Error",
+						JOptionPane.ERROR_MESSAGE);
 			}
 		});
 
 		// Add to nested panel
-		nestedBtnPanel.add(loginButton);
+		nestedBtnPanel.add(createButton);
 
 		// add to main panel
 		gbc.gridx = 1; // Column 1
-		gbc.gridy = 3; // Row 3
+		gbc.gridy = 4; // Row 4
 		gbc.gridwidth = 1; // Span across 1 column
 		gbc.insets = style.BTN_PADS; // Add padding around the buttons
 		this.add(nestedBtnPanel, gbc);
