@@ -1,5 +1,6 @@
 package UI;
 
+import java.awt.BorderLayout;
 import java.util.EventListener;
 
 import javax.swing.JPanel;
@@ -23,6 +24,7 @@ public class homePanel extends JPanel implements EventListener {
 	public homePanel(UI ui, DB db) {
 		this.ui = ui;
 		this.db = db;
-		// TODO
+		this.setLayout(new BorderLayout(20, 20));
+		this.add(ui.createHeader(), BorderLayout.NORTH);
 	}
 }

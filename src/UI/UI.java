@@ -3,10 +3,14 @@ package UI;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.GridLayout;
 import java.util.EventListener;
 
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JSplitPane;
 
 import DB.DB;
 
@@ -96,8 +100,30 @@ public class UI extends JFrame implements EventListener {
 	 *
 	 */
 	public JPanel createHeader() {
-		// TODO
-		return null;
+		JPanel header = new JPanel(); // Create the Main Pane
+		// Settings for the Header
+		header.setBorder(BorderFactory.createEmptyBorder(5, 20, 5, 20));
+		header.setLayout(new GridLayout(1, 5, 20, 20));
+
+		// Buttons
+		JButton homeButton = new JButton("Home");
+		JButton listButton = new JButton("List");
+		JButton searchButton = new JButton("Search");
+		JButton settingButton = new JButton("Settings");
+		JButton exitButton = new JButton("Exit");
+
+		homeButton.addActionListener(e -> switchPanel("home"));
+		listButton.addActionListener(e -> switchPanel("list"));
+		searchButton.addActionListener(e -> switchPanel("search"));
+		settingButton.addActionListener(e -> switchPanel("setting"));
+		exitButton.addActionListener(e -> switchPanel("login"));
+
+		header.add(homeButton);
+		header.add(listButton);
+		header.add(searchButton);
+		header.add(settingButton);
+		header.add(exitButton);
+		return header;
 	}
 
 	// Controls
