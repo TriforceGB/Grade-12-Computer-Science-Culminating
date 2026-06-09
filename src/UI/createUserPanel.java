@@ -156,6 +156,10 @@ class createUserPanel extends JPanel {
 
 		cancelButton.addActionListener(e -> {
 			ui.switchPanel("login"); // Switch back to the login panel when the cancel button is clicked
+			// Clear Text Fields
+			usernameField.setText("");
+			pwdField.setText("");
+			pwdConfirmField.setText("");
 		});
 
 		// Add to nested panel
@@ -173,6 +177,12 @@ class createUserPanel extends JPanel {
 				JOptionPane.showMessageDialog(this, "Unable to Create User, Try again", "Error",
 						JOptionPane.ERROR_MESSAGE);
 			}
+
+			// Clear Text Fields
+			usernameField.setText("");
+			pwdField.setText("");
+			pwdConfirmField.setText("");
+
 		});
 
 		// Add to nested panel

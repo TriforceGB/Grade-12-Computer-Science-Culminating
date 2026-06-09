@@ -145,6 +145,9 @@ public class loginPanel extends JPanel {
 
 		createUserButton.addActionListener(e -> {
 			ui.switchPanel("createUser"); // Switch to the create user panel when the button is clicked
+			// Clear Text Fields
+			usernameField.setText("");
+			passwordField.setText("");
 		});
 
 		// Add to nested panel
@@ -165,10 +168,11 @@ public class loginPanel extends JPanel {
 				// Reset password
 				passwordField.setText("");
 				JOptionPane.showMessageDialog(this, "Invalid username or password", "Error", JOptionPane.ERROR_MESSAGE);
-				return;
 			} else { // If User is Found
 				ui.switchPanel("home"); // Sends to Homepage
-				return;
+				// Clear Text Fields
+				usernameField.setText("");
+				passwordField.setText("");
 			}
 		});
 
