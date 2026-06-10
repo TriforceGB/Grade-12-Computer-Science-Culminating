@@ -5,7 +5,7 @@ import UI.UI;
 /**
  * The List Page Class. Used to display a list of media for the user.
  */
-class ListPage extends Page {
+public class ListPage extends Page {
 	/**
 	 * Create the List Page
 	 *

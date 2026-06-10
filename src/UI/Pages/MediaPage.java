@@ -5,7 +5,7 @@ import UI.UI;
 /**
  * The Media Page Class. Used to display the media for the user.
  */
-class MediaPage extends Page {
+public class MediaPage extends Page {
 	/**
 	 * Create the Media Page
 	 *

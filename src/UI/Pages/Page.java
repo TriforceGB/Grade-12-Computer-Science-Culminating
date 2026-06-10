@@ -17,7 +17,7 @@ import UI.UI;
  * Gives the Basic method and basic setup
  * This isn't used for login as that act differently
  */
-public class Page extends JPanel {
+class Page extends JPanel {
 	// Variables
 	protected UI ui; // Reference to the main UI
 	protected Color PageColor; // Color of the page background

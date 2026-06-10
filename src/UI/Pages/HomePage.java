@@ -6,7 +6,7 @@ import UI.UI;
  * The Home Page Class. Used to Create the Main Page of the UI.
  * This will display some basic information about the user and their media.
  */
-class HomePage extends Page {
+public class HomePage extends Page {
 	/**
 	 * Create the Home Page
 	 *

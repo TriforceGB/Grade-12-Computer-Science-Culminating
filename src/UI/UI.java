@@ -27,8 +27,8 @@ public class UI extends JFrame implements EventListener {
 	private CardLayout card; // Layout manager for switching between panels
 	private Container panelContainer; // Container that holds the panels
 	// Each of these Load a Different Page in the UI
-	private loginPanel loginPanel;
-	private createUserPanel createUserPanel;
+	private LoginPage loginPage;
+	private CreateUserPage createUserPage;
 	private HomePage homePage;
 	private ListPage listPage;
 	private SearchPage searchPage;
@@ -50,9 +50,8 @@ public class UI extends JFrame implements EventListener {
 		this.setResizable(false); // Disable window resizing
 
 		// Initializing Panels
-		// TODO Edit for Sub Class Refactor
-		this.loginPanel = new loginPanel(this, this.db);
-		this.createUserPanel = new createUserPanel(this, this.db);
+		this.loginPage = new LoginPage(this);
+		this.createUserPage = new CreateUserPage(this);
 		this.homePage = new HomePage(this);
 		this.listPage = new ListPage(this);
 		this.searchPage = new SearchPage(this);
@@ -67,8 +66,8 @@ public class UI extends JFrame implements EventListener {
 		this.panelContainer.setLayout(card);
 
 		// Adding Panels to the Card Layout
-		this.panelContainer.add(this.loginPanel, "login");
-		this.panelContainer.add(this.createUserPanel, "createUser");
+		this.panelContainer.add(this.loginPage, "login");
+		this.panelContainer.add(this.createUserPage, "createUser");
 		this.panelContainer.add(this.homePage, "home");
 		this.panelContainer.add(this.listPage, "list");
 		this.panelContainer.add(this.searchPage, "search");
