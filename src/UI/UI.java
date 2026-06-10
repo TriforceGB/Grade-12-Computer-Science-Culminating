@@ -3,16 +3,12 @@ package UI;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Container;
-import java.awt.GridLayout;
 import java.util.EventListener;
 
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JSplitPane;
 
 import DB.DB;
+import TableClass.User;
 
 /**
  * The main UI class that extends JFrame and manages the application's window
@@ -23,9 +19,9 @@ public class UI extends JFrame implements EventListener {
 	// Constants
 	private static final int WIDTH = 1920; // Width of the window
 	private static final int HEIGHT = 1080; // Height of the window
-	private static final Color BACKGROUND_COLOR = Color.GRAY; // Background color of the window
 	// Variables
 	private DB db; // reference to the database
+	private User currentUser; // Info about the Current Login User
 
 	// Panels
 	private CardLayout card; // Layout manager for switching between panels
@@ -48,13 +44,14 @@ public class UI extends JFrame implements EventListener {
 		this.db = db;
 
 		// Settings
-		this.setTitle(style.APP_TITLE); // Set the title of the window
+		this.setTitle(Style.APP_TITLE); // Set the title of the window
 		this.setSize(WIDTH, HEIGHT); // Set the size of the window
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Set the default close operation
-		this.getContentPane().setBackground(BACKGROUND_COLOR); // Set Default Background Color
+		this.getContentPane().setBackground(Style.BACKGROUND_COLOR); // Set Default Background Color
 		this.setResizable(false); // Disable window resizing
 
 		// Initializing Panels
+		// TODO Edit for Sub Class Refactor
 		this.loginPanel = new loginPanel(this, this.db);
 		this.createUserPanel = new createUserPanel(this, this.db);
 		this.homePanel = new homePanel(this, this.db);
@@ -95,43 +92,28 @@ public class UI extends JFrame implements EventListener {
 	}
 
 	/**
-	 * This method creates the button header for the UI, This isn't call inside the
-	 * class but rather inside the panels of the others
+	 * This method logs in the user and sends them into the homepage if the account
+	 * exists
 	 *
+	 * @param username The username of the user
+	 * @param password The password of the user
 	 */
-	public JPanel createHeader() {
-		JPanel header = new JPanel(); // Create the Main Pane
-		// Settings for the Header
-		header.setBorder(BorderFactory.createEmptyBorder(5, 20, 5, 20));
-		header.setLayout(new GridLayout(1, 5, 20, 20));
-
-		// Buttons
-		JButton homeButton = new JButton("Home");
-		JButton listButton = new JButton("List");
-		JButton searchButton = new JButton("Search");
-		JButton settingButton = new JButton("Settings");
-		JButton exitButton = new JButton("Exit");
-
-		homeButton.addActionListener(e -> switchPanel("home"));
-		listButton.addActionListener(e -> switchPanel("list"));
-		searchButton.addActionListener(e -> switchPanel("search"));
-		settingButton.addActionListener(e -> switchPanel("setting"));
-		exitButton.addActionListener(e -> switchPanel("login"));
-
-		header.add(homeButton);
-		header.add(listButton);
-		header.add(searchButton);
-		header.add(settingButton);
-		header.add(exitButton);
-		return header;
+	public boolean login(String username, String password) {
+		this.currentUser = db.login(username, password);
+		if (this.currentUser != null) {
+			this.switchPanel("home");
+			return true;
+		} else {
+			return false;
+		}
 	}
-
-	// Controls
 
 	/**
 	 * This method logs out the user and returns to the login panel
 	 */
 	public void logout() {
-
+		// Remove Current user
+		this.currentUser = null;
+		this.switchPanel("login");
 	}
 }

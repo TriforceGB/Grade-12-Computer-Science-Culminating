@@ -25,6 +25,5 @@ public class homePanel extends JPanel implements EventListener {
 		this.ui = ui;
 		this.db = db;
 		this.setLayout(new BorderLayout(20, 20));
-		this.add(ui.createHeader(), BorderLayout.NORTH);
 	}
 }
