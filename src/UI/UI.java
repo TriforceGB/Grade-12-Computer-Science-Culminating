@@ -1,7 +1,6 @@
 package UI;
 
 import java.awt.CardLayout;
-import java.awt.Color;
 import java.awt.Container;
 import java.util.EventListener;
 
@@ -9,6 +8,7 @@ import javax.swing.JFrame;
 
 import DB.DB;
 import TableClass.User;
+import UI.Pages.*;
 
 /**
  * The main UI class that extends JFrame and manages the application's window
@@ -29,12 +29,11 @@ public class UI extends JFrame implements EventListener {
 	// Each of these Load a Different Page in the UI
 	private loginPanel loginPanel;
 	private createUserPanel createUserPanel;
-	private homePanel homePanel;
-	private listPanel listPanel;
-	private searchPanel searchPanel;
-	private settingsPanel settingPanel;
-	private mediaPanel mediaPanel;
-	private adminPanel adminPanel;
+	private HomePage homePage;
+	private ListPage listPage;
+	private SearchPage searchPage;
+	private SettingsPage settingPage;
+	private MediaPage mediaPage;
 
 	/**
 	 * This Create the UI and Display it for the User
@@ -54,12 +53,13 @@ public class UI extends JFrame implements EventListener {
 		// TODO Edit for Sub Class Refactor
 		this.loginPanel = new loginPanel(this, this.db);
 		this.createUserPanel = new createUserPanel(this, this.db);
-		this.homePanel = new homePanel(this, this.db);
-		this.listPanel = new listPanel(this, this.db);
-		this.searchPanel = new searchPanel(this, this.db);
-		this.settingPanel = new settingsPanel(this, this.db);
-		this.mediaPanel = new mediaPanel(this, this.db);
-		this.adminPanel = new adminPanel(this, this.db);
+		this.homePage = new HomePage(this);
+		this.listPage = new ListPage(this);
+		this.searchPage = new SearchPage(this);
+		this.settingPage = new SettingsPage(this);
+		this.mediaPage = new MediaPage(this);
+		// TODO add later one we got Admin Panel working
+		// this.adminPanel = new adminPanel(this, this.db);
 
 		// Setting Up Card layout
 		this.panelContainer = getContentPane();
@@ -69,12 +69,12 @@ public class UI extends JFrame implements EventListener {
 		// Adding Panels to the Card Layout
 		this.panelContainer.add(this.loginPanel, "login");
 		this.panelContainer.add(this.createUserPanel, "createUser");
-		this.panelContainer.add(this.homePanel, "home");
-		this.panelContainer.add(this.listPanel, "list");
-		this.panelContainer.add(this.searchPanel, "search");
-		this.panelContainer.add(this.settingPanel, "setting");
-		this.panelContainer.add(this.mediaPanel, "media");
-		this.panelContainer.add(this.adminPanel, "admin");
+		this.panelContainer.add(this.homePage, "home");
+		this.panelContainer.add(this.listPage, "list");
+		this.panelContainer.add(this.searchPage, "search");
+		this.panelContainer.add(this.settingPage, "setting");
+		this.panelContainer.add(this.mediaPage, "media");
+		// this.panelContainer.add(this.adminPanel, "admin");
 
 		this.card.show(this.panelContainer, "login"); // Show the Login Panel by Default
 

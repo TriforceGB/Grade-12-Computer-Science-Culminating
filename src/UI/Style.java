@@ -7,7 +7,7 @@ import java.awt.Insets;
 /**
  * Style constants for the application UI.
  */
-class Style {
+public class Style {
 	public static final String APP_TITLE = "Filal's Tracking Service";
 	public static final String NEW_USER_TITLE = "Create New User";
 

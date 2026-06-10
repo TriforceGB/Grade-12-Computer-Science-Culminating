@@ -14,9 +14,6 @@ import javax.swing.JPanel;
 import java.awt.Insets;
 import java.awt.GridLayout;
 
-import DB.DB;
-import TableClass.User;
-
 /**
  * This is the Page that displays the login form.
  */
@@ -167,6 +164,8 @@ public class loginPanel extends JPanel {
 				// Clear Text Fields
 				usernameField.setText("");
 				passwordField.setText("");
+				usernameField.setBackground(Color.WHITE);
+				passwordField.setBackground(Color.WHITE);
 			} else { // If User is not found
 				usernameField.setBackground(Color.RED);
 				passwordField.setBackground(Color.RED);

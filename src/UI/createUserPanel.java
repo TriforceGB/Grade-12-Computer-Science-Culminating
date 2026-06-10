@@ -189,6 +189,9 @@ class createUserPanel extends JPanel {
 				usernameField.setText("");
 				pwdField.setText("");
 				pwdConfirmField.setText("");
+				// Set Color Normal
+				pwdField.setBackground(Color.WHITE);
+				pwdConfirmField.setBackground(Color.WHITE);
 			} else {
 				JOptionPane.showMessageDialog(this, "Unable to Create User, Try again", "Error",
 						JOptionPane.ERROR_MESSAGE);
