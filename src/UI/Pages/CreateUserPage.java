@@ -1,40 +1,60 @@
-package UI;
+package UI.Pages;
 
-import javax.swing.JPasswordField;
+import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import javax.swing.JTextField;
+import java.awt.GridLayout;
+import java.awt.Insets;
+
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import java.awt.Insets;
-import java.awt.GridLayout;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 
-import DB.DB;
+import UI.Style;
+import UI.UI;
 
-class createUserPanel extends JPanel {
-	private UI ui; // Reference to the main UI
-	private DB db; // Reference to the database
+public class CreateUserPage extends Page {
+	// Variables
+	GridBagConstraints gbc; // GridBagConstraints for layout
+	JTextField usernameField; // Field for Username
+	JTextField pwdField; // Field for Password
+	JPasswordField pwdConfirmField; // Field for Confirm Password
+
+	public CreateUserPage(UI ui) {
+		super(ui);
+		createTitle();
+		createUsernameField();
+		createPasswordField();
+		createButtons();
+	}
 
 	/**
-	 * Create the Login Panel
-	 *
-	 * @param ui The UI to associate with the panel
-	 * @param db The database reference
+	 * Remove Header from this Page
 	 */
-	public createUserPanel(UI ui, DB db) {
-		this.ui = ui;
-		this.db = db;
+	@Override
+	protected void pageHeader() {
 
-		// Set the layout for the panel
+	}
+
+	/**
+	 * Set the layout to GridBagLayout and initialize constraints
+	 */
+	@Override
+	protected void pageLayout() {
 		this.setLayout(new GridBagLayout());
-		GridBagConstraints gbc = new GridBagConstraints();
+		gbc = new GridBagConstraints();
+	}
 
-		// create title label
-		JLabel titleLabel = new JLabel(style.NEW_USER_TITLE);
-		titleLabel.setFont(style.TITLE_FONT); // Set the font of the title label
+	/**
+	 * Create the title for the Create User Page
+	 */
+	private void createTitle() {
+		JLabel titleLabel = new JLabel(Style.NEW_USER_TITLE);
+		titleLabel.setFont(Style.TITLE_FONT); // Set the font of the title label
 		gbc.gridx = 0; // Column 0
 		gbc.gridy = 0; // Row 0
 		gbc.gridwidth = 3; // Span across 3 columns
@@ -42,54 +62,61 @@ class createUserPanel extends JPanel {
 
 		// add to panel
 		this.add(titleLabel, gbc); // Add to panel
+	}
 
-		// create username row
-
+	/**
+	 * Create the username field for the Create User Page
+	 */
+	private void createUsernameField() {
 		// label for username
 		JLabel usernameLabel = new JLabel("Username:");
-		usernameLabel.setFont(style.BASE_FONT); // Set the font of the username label
+		usernameLabel.setFont(Style.BASE_FONT); // Set the font of the username label
 		gbc.gridx = 0; // Column 0
 		gbc.gridy = 1; // Row 1
 		gbc.gridwidth = 1; // Span across 1 column
-		gbc.insets = style.LABEL_PADS; // Add padding around the label
+		gbc.insets = Style.LABEL_PADS; // Add padding around the label
 
 		// Add to panel
 		this.add(usernameLabel, gbc);
 
 		// text field for username
-		JTextField usernameField = new JTextField(20);
-		usernameField.setFont(style.BASE_FONT); // Set the font of the username text field
+		usernameField = new JTextField(20);
+		usernameField.setFont(Style.BASE_FONT); // Set the font of the username text field
 		gbc.gridx = 1; // Column 1
 		gbc.gridy = 1; // Row 1
 		gbc.gridwidth = 1; // Span across 1 column
-		gbc.insets = style.FIELD_PADS; // Add padding around the text field
+		gbc.insets = Style.FIELD_PADS; // Add padding around the text field
 
 		// Add to panel
 		this.add(usernameField, gbc);
 
 		// TODO: add extra icon to display whether username available or not
+	}
 
-		// create password creation row
-
+	/**
+	 * Create 2 Password Fields, one for the password and one for the confirm
+	 * password
+	 */
+	private void createPasswordField() {
 		// TODO Hide the First Password
 		// label for password creation
 		JLabel pwdLabel = new JLabel("Password:");
-		pwdLabel.setFont(style.BASE_FONT); // Set the font of the password label
+		pwdLabel.setFont(Style.BASE_FONT); // Set the font of the password label
 		gbc.gridx = 0; // Column 0
 		gbc.gridy = 2; // Row 2
 		gbc.gridwidth = 1; // Span across 1 column
-		gbc.insets = style.LABEL_PADS; // Add padding around the label
+		gbc.insets = Style.LABEL_PADS; // Add padding around the label
 
 		// Add to panel
 		this.add(pwdLabel, gbc);
 
 		// text field for password
-		JTextField pwdField = new JTextField(20);
-		pwdField.setFont(style.BASE_FONT); // Set the font of the password text field
+		pwdField = new JTextField(20);
+		pwdField.setFont(Style.BASE_FONT); // Set the font of the password text field
 		gbc.gridx = 1; // Column 1
 		gbc.gridy = 2; // Row 2
 		gbc.gridwidth = 1; // Span across 1 column
-		gbc.insets = style.FIELD_PADS; // Add padding around the text field
+		gbc.insets = Style.FIELD_PADS; // Add padding around the text field
 
 		// Add to panel
 		this.add(pwdField, gbc);
@@ -98,32 +125,33 @@ class createUserPanel extends JPanel {
 
 		// label for password
 		JLabel pwdConfirmLabel = new JLabel("Confirm Password:");
-		pwdConfirmLabel.setFont(style.BASE_FONT); // Set the font of the password label
+		pwdConfirmLabel.setFont(Style.BASE_FONT); // Set the font of the password label
 		gbc.gridx = 0; // Column 0
 		gbc.gridy = 3; // Row 3
 		gbc.gridwidth = 1; // Span across 1 column
-		gbc.insets = style.LABEL_PADS; // Add padding around the label
+		gbc.insets = Style.LABEL_PADS; // Add padding around the label
 
 		// Add to panel
 		this.add(pwdConfirmLabel, gbc);
 
 		// password field for password
-		JPasswordField pwdConfirmField = new JPasswordField(20);
-		pwdConfirmField.setFont(style.BASE_FONT); // Set the font of the password text field
+		pwdConfirmField = new JPasswordField(20);
+		pwdConfirmField.setFont(Style.BASE_FONT); // Set the font of the password text field
 		char pwdEchoChar = (char) 0; // Character to show when password is hidden (0 means no character)
 		// Character to show when password is visible (0 means no character)
 		char pwdVisibleEchoChar = pwdConfirmField.getEchoChar();
 		gbc.gridx = 1; // Column 1
 		gbc.gridy = 3; // Row 3
 		gbc.gridwidth = 1; // Span across 1 column
-		gbc.insets = style.FIELD_PADS; // Add padding around the text field
+		gbc.insets = Style.FIELD_PADS; // Add padding around the text field
 
 		// Add to panel
 		this.add(pwdConfirmField, gbc);
 
 		// Add checkbox for showing password
 		JCheckBox showPwdCheckBox = new JCheckBox("Show Password");
-		showPwdCheckBox.setFont(style.BASE_FONT); // Set the font of the checkbox
+		showPwdCheckBox.setFont(Style.BASE_FONT); // Set the font of the checkbox
+		showPwdCheckBox.setBackground(this.PageColor);
 		gbc.gridx = 2; // Column 2
 		gbc.gridy = 3; // Row 3
 		gbc.gridwidth = 1; // Span across 1 column
@@ -145,17 +173,26 @@ class createUserPanel extends JPanel {
 
 		// Add to panel
 		this.add(showPwdCheckBox, gbc);
+	}
 
-		// button row
+	/**
+	 * Create Buttons To Either Create user or Go Back
+	 */
+	private void createButtons() {
 		JPanel nestedBtnPanel = new JPanel(); // Create a nested panel for the buttons to exist where they look nice
 		nestedBtnPanel.setLayout(new GridLayout(1, 2, 25, 0));
+		nestedBtnPanel.setBackground(this.PageColor);
 
 		// create new user button
 		JButton cancelButton = new JButton("Cancel");
-		cancelButton.setFont(style.BASE_FONT);
+		cancelButton.setFont(Style.BASE_FONT);
 
 		cancelButton.addActionListener(e -> {
 			ui.switchPanel("login"); // Switch back to the login panel when the cancel button is clicked
+			// Clear Text Fields
+			usernameField.setText("");
+			pwdField.setText("");
+			pwdConfirmField.setText("");
 		});
 
 		// Add to nested panel
@@ -163,16 +200,34 @@ class createUserPanel extends JPanel {
 
 		// create login button
 		JButton createButton = new JButton("Create User");
-		createButton.setFont(style.BASE_FONT);
+		createButton.setFont(Style.BASE_FONT);
 
 		createButton.addActionListener(e -> {
+			// Check if the password fields match
+			if (!pwdField.getText().equals(pwdConfirmField.getText())) { // NOTE This is Deprecated
+				JOptionPane.showMessageDialog(this, "Passwords do not match", "Error", JOptionPane.ERROR_MESSAGE);
+				// Clear Text Fields and set Color Red
+				pwdField.setText("");
+				pwdConfirmField.setText("");
+				pwdField.setBackground(Color.RED);
+				pwdConfirmField.setBackground(Color.RED);
+				return;
+			}
+
 			// Try to Create New User
-			if (db.createUser(usernameField.getText(), pwdField.getText(), false)) {
-				ui.switchPanel("login");
+			if (ui.createUser(usernameField.getText(), pwdField.getText(), false)) {
+				// Clear Text Fields
+				usernameField.setText("");
+				pwdField.setText("");
+				pwdConfirmField.setText("");
+				// Set Color Normal
+				pwdField.setBackground(Color.WHITE);
+				pwdConfirmField.setBackground(Color.WHITE);
 			} else {
 				JOptionPane.showMessageDialog(this, "Unable to Create User, Try again", "Error",
 						JOptionPane.ERROR_MESSAGE);
 			}
+
 		});
 
 		// Add to nested panel
@@ -182,7 +237,7 @@ class createUserPanel extends JPanel {
 		gbc.gridx = 1; // Column 1
 		gbc.gridy = 4; // Row 4
 		gbc.gridwidth = 1; // Span across 1 column
-		gbc.insets = style.BTN_PADS; // Add padding around the buttons
+		gbc.insets = Style.BTN_PADS; // Add padding around the buttons
 		this.add(nestedBtnPanel, gbc);
 	}
 }
