@@ -1,6 +1,5 @@
 import UI.UI;
 import DB.DB;
-import TableClass.*;
 
 public class FTS {
 	// Settings
