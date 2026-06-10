@@ -1,6 +1,8 @@
 package UI;
 
 import javax.swing.JPasswordField;
+
+import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import javax.swing.JTextField;
@@ -170,18 +172,27 @@ class createUserPanel extends JPanel {
 		createButton.setFont(Style.BASE_FONT);
 
 		createButton.addActionListener(e -> {
+			// Check if the password fields match
+			if (!pwdField.getText().equals(pwdConfirmField.getText())) {
+				JOptionPane.showMessageDialog(this, "Passwords do not match", "Error", JOptionPane.ERROR_MESSAGE);
+				// Clear Text Fields and set Color Red
+				pwdField.setText("");
+				pwdConfirmField.setText("");
+				pwdField.setBackground(Color.RED);
+				pwdConfirmField.setBackground(Color.RED);
+				return;
+			}
+
 			// Try to Create New User
-			if (db.createUser(usernameField.getText(), pwdField.getText(), false)) {
-				ui.switchPanel("login");
+			if (ui.createUser(usernameField.getText(), pwdField.getText(), false)) {
+				// Clear Text Fields
+				usernameField.setText("");
+				pwdField.setText("");
+				pwdConfirmField.setText("");
 			} else {
 				JOptionPane.showMessageDialog(this, "Unable to Create User, Try again", "Error",
 						JOptionPane.ERROR_MESSAGE);
 			}
-
-			// Clear Text Fields
-			usernameField.setText("");
-			pwdField.setText("");
-			pwdConfirmField.setText("");
 
 		});
 

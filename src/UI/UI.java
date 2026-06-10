@@ -95,8 +95,8 @@ public class UI extends JFrame implements EventListener {
 	 * This method logs in the user and sends them into the homepage if the account
 	 * exists
 	 *
-	 * @param username The username of the user
-	 * @param password The password of the user
+	 * @param username The username of the user (String)
+	 * @param password The password of the user (String)
 	 */
 	public boolean login(String username, String password) {
 		this.currentUser = db.login(username, password);
@@ -115,5 +115,21 @@ public class UI extends JFrame implements EventListener {
 		// Remove Current user
 		this.currentUser = null;
 		this.switchPanel("login");
+	}
+
+	/**
+	 * Is a Shell for the create User Method for DB
+	 *
+	 * @param username The username of the user to create (String)
+	 * @param password The password of the user to create (String)
+	 * @param isAdmin  Whether the user is an admin (boolean)
+	 * @return
+	 */
+	public boolean createUser(String username, String password, boolean isAdmin) {
+		boolean created = db.createUser(username, password, isAdmin);
+		if (created) {
+			this.switchPanel("login");
+		}
+		return created;
 	}
 }
