@@ -21,7 +21,7 @@ public class CreateUserPage extends Page {
 	// Variables
 	GridBagConstraints gbc; // GridBagConstraints for layout
 	JTextField usernameField; // Field for Username
-	JTextField pwdField; // Field for Password
+	JPasswordField pwdField; // Field for Password
 	JPasswordField pwdConfirmField; // Field for Confirm Password
 
 	public CreateUserPage(UI ui) {
@@ -111,7 +111,7 @@ public class CreateUserPage extends Page {
 		this.add(pwdLabel, gbc);
 
 		// text field for password
-		pwdField = new JTextField(20);
+		pwdField = new JPasswordField(20);
 		pwdField.setFont(Style.BASE_FONT); // Set the font of the password text field
 		gbc.gridx = 1; // Column 1
 		gbc.gridy = 2; // Row 2
@@ -206,7 +206,7 @@ public class CreateUserPage extends Page {
 
 		createButton.addActionListener(e -> {
 			// Check if the password fields match
-			if (!pwdField.getText().equals(pwdConfirmField.getText())) { // NOTE This is Deprecated
+			if (!new String(pwdField.getPassword()).equals(new String(pwdConfirmField.getPassword()))) { // NOTE This is Deprecated
 				JOptionPane.showMessageDialog(this, "Passwords do not match", "Error", JOptionPane.ERROR_MESSAGE);
 				// Clear Text Fields and set Color Red
 				pwdField.setText("");
@@ -217,7 +217,7 @@ public class CreateUserPage extends Page {
 			}
 
 			// Try to Create New User
-			if (ui.createUser(usernameField.getText(), pwdField.getText(), false)) {
+			if (ui.createUser(usernameField.getText(), new String(pwdField.getPassword()), false)) {
 				// Clear Text Fields
 				usernameField.setText("");
 				pwdField.setText("");
