@@ -44,7 +44,7 @@ class Page extends JPanel {
 
 	// Page Variables
 	protected void pageColor() {
-		this.PageColor = Style.BACKGROUND_COLOR;
+		this.PageColor = Style.BALTIC_BLUE;
 	}
 
 	// Page Settings
