@@ -169,4 +169,56 @@ public class DB {
 			return false;
 		}
 	}
+
+	/**
+	 * Return a List of Media that match the given filters
+	 *
+	 * @param userId    the User's id (int)
+	 * @param type      the Media type (int)
+	 * @param status    the Media status (int)
+	 * @param name      the Media name (String)
+	 * @param ratingMin the minimum rating (int)
+	 * @param ratingMax the maximum rating (int)
+	 * @return a List of Media that match the given filters
+	 */
+	public Media[] findMedia(int userId, int type, int status, String name, int ratingMin, int ratingMax) {
+		try (PreparedStatement stmt = dbConnect.prepareStatement(Query.FIND_MEDIA)) {
+			stmt.setInt(1, userId);
+			stmt.setInt(2, type);
+			stmt.setInt(3, status);
+			stmt.setString(4, "%" + name + "%");
+			stmt.setInt(5, ratingMin);
+			stmt.setInt(6, ratingMax);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.getInt("count") > 0) {
+				Media[] foundmeta = new Media[rs.getInt("count")];
+				int i = 0;
+				while (rs.next()) {
+					foundmeta[i] = new Media(
+							rs.getInt("id"),
+							rs.getInt("type"),
+							rs.getInt("externalId"),
+							rs.getString("name"),
+							rs.getString("description"),
+							rs.getString("posterPath"),
+							rs.getInt("status"),
+							rs.getInt("rating"),
+							rs.getInt("lastEpisode"),
+							rs.getString("review"),
+							rs.getInt("rewatched"));
+					i++;
+				}
+				return foundmeta;
+			} else {
+				System.err.println("Unable to Find Media with this filter");
+				return null;
+			}
+
+		} catch (SQLException e) {
+			System.err.println("Exception while creating user:");
+			e.printStackTrace();
+			return null;
+		}
+
+	}
 }

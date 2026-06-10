@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS "UserData" (
 	"rating" INTEGER,
 	"lastEpisode" INTEGER,
 	"review" TEXT,
-	"Rewatched" INTEGER,
+	"rewatched" INTEGER,
 	FOREIGN KEY ("userId") REFERENCES "Users"("id") ON DELETE CASCADE
 	FOREIGN KEY ("mediaId") REFERENCES "Media"("id") ON DELETE CASCADE
 );
