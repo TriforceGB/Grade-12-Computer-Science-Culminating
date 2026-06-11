@@ -120,8 +120,9 @@ public class DB {
 			stmt.setString(2, password);
 
 			ResultSet rs = stmt.executeQuery(); // Pulls the Query
-			if (rs.next()) { // Check if anythign was returned
-				// Return the Data Formated
+			if (rs.next()) { // Check if anything was returned
+				updateLogin(rs.getInt("id"));
+				// Return the Data Format
 				return new User(
 						rs.getInt("id"),
 						rs.getString("username"),
@@ -138,6 +139,23 @@ public class DB {
 			System.err.println("Exception while logging in:");
 			e.printStackTrace();
 			return null;
+		}
+	}
+
+	/**
+	 * Update the last login for a User
+	 *
+	 * @param userId the User's id (int)
+	 */
+	private void updateLogin(int userId) {
+		String lastLogin = LocalDate.now().toString();
+		try (PreparedStatement stmt = dbConnect.prepareStatement(Query.UPDATE_LOGIN)) {
+			stmt.setString(1, lastLogin);
+			stmt.setInt(2, userId);
+			stmt.executeUpdate();
+		} catch (SQLException e) {
+			System.err.println("Exception while updating login:");
+			e.printStackTrace();
 		}
 	}
 

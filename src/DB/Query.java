@@ -65,6 +65,12 @@ class Query {
 			FROM "User"
 			WHERE "username" = ? AND "password" = ?
 			""";
+
+	public static final String UPDATE_LOGIN = """
+			UPDATE "User"
+			SET "lastLogin" = ?
+			WHERE "id" = ?
+			""";
 	// Media Queries
 	public static final String FIND_MEDIA = """
 				SELECT
