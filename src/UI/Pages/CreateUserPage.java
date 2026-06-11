@@ -6,6 +6,7 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -14,6 +15,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 
 import UI.Style;
 import UI.UI;
@@ -85,6 +87,10 @@ public class CreateUserPage extends Page {
 		// text field for username
 		usernameField = new JTextField(20);
 		usernameField.setFont(Style.BASE_FONT); // Set the font of the username text field
+		usernameField.setFont(Style.BASE_FONT); // Set the font of the username text field
+		usernameField.setBackground(Style.TEA_GREEN); // set the background colour of the username text field
+		usernameField.setForeground(Style.BALTIC_BLUE); // set the font color of the username text field's text
+		usernameField.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR));
 		gbc.gridx = 1; // Column 1
 		gbc.gridy = 1; // Row 1
 		gbc.gridwidth = 1; // Span across 1 column
@@ -117,6 +123,10 @@ public class CreateUserPage extends Page {
 		// text field for password
 		pwdField = new JPasswordField(20);
 		pwdField.setFont(Style.BASE_FONT); // Set the font of the password text field
+		pwdField.setFont(Style.BASE_FONT); // Set the font of the password text field
+		pwdField.setBackground(Style.TEA_GREEN); // set the background colour of the password text field
+		pwdField.setForeground(Style.BALTIC_BLUE); // set the font color of the password text field's text
+		pwdField.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR));
 		gbc.gridx = 1; // Column 1
 		gbc.gridy = 2; // Row 2
 		gbc.gridwidth = 1; // Span across 1 column
@@ -141,7 +151,10 @@ public class CreateUserPage extends Page {
 
 		// password field for password
 		pwdConfirmField = new JPasswordField(20);
-		pwdConfirmField.setFont(Style.BASE_FONT); // Set the font of the password text field
+		pwdConfirmField.setFont(Style.BASE_FONT); // Set the font of the confirm password text field
+		pwdConfirmField.setBackground(Style.TEA_GREEN); // set the background colour of the confirm password text field
+		pwdConfirmField.setForeground(Style.BALTIC_BLUE); // set the font color of the confirm password text field's text
+		pwdConfirmField.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR));
 		char pwdEchoChar = (char) 0; // Character to show when password is hidden (0 means no character)
 		// Character to show when password is visible (0 means no character)
 		char pwdVisibleEchoChar = pwdConfirmField.getEchoChar();
@@ -199,6 +212,8 @@ public class CreateUserPage extends Page {
 		ImageIcon xicon = ui.resizeImg(new ImageIcon("assets/UI/xicon.png"), 30, 30);
 		cancelButton.setIcon(xicon);
 		cancelButton.setHorizontalAlignment(JLabel.RIGHT);
+		cancelButton.setHorizontalAlignment(SwingConstants.CENTER);
+		cancelButton.setVerticalAlignment(SwingConstants.CENTER);
 		cancelButton.setIconTextGap(20);
 
 		cancelButton.addActionListener(e -> {
@@ -220,6 +235,8 @@ public class CreateUserPage extends Page {
 		ImageIcon plusicon = ui.resizeImg(new ImageIcon("assets/UI/plus.png"), 30, 30);
 		createButton.setIcon(plusicon);
 		createButton.setHorizontalAlignment(JLabel.RIGHT);
+		createButton.setHorizontalAlignment(SwingConstants.CENTER);
+		createButton.setVerticalAlignment(SwingConstants.CENTER);
 		createButton.setIconTextGap(20);
 
 		createButton.addActionListener(e -> {
@@ -234,7 +251,7 @@ public class CreateUserPage extends Page {
 				return;
 			}
 			// check if password box is blank
-			else if (usernameField.getText().isEmpty() || pwdField.getText().isEmpty()) {
+			else if (usernameField.getText().isEmpty() || new String(pwdField.getPassword()).isEmpty()) {
 				JOptionPane.showMessageDialog(this, "Cannot leave any fields empty", "Error", JOptionPane.ERROR_MESSAGE);
 				return;
 			}
@@ -246,8 +263,7 @@ public class CreateUserPage extends Page {
 				pwdField.setText("");
 				pwdConfirmField.setText("");
 				// Set Color Normal
-				pwdField.setBackground(Color.WHITE);
-				pwdConfirmField.setBackground(Color.WHITE);
+				
 			} else {
 				JOptionPane.showMessageDialog(this, "Unable to Create User, Try again", "Error",
 						JOptionPane.ERROR_MESSAGE);

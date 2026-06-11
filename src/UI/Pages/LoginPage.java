@@ -7,6 +7,7 @@ import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -195,6 +196,8 @@ public class LoginPage extends Page {
 		ImageIcon plusicon = ui.resizeImg(new ImageIcon("assets/UI/plus.png"), 30, 30);
 		createUserButton.setIcon(plusicon);
 		createUserButton.setHorizontalAlignment(JLabel.RIGHT);
+		createUserButton.setHorizontalAlignment(SwingConstants.CENTER);
+		createUserButton.setVerticalAlignment(SwingConstants.CENTER);
 		createUserButton.setIconTextGap(20);
 
 
@@ -216,6 +219,8 @@ public class LoginPage extends Page {
 		ImageIcon loginicon = ui.resizeImg(new ImageIcon("assets/UI/loginicon.png"), 30, 30);
 		loginButton.setIcon(loginicon);
 		loginButton.setHorizontalAlignment(JLabel.RIGHT);
+		loginButton.setHorizontalAlignment(SwingConstants.CENTER);
+		loginButton.setVerticalAlignment(SwingConstants.CENTER);
 		loginButton.setIconTextGap(20);
 
 		loginButton.addActionListener(e -> {
@@ -228,8 +233,7 @@ public class LoginPage extends Page {
 				// Clear Text Fields
 				usernameField.setText("");
 				passwordField.setText("");
-				usernameField.setBackground(Color.WHITE);
-				passwordField.setBackground(Color.WHITE);
+				
 			} else { // If User is not found
 				/*usernameField.setBackground(Color.RED);
 				passwordField.setBackground(Color.RED);*/
