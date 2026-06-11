@@ -68,6 +68,7 @@ public class HomePage extends Page {
 		blScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		blScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		JLabel bllabel = new JLabel("Backlog", SwingConstants.CENTER);
+		bllabel.setForeground(Style.TEA_GREEN);
 		bllabel.setFont(Style.BASE_FONT);
 
 		backlogpanel.add(bllabel, BorderLayout.PAGE_START);
@@ -96,6 +97,7 @@ public class HomePage extends Page {
 		crScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		JLabel crlabel = new JLabel("Currently Watching", SwingConstants.CENTER);
 		crlabel.setFont(Style.BASE_FONT);
+		crlabel.setForeground(Style.TEA_GREEN);
 
 		currentpanel.add(crlabel, BorderLayout.PAGE_START);
 		currentpanel.add(crbuttonpanel, BorderLayout.CENTER);
@@ -121,8 +123,9 @@ public class HomePage extends Page {
 		JScrollPane finScrollPane = new JScrollPane(finbuttonpanel);
 		finScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		finScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		JLabel finlabel = new JLabel("Backlog", SwingConstants.CENTER);
+		JLabel finlabel = new JLabel("Finished", SwingConstants.CENTER);
 		finlabel.setFont(Style.BASE_FONT);
+		finlabel.setForeground(Style.TEA_GREEN);
 
 		finishpanel.add(finlabel, BorderLayout.PAGE_START);
 		finishpanel.add(finbuttonpanel, BorderLayout.CENTER);
