@@ -6,5 +6,7 @@ CREATE TABLE IF NOT EXISTS "Media" (
 	"externalId" INTEGER NOT NULL, -- Might not be an Int
 	"name" TEXT NOT NULL,
 	"description" TEXT,
-	"posterPath" TEXT
+	"episodeCount" INTEGER,
+	"posterPath" TEXT,
+	"posterLink" TEXT
 );

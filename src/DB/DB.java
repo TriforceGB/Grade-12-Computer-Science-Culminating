@@ -1,7 +1,5 @@
 package DB;
 
-import TableClass.*;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -9,6 +7,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
+
+import DTO.LocalDB.Media;
+import DTO.LocalDB.User;
 
 /**
  * This is the public interface for the application to interact with the

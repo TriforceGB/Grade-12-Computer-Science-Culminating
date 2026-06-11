@@ -1,13 +1,22 @@
-package TableClass;
+package DTO.LocalDB;
+
+import com.google.gson.annotations.SerializedName;
 
 public class Media {
 	// Base Info
-	private int id;
-	private int type;
-	private int externalId;
-	private String name;
-	private String description;
+	@SerializedName("internalId")
+	private int id; // The ID in the database
+	private int type; // The type of media (e.g. TV, Movie)
+	@SerializedName("id")
+	private int externalId; // The external ID from the API
+	@SerializedName("value = english, alternate = {romaji}")
+	private String name; // Name of Media
+	private String description; // Description of Media
+	@SerializedName("episodes")
+	private int episodeCount;
 	private String posterPath;
+	@SuppressWarnings("large")
+	private String posterLink;
 
 	// Extra Info
 	private int status;
@@ -17,17 +26,20 @@ public class Media {
 	private int rewatched;
 
 	// Only Media
-	public Media(int id, int type, int externalId, String name, String description, String posterPath) {
+	public Media(int id, int type, int externalId, String name, String description, String posterPath,
+			String posterLink) {
 		this.id = id;
 		this.type = type;
 		this.externalId = externalId;
 		this.name = name;
 		this.description = description;
 		this.posterPath = posterPath;
+		this.posterLink = posterLink;
 	}
 
 	// Everything
-	public Media(int id, int type, int externalId, String name, String description, String posterPath, int status,
+	public Media(int id, int type, int externalId, String name, String description, String posterPath,
+			String posterLink, int status,
 			int rating, int lastEpisode, String review, int rewatched) {
 		this.id = id;
 		this.type = type;
@@ -35,6 +47,7 @@ public class Media {
 		this.name = name;
 		this.description = description;
 		this.posterPath = posterPath;
+		this.posterLink = null;
 		this.status = status;
 		this.rating = rating;
 		this.lastEpisode = lastEpisode;

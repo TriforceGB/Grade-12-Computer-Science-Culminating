@@ -33,8 +33,10 @@ class Query {
 				"externalId" INTEGER NOT NULL,
 				"name" TEXT NOT NULL,
 				"description" TEXT,
+				"episodeCount" INTEGER,
 				"releaseDate" TEXT,
-				"posterPath" TEXT
+				"posterPath" TEXT,
+				"posterLink" TEXT
 				)
 			""";
 	// Create UserData Table

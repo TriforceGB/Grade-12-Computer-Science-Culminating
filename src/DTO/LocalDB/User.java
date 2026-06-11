@@ -1,4 +1,4 @@
-package TableClass;
+package DTO.LocalDB;
 
 /**
  * A class that create the Object needed for the Users Table.

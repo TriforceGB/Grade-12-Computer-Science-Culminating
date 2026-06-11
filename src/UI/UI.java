@@ -9,7 +9,7 @@ import java.awt.Image;
 import javax.swing.JFrame;
 
 import DB.DB;
-import TableClass.User;
+import DTO.LocalDB.User;
 import UI.Pages.*;
 
 /**
