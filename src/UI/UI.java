@@ -4,6 +4,8 @@ import java.awt.CardLayout;
 import java.awt.Container;
 import java.util.EventListener;
 
+import javax.swing.ImageIcon;
+import java.awt.Image;
 import javax.swing.JFrame;
 
 import DB.DB;
@@ -46,7 +48,7 @@ public class UI extends JFrame implements EventListener {
 		this.setTitle(Style.APP_TITLE); // Set the title of the window
 		this.setSize(WIDTH, HEIGHT); // Set the size of the window
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Set the default close operation
-		this.getContentPane().setBackground(Style.BACKGROUND_COLOR); // Set Default Background Color
+		this.getContentPane().setBackground(Style.BALTIC_BLUE); // Set Default Background Color
 		this.setResizable(false); // Disable window resizing
 
 		// Initializing Panels
@@ -130,5 +132,13 @@ public class UI extends JFrame implements EventListener {
 			this.switchPanel("login");
 		}
 		return created;
+	}
+
+
+	public ImageIcon resizeImg(ImageIcon original, int width, int height) {
+        Image ogImage = original.getImage();
+        Image resizedImage = ogImage.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+        ImageIcon newicon = new ImageIcon(resizedImage);
+		return newicon;
 	}
 }
