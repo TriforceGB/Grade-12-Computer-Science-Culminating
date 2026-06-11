@@ -6,8 +6,11 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 import UI.Style;
 import UI.UI;
@@ -44,7 +47,7 @@ class Page extends JPanel {
 
 	// Page Variables
 	protected void pageColor() {
-		this.PageColor = Style.BACKGROUND_COLOR;
+		this.PageColor = Style.BALTIC_BLUE;
 	}
 
 	// Page Settings
@@ -85,6 +88,54 @@ class Page extends JPanel {
 		searchButton.setFont(Style.BASE_FONT);
 		settingButton.setFont(Style.BASE_FONT);
 		exitButton.setFont(Style.BASE_FONT);
+
+		// Colours
+		homeButton.setBackground(Style.LIGHT_GREEN);
+		homeButton.setForeground(Style.BALTIC_BLUE);
+		listButton.setBackground(Style.LIGHT_GREEN);
+		listButton.setForeground(Style.BALTIC_BLUE);
+		searchButton.setBackground(Style.LIGHT_GREEN);
+		searchButton.setForeground(Style.BALTIC_BLUE);
+		settingButton.setBackground(Style.LIGHT_GREEN);
+		settingButton.setForeground(Style.BALTIC_BLUE);
+		exitButton.setBackground(Style.LIGHT_GREEN);
+		exitButton.setForeground(Style.BALTIC_BLUE);
+
+		// Images
+		ImageIcon homeicon = ui.resizeImg(new ImageIcon("assets/UI/homeicon.png"), 30, 30);
+		homeButton.setIcon(homeicon);
+		homeButton.setHorizontalAlignment(JLabel.RIGHT);
+		homeButton.setHorizontalAlignment(SwingConstants.CENTER);
+		homeButton.setVerticalAlignment(SwingConstants.CENTER);
+		homeButton.setIconTextGap(20);
+		
+		ImageIcon listicon = ui.resizeImg(new ImageIcon("assets/UI/listicon.png"), 30, 30);
+		listButton.setIcon(listicon);
+		listButton.setHorizontalAlignment(JLabel.RIGHT);
+		listButton.setHorizontalAlignment(SwingConstants.CENTER);
+		listButton.setVerticalAlignment(SwingConstants.CENTER);
+		listButton.setIconTextGap(20);
+
+		ImageIcon searchicon = ui.resizeImg(new ImageIcon("assets/UI/searchicon.png"), 30, 30);
+		searchButton.setIcon(searchicon);
+		searchButton.setHorizontalAlignment(JLabel.RIGHT);
+		searchButton.setHorizontalAlignment(SwingConstants.CENTER);
+		searchButton.setVerticalAlignment(SwingConstants.CENTER);
+		searchButton.setIconTextGap(20);
+
+		ImageIcon settingicon = ui.resizeImg(new ImageIcon("assets/UI/settingicon.png"), 30, 30);
+		settingButton.setIcon(settingicon);
+		settingButton.setHorizontalAlignment(JLabel.RIGHT);
+		settingButton.setHorizontalAlignment(SwingConstants.CENTER);
+		settingButton.setVerticalAlignment(SwingConstants.CENTER);
+		settingButton.setIconTextGap(20);
+
+		ImageIcon exiticon = ui.resizeImg(new ImageIcon("assets/UI/exiticon.png"), 30, 30);
+		exitButton.setIcon(exiticon);
+		exitButton.setHorizontalAlignment(JLabel.RIGHT);
+		exitButton.setHorizontalAlignment(SwingConstants.CENTER);
+		exitButton.setVerticalAlignment(SwingConstants.CENTER);
+		exitButton.setIconTextGap(20);
 
 		homeButton.addActionListener(e -> ui.switchPanel("home"));
 		listButton.addActionListener(e -> ui.switchPanel("list"));
