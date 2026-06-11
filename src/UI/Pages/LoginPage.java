@@ -178,12 +178,6 @@ public class LoginPage extends Page {
 
 	}
 
-	private ImageIcon resizeImg(ImageIcon original, int width, int height) {
-        Image ogImage = original.getImage();
-        Image resizedImage = ogImage.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-        ImageIcon newicon = new ImageIcon(resizedImage);
-		return newicon;
-	}
 
 	/**
 	 * Has both the Login button and the Create New User button
@@ -197,9 +191,7 @@ public class LoginPage extends Page {
 		createUserButton.setFont(Style.BASE_FONT);
 		createUserButton.setBackground(Style.LIGHT_GREEN);
 		createUserButton.setForeground(Style.BALTIC_BLUE);
-		// createUserButton.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR));
-		// createUserButton.setFocusable(false);
-		ImageIcon plusicon = resizeImg(new ImageIcon("assets/UI/plus.png"), 30, 30);
+		ImageIcon plusicon = ui.resizeImg(new ImageIcon("assets/UI/plus.png"), 30, 30);
 		createUserButton.setIcon(plusicon);
 		createUserButton.setHorizontalAlignment(JLabel.RIGHT);
 		createUserButton.setIconTextGap(20);
@@ -220,8 +212,7 @@ public class LoginPage extends Page {
 		loginButton.setFont(Style.BASE_FONT);
 		loginButton.setBackground(Style.LIGHT_GREEN);
 		loginButton.setForeground(Style.BALTIC_BLUE);
-		// loginButton.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR));
-		ImageIcon loginicon = resizeImg(new ImageIcon("assets/UI/loginicon.png"), 30, 30);
+		ImageIcon loginicon = ui.resizeImg(new ImageIcon("assets/UI/loginicon.png"), 30, 30);
 		loginButton.setIcon(loginicon);
 		loginButton.setHorizontalAlignment(JLabel.RIGHT);
 		loginButton.setIconTextGap(20);

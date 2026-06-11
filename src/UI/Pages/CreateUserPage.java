@@ -6,6 +6,7 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
@@ -55,6 +56,7 @@ public class CreateUserPage extends Page {
 	private void createTitle() {
 		JLabel titleLabel = new JLabel(Style.NEW_USER_TITLE);
 		titleLabel.setFont(Style.TITLE_FONT); // Set the font of the title label
+		titleLabel.setForeground(Style.TEA_GREEN);
 		gbc.gridx = 0; // Column 0
 		gbc.gridy = 0; // Row 0
 		gbc.gridwidth = 3; // Span across 3 columns
@@ -71,6 +73,7 @@ public class CreateUserPage extends Page {
 		// label for username
 		JLabel usernameLabel = new JLabel("Username:");
 		usernameLabel.setFont(Style.BASE_FONT); // Set the font of the username label
+		usernameLabel.setForeground(Style.TEA_GREEN);
 		gbc.gridx = 0; // Column 0
 		gbc.gridy = 1; // Row 1
 		gbc.gridwidth = 1; // Span across 1 column
@@ -102,6 +105,7 @@ public class CreateUserPage extends Page {
 		// label for password creation
 		JLabel pwdLabel = new JLabel("Password:");
 		pwdLabel.setFont(Style.BASE_FONT); // Set the font of the password label
+		pwdLabel.setForeground(Style.TEA_GREEN);
 		gbc.gridx = 0; // Column 0
 		gbc.gridy = 2; // Row 2
 		gbc.gridwidth = 1; // Span across 1 column
@@ -126,6 +130,7 @@ public class CreateUserPage extends Page {
 		// label for password
 		JLabel pwdConfirmLabel = new JLabel("Confirm Password:");
 		pwdConfirmLabel.setFont(Style.BASE_FONT); // Set the font of the password label
+		pwdConfirmLabel.setForeground(Style.TEA_GREEN);
 		gbc.gridx = 0; // Column 0
 		gbc.gridy = 3; // Row 3
 		gbc.gridwidth = 1; // Span across 1 column
@@ -152,6 +157,7 @@ public class CreateUserPage extends Page {
 		JCheckBox showPwdCheckBox = new JCheckBox("Show Password");
 		showPwdCheckBox.setFont(Style.BASE_FONT); // Set the font of the checkbox
 		showPwdCheckBox.setBackground(this.PageColor);
+		showPwdCheckBox.setForeground(Style.TEA_GREEN);
 		gbc.gridx = 2; // Column 2
 		gbc.gridy = 3; // Row 3
 		gbc.gridwidth = 1; // Span across 1 column
@@ -183,9 +189,15 @@ public class CreateUserPage extends Page {
 		nestedBtnPanel.setLayout(new GridLayout(1, 2, 25, 0));
 		nestedBtnPanel.setBackground(this.PageColor);
 
-		// create new user button
+		// cancel button
 		JButton cancelButton = new JButton("Cancel");
 		cancelButton.setFont(Style.BASE_FONT);
+		cancelButton.setBackground(Style.LIGHT_GREEN);
+		cancelButton.setForeground(Style.BALTIC_BLUE);
+		ImageIcon xicon = ui.resizeImg(new ImageIcon("assets/UI/xicon.png"), 30, 30);
+		cancelButton.setIcon(xicon);
+		cancelButton.setHorizontalAlignment(JLabel.RIGHT);
+		cancelButton.setIconTextGap(20);
 
 		cancelButton.addActionListener(e -> {
 			ui.switchPanel("login"); // Switch back to the login panel when the cancel button is clicked
@@ -201,6 +213,12 @@ public class CreateUserPage extends Page {
 		// create login button
 		JButton createButton = new JButton("Create User");
 		createButton.setFont(Style.BASE_FONT);
+		createButton.setBackground(Style.LIGHT_GREEN);
+		createButton.setForeground(Style.BALTIC_BLUE);
+		ImageIcon plusicon = ui.resizeImg(new ImageIcon("assets/UI/plus.png"), 30, 30);
+		createButton.setIcon(plusicon);
+		createButton.setHorizontalAlignment(JLabel.RIGHT);
+		createButton.setIconTextGap(20);
 
 		createButton.addActionListener(e -> {
 			// Check if the password fields match
@@ -209,8 +227,13 @@ public class CreateUserPage extends Page {
 				// Clear Text Fields and set Color Red
 				pwdField.setText("");
 				pwdConfirmField.setText("");
-				pwdField.setBackground(Color.RED);
-				pwdConfirmField.setBackground(Color.RED);
+				// pwdField.setBackground(Color.RED);
+				// pwdConfirmField.setBackground(Color.RED);
+				return;
+			}
+			// check if password box is blank
+			else if (usernameField.getText().isEmpty() || pwdField.getText().isEmpty()) {
+				JOptionPane.showMessageDialog(this, "Cannot leave any fields empty", "Error", JOptionPane.ERROR_MESSAGE);
 				return;
 			}
 

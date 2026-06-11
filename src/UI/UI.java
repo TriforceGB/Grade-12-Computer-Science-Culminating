@@ -4,6 +4,8 @@ import java.awt.CardLayout;
 import java.awt.Container;
 import java.util.EventListener;
 
+import javax.swing.ImageIcon;
+import java.awt.Image;
 import javax.swing.JFrame;
 
 import DB.DB;
@@ -130,5 +132,13 @@ public class UI extends JFrame implements EventListener {
 			this.switchPanel("login");
 		}
 		return created;
+	}
+
+
+	public ImageIcon resizeImg(ImageIcon original, int width, int height) {
+        Image ogImage = original.getImage();
+        Image resizedImage = ogImage.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+        ImageIcon newicon = new ImageIcon(resizedImage);
+		return newicon;
 	}
 }
