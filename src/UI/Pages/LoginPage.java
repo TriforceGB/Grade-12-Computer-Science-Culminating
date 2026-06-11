@@ -1,7 +1,8 @@
 package UI.Pages;
 
 import javax.swing.JPasswordField;
-
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -217,7 +218,6 @@ public class LoginPage extends Page {
 		loginButton.setHorizontalAlignment(JLabel.RIGHT);
 		loginButton.setIconTextGap(20);
 
-		// TODO Get Enter to Login Working
 		loginButton.addActionListener(e -> {
 			String username = usernameField.getText(); // Get the username from the text field
 			String password = new String(passwordField.getPassword()); // Get the password from the password field
@@ -236,6 +236,16 @@ public class LoginPage extends Page {
 				// Reset password
 				passwordField.setText("");
 				JOptionPane.showMessageDialog(this, "Invalid username or password", "Error", JOptionPane.ERROR_MESSAGE);
+			}
+		});
+
+		// this code is for the password field because the login btn needs to be intialized first
+
+		// add enter key functionality to the password field to trigger the login button
+		passwordField.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				loginButton.doClick(); // Trigger the login button when the enter key is pressed in the password field
 			}
 		});
 
