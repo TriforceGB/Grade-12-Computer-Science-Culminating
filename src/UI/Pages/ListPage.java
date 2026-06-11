@@ -250,7 +250,8 @@ public class ListPage extends Page {
 			boolean canBeMovie = movieType.isSelected();
 			boolean canBeShow = showType.isSelected();
 			boolean canBeAnime = animeType.isSelected();
-			System.out.println();
+
+			
 		});
 
 		gbc.gridy = 6; // row 7
