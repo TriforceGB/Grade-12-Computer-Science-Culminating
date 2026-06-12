@@ -1,17 +1,29 @@
 package DTO.API;
 
-import DTO.LocalDB.Media;
+import com.google.gson.annotations.SerializedName;
 
+/**
+ * The Object that the AniList API returns.
+ */
 public class AniListRequest {
 	// Top Level of the Json
-	public Data data;
+	private Data data; // Private so no info is exposed
 
-	public static class Data {
-		// Data only Holds Page
-		public Page page;
+	// Getter
+	public Anime[] getAnime() {
+		return data.page.media;
 	}
+}
 
-	public static class Page {
-		public Media[] media;
-	}
+/**
+ * First Layer of the Json, exist just for formatting
+ */
+class Data {
+	// Data only Holds Page
+	@SerializedName("Page")
+	public Page page;
+}
+
+class Page {
+	public Anime[] media;
 }

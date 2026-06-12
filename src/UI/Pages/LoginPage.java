@@ -3,7 +3,6 @@ package UI.Pages;
 import javax.swing.JPasswordField;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import javax.swing.JTextField;
@@ -16,7 +15,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import java.awt.Insets;
-import java.awt.Image;
 
 import UI.Style;
 import UI.UI;
@@ -92,7 +90,7 @@ public class LoginPage extends Page {
 		JLabel usernameLabel = new JLabel("Username:");
 		usernameLabel.setFont(Style.BASE_FONT); // Set the font of the username label
 		usernameLabel.setForeground(Style.TEA_GREEN); // Set the font color of the username label
-		
+
 		gbc.gridx = 0; // Column 0
 		gbc.gridy = 1; // Row 1
 		gbc.gridwidth = 1; // Span across 1 column
@@ -180,7 +178,6 @@ public class LoginPage extends Page {
 
 	}
 
-
 	/**
 	 * Has both the Login button and the Create New User button
 	 */
@@ -199,7 +196,6 @@ public class LoginPage extends Page {
 		createUserButton.setHorizontalAlignment(SwingConstants.CENTER);
 		createUserButton.setVerticalAlignment(SwingConstants.CENTER);
 		createUserButton.setIconTextGap(20);
-
 
 		createUserButton.addActionListener(e -> {
 			ui.switchPanel("createUser"); // Switch to the create user panel when the button is clicked
@@ -233,17 +229,20 @@ public class LoginPage extends Page {
 				// Clear Text Fields
 				usernameField.setText("");
 				passwordField.setText("");
-				
+
 			} else { // If User is not found
-				/*usernameField.setBackground(Color.RED);
-				passwordField.setBackground(Color.RED);*/
+				/*
+				 * usernameField.setBackground(Color.RED);
+				 * passwordField.setBackground(Color.RED);
+				 */
 				// Reset password
 				passwordField.setText("");
 				JOptionPane.showMessageDialog(this, "Invalid username or password", "Error", JOptionPane.ERROR_MESSAGE);
 			}
 		});
 
-		// this code is for the password field because the login btn needs to be intialized first
+		// this code is for the password field because the login btn needs to be
+		// intialized first
 
 		// add enter key functionality to the password field to trigger the login button
 		passwordField.addActionListener(new ActionListener() {
