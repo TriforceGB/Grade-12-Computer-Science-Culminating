@@ -8,6 +8,7 @@ import com.google.gson.Gson;
 import DB.DB;
 import DTO.API.AniListRequest;
 import DTO.API.Anime;
+import DTO.API.TVDBData;
 
 public class API {
 	// Constants
@@ -22,11 +23,13 @@ public class API {
 	private DB db; // Reference to the Local DB
 	private Gson gson; // Reference to the Gson library
 	private AniList aniList; // Reference to the AniList API
+	private TheTVDB theTVDB; // Reference to the TheTVDB API
 
 	public API(DB db) {
 		this.db = db;
 		this.gson = new Gson();
 		this.aniList = new AniList(this.CLIENT, this.gson);
+		this.theTVDB = new TheTVDB(this.CLIENT, this.gson);
 	}
 
 	/**
@@ -39,4 +42,10 @@ public class API {
 	public Anime[] searchAnime(String name, int amount) {
 		return aniList.searchAnime(name, amount).getAnime();
 	}
+
+	public TVDBData[] searchMovie(String name, int amount) {
+		theTVDB.Search(name, "Movie", amount).getData();
+		return null;
+	}
+
 }

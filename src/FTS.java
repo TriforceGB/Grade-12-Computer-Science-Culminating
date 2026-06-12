@@ -14,6 +14,7 @@ public class FTS {
 	public static void main(String[] args) {
 		db = new DB(DB_PATH);
 		api = new API(db);
+		api.searchMovie("Backroom", 3);
 		ui = new UI(db);
 	}
 }

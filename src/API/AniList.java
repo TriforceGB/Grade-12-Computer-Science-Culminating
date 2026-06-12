@@ -63,10 +63,8 @@ class AniList {
 			if (response.statusCode() != 200) {
 				return null;
 			} else {
-				System.out.println(response.body());
-
+				return gson.fromJson(response.body(), AniListRequest.class);
 			}
-			return gson.fromJson(response.body(), AniListRequest.class);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;

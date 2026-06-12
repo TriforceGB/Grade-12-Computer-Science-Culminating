@@ -13,17 +13,17 @@ public class AniListRequest {
 	public Anime[] getAnime() {
 		return data.page.media;
 	}
-}
 
-/**
- * First Layer of the Json, exist just for formatting
- */
-class Data {
-	// Data only Holds Page
-	@SerializedName("Page")
-	public Page page;
-}
+	/**
+	 * First Layer of the Json, exist just for formatting
+	 */
+	private class Data {
+		// Data only Holds Page
+		@SerializedName("Page")
+		public Page page;
+	}
 
-class Page {
-	public Anime[] media;
+	private class Page {
+		public Anime[] media;
+	}
 }
