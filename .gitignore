@@ -4,6 +4,7 @@
 # DB file
 *.db
 # Keys
+key/
 *.p12
 # Log file
 *.log
