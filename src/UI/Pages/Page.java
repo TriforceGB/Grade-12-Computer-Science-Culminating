@@ -142,6 +142,7 @@ class Page extends JPanel {
 		exitButton.setIconTextGap(20);
 		exitButton.setFocusable(false);
 
+		// Action listener
 		homeButton.addActionListener(e -> ui.switchPanel("home"));
 		listButton.addActionListener(e -> ui.switchPanel("list"));
 		searchButton.addActionListener(e -> ui.switchPanel("search"));

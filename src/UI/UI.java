@@ -5,8 +5,12 @@ import java.awt.Container;
 import java.util.EventListener;
 
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
+
 import java.awt.Image;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 
 import DB.DB;
 import DTO.LocalDB.User;
@@ -140,5 +144,14 @@ public class UI extends JFrame implements EventListener {
         Image resizedImage = ogImage.getScaledInstance(width, height, Image.SCALE_SMOOTH);
         ImageIcon newicon = new ImageIcon(resizedImage);
 		return newicon;
+	}
+
+	public void addButtonImg(JButton button, ImageIcon image, int gap, int width, int height) {
+		ImageIcon changeIcon = resizeImg(image, width, height);
+		button.setIcon(changeIcon);
+		button.setHorizontalAlignment(JLabel.RIGHT);
+		button.setHorizontalAlignment(SwingConstants.CENTER);
+		button.setVerticalAlignment(SwingConstants.CENTER);
+		button.setIconTextGap(gap);
 	}
 }
