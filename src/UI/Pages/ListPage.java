@@ -2,6 +2,8 @@ package UI.Pages;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
+
 import UI.Style;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -9,9 +11,11 @@ import java.awt.GridBagConstraints;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -20,6 +24,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
+
 
 import UI.UI;
 
@@ -67,7 +72,7 @@ public class ListPage extends Page {
 
 	private JButton searchButton;
 
-	private final Border border = BorderFactory.createLineBorder(Color.BLACK, 2, true); // true allows for rounded
+	private final Border border = BorderFactory.createLineBorder(Style.BORDER_COLOR, 4, true); // true allows for rounded
 
 	/**
 	 * Create the List Page
@@ -121,37 +126,51 @@ public class ListPage extends Page {
 		// note row comments are not accurate (psa gridy = 0 -> row 1)
 		movieTypeLbl = new JLabel("Movie: ");
 		movieTypeLbl.setFont(Style.BASE_FONT);
+		movieTypeLbl.setForeground(Style.TEA_GREEN); // set the font color of the password label
 		movieType = new JCheckBox();
+		movieType.setBackground(Style.BALTIC_BLUE);
+		
 
 		showTypeLbl = new JLabel("TV Show: ");
 		showTypeLbl.setFont(Style.BASE_FONT);
+		showTypeLbl.setForeground(Style.TEA_GREEN);
 		showType = new JCheckBox();
+		showType.setBackground(Style.BALTIC_BLUE);
 
 		animeTypeLbl = new JLabel("Anime: ");
 		animeTypeLbl.setFont(Style.BASE_FONT);
+		animeTypeLbl.setForeground(Style.TEA_GREEN);
 		animeType = new JCheckBox();
+		animeType.setBackground(Style.BALTIC_BLUE);
 
 		gbc.gridx = 0; // col 1
 		gbc.gridy = 1; // row 1
-		// gbc.insets = Style.LABEL_PADS;
+		gbc.insets = Style.LABEL_PADS;
+		gbc.insets = new Insets(0, 0, 0, 0);
 		filterPanel.add(movieTypeLbl, gbc);
 
 		gbc.gridx = 1; // col 2
+		gbc.insets = new Insets(0, 0, 0, 140);
 		filterPanel.add(movieType, gbc);
 
 		gbc.gridx = 0; // col 1
 		gbc.gridy = 2; // row 2
+		gbc.insets = new Insets(0, 0, 0, 0);
 		filterPanel.add(showTypeLbl, gbc);
 
 		gbc.gridx = 1; // col 1
+		gbc.insets = new Insets(0, 0, 0, 140);
 		filterPanel.add(showType, gbc);
 
 		gbc.gridx = 0; // col 1
 		gbc.gridy = 3; // row 3
+		gbc.insets = new Insets(0, 0, 0, 0);
 		filterPanel.add(animeTypeLbl, gbc);
 
 		gbc.gridx = 1; // col 2
+		gbc.insets = new Insets(0, 0, 0, 140);
 		filterPanel.add(animeType, gbc);
+		gbc.insets = new Insets(0, 0, 0, 0);
 	}
 
 	void addNameSatusButtons() {
@@ -159,14 +178,23 @@ public class ListPage extends Page {
 		// name is texfield and status is a dropdown
 		nameFilterLbl = new JLabel("Name: ");
 		nameFilterLbl.setFont(Style.BASE_FONT);
+		nameFilterLbl.setForeground(Style.TEA_GREEN);
 		nameFilter = new JTextField(10);
 		nameFilter.setSize(new Dimension(100, 10));
 		nameFilter.setFont(Style.BASE_FONT);
+		nameFilter.setBackground(Style.TEA_GREEN);
+		nameFilter.setForeground(Style.BALTIC_BLUE); 
+		nameFilter.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR));
 
 		statusFilterLbl = new JLabel("Status: ");
 		statusFilterLbl.setFont(Style.BASE_FONT);
+		statusFilterLbl.setForeground(Style.TEA_GREEN);
 		statusFilter = new JComboBox<String>(showStatus);
 		statusFilter.setFont(Style.BASE_FONT);
+		statusFilter.setBackground(Style.TEA_GREEN);
+		statusFilter.setForeground(Style.BALTIC_BLUE);
+		statusFilter.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR));
+		statusFilter.setFocusable(false);
 
 		gbc.gridy = 4; // row 5
 		gbc.gridx = 0; // col 1
@@ -188,13 +216,31 @@ public class ListPage extends Page {
 		// rating range row 2x JSpinners
 		minRatingLbl = new JLabel("Min Rating: ");
 		minRatingLbl.setFont(Style.BASE_FONT);
+		minRatingLbl.setForeground(Style.TEA_GREEN);
 		minRating = new JSpinner(new SpinnerNumberModel(0, 0, 10, 1));
 		minRating.setFont(Style.BASE_FONT);
+		JSpinner.DefaultEditor mineditor = (JSpinner.DefaultEditor) minRating.getEditor();
+		JTextField minratingtextfield = mineditor.getTextField();
+		minRating.setBackground(Style.TEA_GREEN);
+		minRating.setForeground(Style.BALTIC_BLUE);
+		minRating.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR));
+		minratingtextfield.setBackground(Style.TEA_GREEN);
+		minratingtextfield.setForeground(Style.BALTIC_BLUE);
+		minratingtextfield.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR));
 
 		maxRatingLbl = new JLabel("Max Rating: ");
 		maxRatingLbl.setFont(Style.BASE_FONT);
+		maxRatingLbl.setForeground(Style.TEA_GREEN);
 		maxRating = new JSpinner(new SpinnerNumberModel(10, 0, 10, 1));
 		maxRating.setFont(Style.BASE_FONT);
+		maxRating.setBackground(Style.TEA_GREEN);
+		maxRating.setForeground(Style.BALTIC_BLUE);
+		maxRating.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR));
+		JSpinner.DefaultEditor maxeditor = (JSpinner.DefaultEditor) maxRating.getEditor();
+		JTextField maxratingtextfield = maxeditor.getTextField();
+		maxratingtextfield.setBackground(Style.TEA_GREEN);
+		maxratingtextfield.setForeground(Style.BALTIC_BLUE);
+		maxratingtextfield.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR));
 
 		// change listeners for both ratings
 		// adds the listeners that do the things to ensure bounds are set properly
@@ -239,7 +285,10 @@ public class ListPage extends Page {
 	void addSearchButton() {
 		// search button on set row
 		searchButton = new JButton("Search");
+		searchButton.setBackground(Style.LIGHT_GREEN);
+		searchButton.setForeground(Style.BALTIC_BLUE);
 		searchButton.setFont(Style.BASE_FONT);
+		ui.addButtonImg(searchButton, new ImageIcon("assets/UI/searchicon.png"), 20, 30, 30);
 		searchButton.addActionListener(e -> {
 			// TODO: Implement db. also verify if selector for name and status are blank to
 			// not care
@@ -287,7 +336,13 @@ public class ListPage extends Page {
 			}
 		};
 		listTable = new JTable(listTableModel);
+		listTable.getTableHeader().setReorderingAllowed(false);
+		listTable.getTableHeader().setResizingAllowed(false);
+		listTable.getTableHeader().setBackground(Style.TROPICAL_TEAL);
+		listTable.getTableHeader().setForeground(Style.TEA_GREEN);
+		listTable.getTableHeader().setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR));
 		tableScrollContainer = new JScrollPane(listTable);
+		tableScrollContainer.setBackground(Style.BALTIC_BLUE);
 		tableScrollContainer.setBorder(border);
 		tableScrollContainer.getViewport().setBackground(PageColor);
 
