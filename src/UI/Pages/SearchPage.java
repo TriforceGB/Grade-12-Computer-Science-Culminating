@@ -9,7 +9,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
+
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Insets;
 import java.net.URI;
 import java.net.URL;
@@ -17,6 +20,7 @@ import java.net.URL;
 import UI.Style;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 
 import UI.UI;
@@ -40,6 +44,8 @@ public class SearchPage extends Page {
 
 	private JScrollPane listScrollContainer;
 
+	private JPanel scrollContentPanel;
+
 	private final int posterWidth = 200;
 	private final int posterHeight = 200;
 
@@ -57,6 +63,7 @@ public class SearchPage extends Page {
 
 		createSearchPanel();
 
+		addSearchLabel();
 		addSearchField();
 		addSearchTypeBox();
 		addSearchBtn();
@@ -65,33 +72,10 @@ public class SearchPage extends Page {
 
 		addListScrollContainer();
 
-		// testing for adding x number of panels with information
-		JPanel contentPanel = new JPanel();
-		contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
+		// for testing purposes simply
 		for (int i = 0; i < 3; i++) {
-			JPanel test = new JPanel();
-			// get url in try catch
-			URL url;
-			try {
-				url = new URI(testUrlString).toURL();
-			} catch (Exception e) {
-				url = null;
-			}
-			// attempt to create and scale poster
-			ImageIcon poster;
-			if (url != null)
-				poster = getSearchResultPoster(url);
-			else
-				poster = null;
-
-			// create poster
-			gbc.gridy = 0; // row is always 0
-			gbc.gridx = 0; // col 1
-			gbc.insets = new Insets(20, 20, 20, 20);
-			test.add(new JLabel("poster"));
-			contentPanel.add(test);
+			scrollContentPanel.add(getSearchResultPanel());
 		}
-		listScrollContainer.add(contentPanel);
 	}
 
 	void createContentPanel() {
@@ -114,6 +98,7 @@ public class SearchPage extends Page {
 	void createListPanel() {
 		listPanel = new JPanel();
 		listPanel.setBackground(PageColor);
+		listPanel.setPreferredSize(new Dimension(400, 400));
 
 		contentPanel.add(listPanel, BorderLayout.CENTER);
 	}
@@ -122,7 +107,11 @@ public class SearchPage extends Page {
 		searchLbl = new JLabel("Search: ");
 		searchLbl.setFont(Style.BASE_FONT);
 
-		searchPanel.add(searchLbl);
+		gbc.gridy = 0; // only one row
+		gbc.gridx = 0; // col 1
+		gbc.insets = new Insets(0, 20, 10, 0);
+
+		searchPanel.add(searchLbl, gbc);
 	}
 
 	void addSearchField() {
@@ -130,12 +119,12 @@ public class SearchPage extends Page {
 		searchField.setFont(Style.BASE_FONT);
 
 		gbc.gridy = 0; // only one row
-		gbc.gridx = 0; // col 1
+		gbc.gridx = 1; // col 2
 
 		// 20 px padding on left
-		gbc.insets = new Insets(0, 20, 10, 0);
+		gbc.insets = new Insets(0, 0, 10, 0);
 
-		searchPanel.add(searchField);
+		searchPanel.add(searchField, gbc);
 	}
 
 	void addSearchTypeBox() {
@@ -143,7 +132,7 @@ public class SearchPage extends Page {
 		searchTypeBox.setFont(Style.BASE_FONT);
 
 		gbc.gridy = 0; // only one row
-		gbc.gridx = 1; // col 2
+		gbc.gridx = 2; // col 3
 
 		// only padding on bottom for spacing
 		gbc.insets = new Insets(0, 0, 10, 0);
@@ -156,16 +145,21 @@ public class SearchPage extends Page {
 		searchBtn.setFont(Style.BASE_FONT);
 
 		gbc.gridy = 0; // only one row
-		gbc.gridx = 2; // col 3
+		gbc.gridx = 3; // col 4
 
 		// padding for 20px right to match offset from searchField
 		gbc.insets = new Insets(0, 0, 10, 20);
+
+		searchBtn.addActionListener(e -> procureSearches(1));
 
 		searchPanel.add(searchBtn, gbc);
 	}
 
 	void addListScrollContainer() {
-		listScrollContainer = new JScrollPane();
+		scrollContentPanel = new JPanel(new GridLayout(0, 1, posterHeight + 20, 0));
+		listScrollContainer = new JScrollPane(scrollContentPanel);
+		listScrollContainer.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		listScrollContainer.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
 		listPanel.add(listScrollContainer);
 	}
@@ -198,9 +192,32 @@ public class SearchPage extends Page {
 		// create poster
 		gbc.gridy = 0; // row is always 0
 		gbc.gridx = 0; // col 1
-		gbc.insets = new Insets(20, 20, 20, 20);
+		gbc.insets = new Insets(posterHeight / 2, posterWidth / 2, posterHeight / 2, posterWidth / 2);
 
 		result.add(new JLabel(poster));
+
+		// add name
+		JLabel name = new JLabel("Testing");
+		name.setFont(Style.BASE_FONT);
+
+		gbc.gridx = 1;
+		result.add(name);
+
+		// add desc.
+		JLabel desc = new JLabel("<html>Testing description.<br>With second line too.</hmtl>");
+		desc.setFont(Style.BASE_FONT);
+
+		gbc.gridx = 2;
+
+		result.add(desc);
+
+		// add button
+		JButton addToDb = new JButton("+");
+		addToDb.setFont(Style.BASE_FONT);
+
+		gbc.gridx = 3;
+
+		result.add(addToDb);
 
 		return result;
 	}
@@ -211,5 +228,23 @@ public class SearchPage extends Page {
 		} catch (Exception e) {
 			return null;
 		}
+	}
+
+	void procureSearches(int test) {
+		// empty existing
+		scrollContentPanel.removeAll();
+
+		// get serach number
+		// and do search itself
+		
+		// for testing purposes simply
+		for (int i = 0; i < test; i++) {
+			scrollContentPanel.add(getSearchResultPanel());
+		}
+		scrollContentPanel.revalidate();
+		scrollContentPanel.repaint();
+
+		listScrollContainer.revalidate();
+		listScrollContainer.repaint();
 	}
 }
