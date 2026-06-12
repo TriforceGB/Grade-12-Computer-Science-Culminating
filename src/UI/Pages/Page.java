@@ -137,6 +137,7 @@ class Page extends JPanel {
 		exitButton.setVerticalAlignment(SwingConstants.CENTER);
 		exitButton.setIconTextGap(20);
 
+		// Action listener
 		homeButton.addActionListener(e -> ui.switchPanel("home"));
 		listButton.addActionListener(e -> ui.switchPanel("list"));
 		searchButton.addActionListener(e -> ui.switchPanel("search"));
