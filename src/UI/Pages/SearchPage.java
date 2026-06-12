@@ -11,7 +11,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.Label;
 import java.net.URI;
 import java.net.URL;
 
