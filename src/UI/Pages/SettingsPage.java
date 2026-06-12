@@ -119,6 +119,9 @@ public class SettingsPage extends Page {
 		});
 		chngPassButton.addActionListener(e -> {
 			String changedpass = JOptionPane.showInputDialog("Enter new password"); // Prompt to change the password
+			if (changedpass == null) {
+				return;
+			}
 			String chanagedpassconfirm = JOptionPane.showInputDialog("Re-enter password to confirm"); // Prompt to confirm password
 			if (!changedpass.equals(chanagedpassconfirm)) { // checks to see if both entries match, if not then the user will have to retry
 				JOptionPane.showMessageDialog(this, "Passwords do not match.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -148,19 +151,6 @@ public class SettingsPage extends Page {
 		// Michael pls do this
 
 
-		// Action listeners
-		/*chngUserButton.addActionListener(e -> ui.switchPanel("home"));
-		chngPassButton.addActionListener(e -> ui.switchPanel("list"));
-		expUserButton.addActionListener(e -> ui.switchPanel("search"));
-		impUserButton.addActionListener(e -> ui.switchPanel("setting"));
-		expMediaButton.addActionListener(e -> ui.logout());*/
-
-		/*buttonPanel.add(new JPanel());
-		buttonPanel.add(new JPanel());
-		buttonPanel.add(new JPanel());
-		buttonPanel.add(new JPanel());
-		buttonPanel.add(new JPanel());
-		buttonPanel.add(new JPanel());*/
 		buttonPanel.add(chngUserButton);
 		buttonPanel.add(chngPassButton);
 		buttonPanel.add(expUserButton);
@@ -169,15 +159,10 @@ public class SettingsPage extends Page {
 		buttonPanel.add(impMediaButton);
 		buttonPanel.add(delUserButton);
 		buttonPanel.add(adminButton); // TODO (make sure only admins can see this button)
-		/*buttonPanel.add(new JPanel());
-		buttonPanel.add(new JPanel());
-		buttonPanel.add(new JPanel());
-		buttonPanel.add(new JPanel());
-		buttonPanel.add(new JPanel());
-		buttonPanel.add(new JPanel());*/
+		
 		
 		buttonPanel.setBorder(BorderFactory.createEmptyBorder(300,250,300,850));
-		// statPanel.setBorder(BorderFactory.createEmptyBorder(300, 1000, 300, 100));
+		// STILL NEED STAT PANEL
 		
 		contentPanel.add(buttonPanel, BorderLayout.CENTER);
 		contentPanel.add(statPanel, BorderLayout.LINE_END);
