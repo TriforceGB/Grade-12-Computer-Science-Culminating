@@ -96,10 +96,6 @@ public class ListPage extends Page {
 		createListPanel();
 
 		addTableToListPanel();
-
-
-		// add content panel to main panel
-		this.add(contentPanel);
 	}
 
 	void createFilterPanel() {
@@ -118,6 +114,9 @@ public class ListPage extends Page {
 		contentPanel = new JPanel();
 		contentPanel.setBackground(PageColor);
 		contentPanel.setLayout(new BorderLayout());
+		
+		// add content panel to main panel
+		this.add(contentPanel);
 	}
 
 	void addTypeCheckboxes() {
