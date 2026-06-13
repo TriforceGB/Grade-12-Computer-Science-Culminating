@@ -70,6 +70,10 @@ public class AniListSearchResponse {
 					return coverImage.large;
 				}
 
+				public int getType() {
+					return 3;
+				}
+
 			}
 		}
 

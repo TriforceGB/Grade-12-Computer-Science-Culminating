@@ -13,6 +13,7 @@ public class TheTVDBSearchResponse {
 		private String overview; // The description of the data
 		private int episode_count; // The number of episodes (has to be added in a separate request)
 		private String image_url; // The URL of the image associated with the data
+		private String primary_type; // The primary type of the data (is it a movie or a series)
 
 		public int getId() {
 			return tvdb_id;
@@ -42,6 +43,15 @@ public class TheTVDBSearchResponse {
 
 		public String getImageUrl() {
 			return image_url;
+		}
+
+		public int getType() {
+			// Return 2 if the primary type is "series", 1 otherwise
+			if (primary_type.equals("series")) {
+				return 2;
+			} else {
+				return 1;
+			}
 		}
 	}
 

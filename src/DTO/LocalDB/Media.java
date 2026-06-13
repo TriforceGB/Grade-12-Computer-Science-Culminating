@@ -1,5 +1,8 @@
 package DTO.LocalDB;
 
+import DTO.API.Response.AniListSearchResponse;
+import DTO.API.Response.TheTVDBSearchResponse;
+
 public class Media {
 	// Base Info
 	private int id; // The ID in the database
@@ -45,6 +48,83 @@ public class Media {
 		this.lastEpisode = lastEpisode;
 		this.review = review;
 		this.rewatched = rewatched;
+	}
+
+	public Media(AniListSearchResponse.Data.Page.Anime response) {
+		this.id = 0; // Unknown (DB will give it a real one later)
+		this.type = response.getType();
+		this.externalId = response.getId();
+		this.name = response.getName();
+		this.description = response.getDescription();
+		this.posterPath = "assets/Images/Anime/" + response.getId() + ".png";
+		this.posterLink = response.getImageUrl();
+	}
+
+	public Media(TheTVDBSearchResponse.Data response) {
+		this.id = 0; // Unknown (DB will give it a real one later)
+		this.type = response.getType();
+		this.externalId = response.getId();
+		this.name = response.getName();
+		this.description = response.getDescription();
+		if (response.getType() == 1) {
+			this.posterPath = "assets/Images/Movies/" + response.getId() + ".jpg";
+		} else {
+			this.posterPath = "assets/Images/Shows/" + response.getId() + ".jpg";
+		}
+		this.posterLink = response.getImageUrl();
+	}
+
+	// Getter
+	public int getId() {
+		return id;
+	}
+
+	public int getType() {
+		return type;
+	}
+
+	public int getExternalId() {
+		return externalId;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public int getEpisodeCount() {
+		return episodeCount;
+	}
+
+	public String getPosterPath() {
+		return posterPath;
+	}
+
+	public String getPosterLink() {
+		return posterLink;
+	}
+
+	public int getStatus() {
+		return status;
+	}
+
+	public int getRating() {
+		return rating;
+	}
+
+	public int getLastEpisode() {
+		return lastEpisode;
+	}
+
+	public String getReview() {
+		return review;
+	}
+
+	public int getRewatched() {
+		return rewatched;
 	}
 
 }

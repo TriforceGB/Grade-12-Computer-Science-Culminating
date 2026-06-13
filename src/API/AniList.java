@@ -7,7 +7,7 @@ import java.net.http.HttpResponse;
 
 import com.google.gson.Gson;
 
-import DTO.API.Request.AniListSearchMessage;
+import DTO.API.Request.AniListSearchRequest;
 import DTO.API.Response.AniListSearchResponse;
 
 class AniList {
@@ -48,7 +48,7 @@ class AniList {
 
 	public AniListSearchResponse searchAnime(String name, int amount) {
 		// Creating json
-		AniListSearchMessage message = new AniListSearchMessage(SEARCH_QUERY, name, amount);
+		AniListSearchRequest message = new AniListSearchRequest(SEARCH_QUERY, name, amount);
 
 		try {
 			HttpRequest request = HttpRequest.newBuilder()
