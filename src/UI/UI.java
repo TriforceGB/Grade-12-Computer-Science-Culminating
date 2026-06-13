@@ -2,12 +2,16 @@ package UI;
 
 import java.awt.CardLayout;
 import java.awt.Container;
+import java.awt.Graphics2D;
 import java.util.EventListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 import java.awt.Image;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
+
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
@@ -138,11 +142,10 @@ public class UI extends JFrame implements EventListener {
 		return created;
 	}
 
-
 	public ImageIcon resizeImg(ImageIcon original, int width, int height) {
-        Image ogImage = original.getImage();
-        Image resizedImage = ogImage.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-        ImageIcon newicon = new ImageIcon(resizedImage);
+		Image ogImage = original.getImage();
+		Image resizedImage = ogImage.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+		ImageIcon newicon = new ImageIcon(resizedImage);
 		return newicon;
 	}
 
@@ -157,9 +160,14 @@ public class UI extends JFrame implements EventListener {
 
 	/**
 	 * @param toFormat The string of text (without line breaks) to be formatted
-	 * @param cPerLine The number of characters to place on each line. Will overshoot depedent on word size, so account for a little extra rooom. 
-	 * @param maxPass The amount of wiggle room there is around the cPerLine. If doesn't fit cPerLine but fits within cPerLine + maxPass then will add word to current line 
-	 * @return The string of text formatted via html with line breaks at parts attempting to match cPerLine, but based on number of words
+	 * @param cPerLine The number of characters to place on each line. Will
+	 *                 overshoot depedent on word size, so account for a little
+	 *                 extra rooom.
+	 * @param maxPass  The amount of wiggle room there is around the cPerLine. If
+	 *                 doesn't fit cPerLine but fits within cPerLine + maxPass then
+	 *                 will add word to current line
+	 * @return The string of text formatted via html with line breaks at parts
+	 *         attempting to match cPerLine, but based on number of words
 	 */
 	public String getHtmlFormatText(String toFormat, int cPerLine, int maxPass) {
 		String[] words = toFormat.split(" "); // split @ each space for each word

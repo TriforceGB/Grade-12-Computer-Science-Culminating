@@ -14,6 +14,7 @@ import javax.swing.ScrollPaneConstants;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.net.URI;
 import java.net.URL;
@@ -48,13 +49,15 @@ public class SearchPage extends Page {
 	private JPanel scrollWrapperPanel;
 	private JPanel scrollContentPanel;
 
-	private final int POSTER_WIDTH = 200;
-	private final int POSTER_HEIGHT = 200;
+	private final int POSTER_WIDTH = 100;
+	private final int POSTER_HEIGHT = 100;
+	private final Dimension POSTER_SIZE = new Dimension(POSTER_WIDTH, POSTER_HEIGHT);
+
 
 	private final int DESCRIPTION_CPERLINE = 40;
 	private final int MAX_PASS = 5;
 
-	private final String PATH_FOR_DEFAULT_IMAGE = "assets/UI/adminicon.png";
+	private final String PATH_FOR_DEFAULT_IMAGE = "assets/UI/filal.png";
 
 	/**
 	 * Create the Search Page
@@ -201,7 +204,15 @@ public class SearchPage extends Page {
 		gbc.gridx = 0; // col 1
 		gbc.insets = new Insets(POSTER_HEIGHT / 2, POSTER_WIDTH / 2, POSTER_HEIGHT / 2, POSTER_WIDTH / 2);
 
-		result.add(new JLabel(poster));
+		JLabel posterLbl = new JLabel();
+		posterLbl.setIcon(poster);
+		posterLbl.setPreferredSize(POSTER_SIZE);
+		posterLbl.setMinimumSize(POSTER_SIZE);
+		posterLbl.setMaximumSize(POSTER_SIZE);
+		result.add(posterLbl);
+
+		// revalidate all the stuff
+		
 
 		// add name
 		JLabel name = new JLabel("Testing");
