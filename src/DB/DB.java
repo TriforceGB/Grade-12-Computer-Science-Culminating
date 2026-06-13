@@ -220,6 +220,7 @@ public class DB {
 							rs.getString("name"),
 							rs.getString("description"),
 							rs.getString("posterPath"),
+							"",
 							rs.getInt("status"),
 							rs.getInt("rating"),
 							rs.getInt("lastEpisode"),
