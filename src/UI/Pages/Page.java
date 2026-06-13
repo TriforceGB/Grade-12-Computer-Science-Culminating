@@ -83,59 +83,64 @@ class Page extends JPanel {
 		JButton exitButton = new JButton("Exit");
 
 		// Fonts
-		homeButton.setFont(Style.BASE_FONT);
-		listButton.setFont(Style.BASE_FONT);
-		searchButton.setFont(Style.BASE_FONT);
-		settingButton.setFont(Style.BASE_FONT);
-		exitButton.setFont(Style.BASE_FONT);
 
 		// Colours
-		homeButton.setBackground(Style.LIGHT_GREEN);
-		homeButton.setForeground(Style.BALTIC_BLUE);
-		listButton.setBackground(Style.LIGHT_GREEN);
-		listButton.setForeground(Style.BALTIC_BLUE);
-		searchButton.setBackground(Style.LIGHT_GREEN);
-		searchButton.setForeground(Style.BALTIC_BLUE);
-		settingButton.setBackground(Style.LIGHT_GREEN);
-		settingButton.setForeground(Style.BALTIC_BLUE);
-		exitButton.setBackground(Style.LIGHT_GREEN);
-		exitButton.setForeground(Style.BALTIC_BLUE);
 
 		// Images
 		ImageIcon homeicon = ui.resizeImg(new ImageIcon("assets/UI/homeicon.png"), 30, 30);
+		homeButton.setFont(Style.BASE_FONT);
+		homeButton.setBackground(Style.LIGHT_GREEN);
+		homeButton.setForeground(Style.BALTIC_BLUE);
 		homeButton.setIcon(homeicon);
 		homeButton.setHorizontalAlignment(JLabel.RIGHT);
 		homeButton.setHorizontalAlignment(SwingConstants.CENTER);
 		homeButton.setVerticalAlignment(SwingConstants.CENTER);
 		homeButton.setIconTextGap(20);
-		
+		homeButton.setFocusable(false);
+
 		ImageIcon listicon = ui.resizeImg(new ImageIcon("assets/UI/listicon.png"), 30, 30);
+		listButton.setFont(Style.BASE_FONT);
+		listButton.setBackground(Style.LIGHT_GREEN);
+		listButton.setForeground(Style.BALTIC_BLUE);
 		listButton.setIcon(listicon);
 		listButton.setHorizontalAlignment(JLabel.RIGHT);
 		listButton.setHorizontalAlignment(SwingConstants.CENTER);
 		listButton.setVerticalAlignment(SwingConstants.CENTER);
 		listButton.setIconTextGap(20);
+		listButton.setFocusable(false);
 
 		ImageIcon searchicon = ui.resizeImg(new ImageIcon("assets/UI/searchicon.png"), 30, 30);
+		searchButton.setFont(Style.BASE_FONT);
+		searchButton.setBackground(Style.LIGHT_GREEN);
+		searchButton.setForeground(Style.BALTIC_BLUE);
 		searchButton.setIcon(searchicon);
 		searchButton.setHorizontalAlignment(JLabel.RIGHT);
 		searchButton.setHorizontalAlignment(SwingConstants.CENTER);
 		searchButton.setVerticalAlignment(SwingConstants.CENTER);
 		searchButton.setIconTextGap(20);
+		searchButton.setFocusable(false);
 
 		ImageIcon settingicon = ui.resizeImg(new ImageIcon("assets/UI/settingicon.png"), 30, 30);
+		settingButton.setFont(Style.BASE_FONT);
+		settingButton.setBackground(Style.LIGHT_GREEN);
+		settingButton.setForeground(Style.BALTIC_BLUE);
 		settingButton.setIcon(settingicon);
 		settingButton.setHorizontalAlignment(JLabel.RIGHT);
 		settingButton.setHorizontalAlignment(SwingConstants.CENTER);
 		settingButton.setVerticalAlignment(SwingConstants.CENTER);
 		settingButton.setIconTextGap(20);
+		settingButton.setFocusable(false);
 
 		ImageIcon exiticon = ui.resizeImg(new ImageIcon("assets/UI/exiticon.png"), 30, 30);
+		exitButton.setFont(Style.BASE_FONT);
+		exitButton.setBackground(Style.LIGHT_GREEN);
+		exitButton.setForeground(Style.BALTIC_BLUE);
 		exitButton.setIcon(exiticon);
 		exitButton.setHorizontalAlignment(JLabel.RIGHT);
 		exitButton.setHorizontalAlignment(SwingConstants.CENTER);
 		exitButton.setVerticalAlignment(SwingConstants.CENTER);
 		exitButton.setIconTextGap(20);
+		exitButton.setFocusable(false);
 
 		// Action listener
 		homeButton.addActionListener(e -> ui.switchPanel("home"));

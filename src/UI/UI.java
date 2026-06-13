@@ -13,7 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
 import DB.DB;
-import TableClass.User;
+import DTO.LocalDB.User;
 import UI.Pages.*;
 
 /**
