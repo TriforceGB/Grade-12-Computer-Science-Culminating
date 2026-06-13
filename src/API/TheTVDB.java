@@ -68,6 +68,7 @@ public class TheTVDB {
 	}
 
 	public TheTVDBSearchRespose Search(String query, String type, int limit) {
+		query = query.replace(" ", "%20"); // Replace spaces with %20 for URL encoding
 		try {
 			HttpRequest request = HttpRequest.newBuilder()
 					.uri(new URI(ENDPOINT + "/search?" + "query=" + query + "&type=" + type + "&limit=" + limit))

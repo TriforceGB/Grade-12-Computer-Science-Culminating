@@ -46,4 +46,8 @@ public class API {
 		return theTVDB.Search(name, "Movie", amount).getData();
 	}
 
+	public TheTVDBSearchRespose.Data[] searchShow(String name, int amount) {
+		return theTVDB.Search(name, "Series", amount).getData();
+	}
+
 }

@@ -8,10 +8,31 @@ public class TheTVDBSearchRespose {
 	private String status; // The status of the request (e.g. "success", "error")
 
 	public class Data {
-		// TODO add more Variables Here
-		private String id; // The ID of the data
-		private String image_url; // The URL of the image associated with the data
+		private int tvdb_id; // The ID of the data
 		private String name; // The name of the data
+		private String overview; // The description of the data
+		private int episode_count; // The number of episodes (has to be added in a separate request)
+		private String image_url; // The URL of the image associated with the data
+
+		public int getId() {
+			return tvdb_id;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public String getDescription() {
+			return overview;
+		}
+
+		public int getEpisodeCount() {
+			return episode_count;
+		}
+
+		public String getImageUrl() {
+			return image_url;
+		}
 	}
 
 	public Data[] getData() {
