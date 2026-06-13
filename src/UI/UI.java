@@ -154,4 +154,38 @@ public class UI extends JFrame implements EventListener {
 		button.setVerticalAlignment(SwingConstants.CENTER);
 		button.setIconTextGap(gap);
 	}
+
+	/**
+	 * @param toFormat The string of text (without line breaks) to be formatted
+	 * @param cPerLine The number of characters to place on each line. Will overshoot depedent on word size, so account for a little extra rooom. 
+	 * @param maxPass The amount of wiggle room there is around the cPerLine. If doesn't fit cPerLine but fits within cPerLine + maxPass then will add word to current line 
+	 * @return The string of text formatted via html with line breaks at parts attempting to match cPerLine, but based on number of words
+	 */
+	public String getHtmlFormatText(String toFormat, int cPerLine, int maxPass) {
+		String[] words = toFormat.split(" "); // split @ each space for each word
+		String result = "<html>"; // result string to return
+
+		int tracker = 0; // tracks current line number of chars
+		for (String word : words) {
+			int wordLength = word.length();
+			if ((tracker + wordLength) > cPerLine) { // exceeds cPerLine
+				if ((tracker + wordLength) < (cPerLine + maxPass)) { // but doesn't exceed the maximun pass range
+					// add word but prep for next line instead
+					tracker = 0;
+					result += word + "<br>"; // add break line for html
+				} else {
+					// simply add to next line
+					tracker = wordLength + 1; // accounting for space
+					result += "<br>" + word + " "; // new line, then word, then a space
+				}
+			} else { // doesn't exceed cPerLine so add as normal
+				tracker += wordLength + 1; // add length of word and space as well
+				result += word + " "; // add word with a space
+			}
+		}
+		// when done append ending html
+		result += "</html>";
+
+		return result; // return once finished
+	}
 }

@@ -1,7 +1,7 @@
 package UI.Pages;
 
 import javax.imageio.ImageIO;
-import javax.swing.BoxLayout;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -14,12 +14,14 @@ import javax.swing.ScrollPaneConstants;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.io.File;
 import java.net.URI;
 import java.net.URL;
 
 import UI.Style;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 
@@ -39,17 +41,20 @@ public class SearchPage extends Page {
 	private JLabel searchLbl;
 	private JTextField searchField;
 	private JComboBox<String> searchTypeBox;
-	private final String[] types = new String[] { "Movie", "TV Show", "Anime" };
+	private final String[] TYPES = new String[] { "Movie", "TV Show", "Anime" };
 	private JButton searchBtn;
 
-	private JScrollPane listScrollContainer;
-
+	private JScrollPane listScrollPane;
+	private JPanel scrollWrapperPanel;
 	private JPanel scrollContentPanel;
 
-	private final int posterWidth = 200;
-	private final int posterHeight = 200;
+	private final int POSTER_WIDTH = 200;
+	private final int POSTER_HEIGHT = 200;
 
-	private final String testUrlString = "https://images.unsplash.com/photo-1450558415837-1f5e21a17709?ixid=M3w4MjcwNjd8MHwxfHNlYXJjaHwzfHxqZXN1c3xlbnwwfHx8fDE3ODEyMjk4ODh8MA&ixlib=rb-4.1.0&fit=max&q=80";
+	private final int DESCRIPTION_CPERLINE = 40;
+	private final int MAX_PASS = 5;
+
+	private final String PATH_FOR_DEFAULT_IMAGE = "assets/UI/adminicon.png";
 
 	/**
 	 * Create the Search Page
@@ -71,11 +76,6 @@ public class SearchPage extends Page {
 		createListPanel();
 
 		addListScrollContainer();
-
-		// for testing purposes simply
-		for (int i = 0; i < 3; i++) {
-			scrollContentPanel.add(getSearchResultPanel());
-		}
 	}
 
 	void createContentPanel() {
@@ -128,7 +128,7 @@ public class SearchPage extends Page {
 	}
 
 	void addSearchTypeBox() {
-		searchTypeBox = new JComboBox<String>(types);
+		searchTypeBox = new JComboBox<String>(TYPES);
 		searchTypeBox.setFont(Style.BASE_FONT);
 
 		gbc.gridy = 0; // only one row
@@ -150,18 +150,22 @@ public class SearchPage extends Page {
 		// padding for 20px right to match offset from searchField
 		gbc.insets = new Insets(0, 0, 10, 20);
 
-		searchBtn.addActionListener(e -> procureSearches(1));
+		searchBtn.addActionListener(e -> procureSearches(5));
 
 		searchPanel.add(searchBtn, gbc);
 	}
 
 	void addListScrollContainer() {
-		scrollContentPanel = new JPanel(new GridLayout(0, 1, posterHeight + 20, 0));
-		listScrollContainer = new JScrollPane(scrollContentPanel);
-		listScrollContainer.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		listScrollContainer.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollWrapperPanel = new JPanel(new BorderLayout());
+		scrollContentPanel = new JPanel(new GridLayout(0, 1, 0, 20));
+		scrollWrapperPanel.add(scrollContentPanel, BorderLayout.NORTH);
+		listScrollPane = new JScrollPane(scrollWrapperPanel);
+		listScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		listScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		listScrollPane.setPreferredSize(new Dimension(1200, 900));
+		listScrollPane.getVerticalScrollBar().setUnitIncrement(16);
 
-		listPanel.add(listScrollContainer);
+		listPanel.add(listScrollPane);
 	}
 
 	// poster
@@ -172,13 +176,16 @@ public class SearchPage extends Page {
 	JPanel getSearchResultPanel() {
 		JPanel result = new JPanel();
 		result.setBackground(PageColor);
+		result.setBorder(BorderFactory.createLineBorder(Color.black, 4, true));
 		result.setLayout(new GridBagLayout());
 		gbc = new GridBagConstraints(); // reset gbc to ensure ready to go
+
+		String urlString = "";
 
 		// get url in try catch
 		URL url;
 		try {
-			url = new URI(testUrlString).toURL();
+			url = new URI(urlString).toURL();
 		} catch (Exception e) {
 			url = null;
 		}
@@ -186,13 +193,13 @@ public class SearchPage extends Page {
 		ImageIcon poster;
 		if (url != null)
 			poster = getSearchResultPoster(url);
-		else
-			poster = null;
+		else // if fails to grab poster, set poster to Filal Baruqi
+			poster = getDefaultPoster();
 
 		// create poster
 		gbc.gridy = 0; // row is always 0
 		gbc.gridx = 0; // col 1
-		gbc.insets = new Insets(posterHeight / 2, posterWidth / 2, posterHeight / 2, posterWidth / 2);
+		gbc.insets = new Insets(POSTER_HEIGHT / 2, POSTER_WIDTH / 2, POSTER_HEIGHT / 2, POSTER_WIDTH / 2);
 
 		result.add(new JLabel(poster));
 
@@ -204,8 +211,10 @@ public class SearchPage extends Page {
 		result.add(name);
 
 		// add desc.
-		JLabel desc = new JLabel("<html>Testing description.<br>With second line too.</hmtl>");
-		desc.setFont(Style.BASE_FONT);
+		// description is mounted via singular line
+		String testingDesc = "Sir James Bond 007, a legendary British spy who retired from the secret service 20 years previously, is visited by the head of British Secret Intelligence Service, M (James Bond), CIA representative Ransome, KGB representative Smernov, and Deuxième Bureau representative Le Grand. All implore Bond to come out of retirement to deal with SMERSH (James Bond) who have been eliminating agents: Bond spurns all their pleas. When Bond continues to stand firm, his mansion is destroyed by a mortar attack at the orders of M, who is, however, killed in the explosion.";
+		JLabel desc = new JLabel(ui.getHtmlFormatText(testingDesc, DESCRIPTION_CPERLINE, MAX_PASS));
+		desc.setFont(Style.DESC_FONT);
 
 		gbc.gridx = 2;
 
@@ -224,8 +233,17 @@ public class SearchPage extends Page {
 
 	ImageIcon getSearchResultPoster(URL url) {
 		try {
-			return ui.resizeImg(new ImageIcon(ImageIO.read(url)), posterWidth, posterHeight);
+			return ui.resizeImg(new ImageIcon(ImageIO.read(url)), POSTER_WIDTH, POSTER_HEIGHT);
 		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	ImageIcon getDefaultPoster() {
+		try {
+			return ui.resizeImg(new ImageIcon(PATH_FOR_DEFAULT_IMAGE), WIDTH, HEIGHT);
+		} catch (Exception e) {
+			System.out.println(System.getProperty("user.dir"));
 			return null;
 		}
 	}
@@ -240,11 +258,12 @@ public class SearchPage extends Page {
 		// for testing purposes simply
 		for (int i = 0; i < test; i++) {
 			scrollContentPanel.add(getSearchResultPanel());
+			listScrollPane.getViewport().revalidate();
 		}
 		scrollContentPanel.revalidate();
 		scrollContentPanel.repaint();
 
-		listScrollContainer.revalidate();
-		listScrollContainer.repaint();
+		listScrollPane.revalidate();
+		listScrollPane.repaint();
 	}
 }
