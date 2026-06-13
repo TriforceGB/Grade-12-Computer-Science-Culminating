@@ -8,7 +8,7 @@ import java.net.http.HttpResponse;
 import com.google.gson.Gson;
 
 import DTO.API.Request.AniListSearchMessage;
-import DTO.API.Response.AniListSearchResponce;
+import DTO.API.Response.AniListSearchResponse;
 
 class AniList {
 	// Constants
@@ -46,7 +46,7 @@ class AniList {
 		this.gson = gson;
 	}
 
-	public AniListSearchResponce searchAnime(String name, int amount) {
+	public AniListSearchResponse searchAnime(String name, int amount) {
 		// Creating json
 		AniListSearchMessage message = new AniListSearchMessage(SEARCH_QUERY, name, amount);
 
@@ -63,7 +63,7 @@ class AniList {
 			if (response.statusCode() != 200) {
 				return null;
 			} else {
-				return gson.fromJson(response.body(), AniListSearchResponce.class);
+				return gson.fromJson(response.body(), AniListSearchResponse.class);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

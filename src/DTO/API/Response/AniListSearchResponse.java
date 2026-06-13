@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 /**
  * The Object that the AniList API returns.
  */
-public class AniListSearchResponce {
+public class AniListSearchResponse {
 	// Top Level of the Json
 	private Data data; // Private so no info is exposed
 
@@ -76,7 +76,7 @@ public class AniListSearchResponce {
 	}
 
 	// Getter
-	public AniListSearchResponce.Data.Page.Anime[] getAnime() {
+	public AniListSearchResponse.Data.Page.Anime[] getAnime() {
 		return this.data.page.media;
 	}
 

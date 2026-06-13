@@ -10,8 +10,9 @@ import java.net.http.HttpResponse;
 import com.google.gson.Gson;
 
 import DTO.API.Request.TheTVDBLoginRequest;
-import DTO.API.Response.TheTVDBLoginResponce;
-import DTO.API.Response.TheTVDBSearchRespose;
+import DTO.API.Response.TheTVDBEpisodeResponse;
+import DTO.API.Response.TheTVDBLoginResponse;
+import DTO.API.Response.TheTVDBSearchResponse;
 
 public class TheTVDB {
 	// Constants
@@ -54,20 +55,19 @@ public class TheTVDB {
 
 			// Parse the response and return the token
 			if (response.statusCode() == 200) {
-				return gson.fromJson(response.body(), TheTVDBLoginResponce.class).getToken();
+				return gson.fromJson(response.body(), TheTVDBLoginResponse.class).getToken();
 			} else {
 				System.out.println(response.statusCode());
 				System.out.println(response.body());
 				return null;
 			}
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 			return null;
 		}
 	}
 
-	public TheTVDBSearchRespose Search(String query, String type, int limit) {
+	public TheTVDBSearchResponse Search(String query, String type, int limit) {
 		query = query.replace(" ", "%20"); // Replace spaces with %20 for URL encoding
 		try {
 			HttpRequest request = HttpRequest.newBuilder()
@@ -78,14 +78,71 @@ public class TheTVDB {
 					.build();
 
 			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-			System.out.println(response.statusCode());
-			System.out.println(response.body());
-			return gson.fromJson(response.body(), TheTVDBSearchRespose.class);
+			// Print Output if Issue Comes Up
+			if (response.statusCode() != 200) {
+				System.out.println(response.statusCode());
+				System.out.println(response.body());
+				return null;
+			}
+			TheTVDBSearchResponse formattedResponse = gson.fromJson(response.body(), TheTVDBSearchResponse.class);
+			setEpisodeCount(formattedResponse, type);
+			return formattedResponse;
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 			return null;
 		}
 	}
 
+	/**
+	 * A Shell method that finds all shows in a Response and sets their episode
+	 * count
+	 *
+	 * @param searchResponse The Request that we are finding the episode count for
+	 * @param type           if the request is a movie or series
+	 */
+	private void setEpisodeCount(TheTVDBSearchResponse searchResponse, String type) {
+		// Loop through the data and set the episode count for each show
+		for (int i = 0; i < searchResponse.getData().length; i++) {
+			// Gets the TVDB ID of the show
+			int tvdb_id = searchResponse.getData()[i].getId();
+			// Gets the episode count for the show from the API
+			if (type.equals("Movie")) {
+				searchResponse.getData()[i].setEpisodeCount(1); // Movie have 1 EP
+			} else {
+				int episode_count = getEpisodeCount(tvdb_id);
+				// Sets the episode count for the show in the search response
+				searchResponse.getData()[i].setEpisodeCount(episode_count);
+			}
+		}
+	}
+
+	/**
+	 * Find the Episode Count for a show with the Given ID
+	 *
+	 * @param tvdb_id the ID of the show to find the episode count for
+	 * @return the number of episodes for the show with the given ID
+	 */
+	private int getEpisodeCount(int tvdb_id) {
+		try {
+			HttpRequest request = HttpRequest.newBuilder()
+					.uri(new URI(ENDPOINT + "/series/" + tvdb_id + "/extended?meta=episodes"))
+					.header("Authorization", "Bearer " + this.token)
+					.header("Content-Type", "application/json")
+					.GET()
+					.build();
+
+			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+			if (response.statusCode() != 200) {
+				System.out.println(response.statusCode());
+				System.out.println(response.body());
+				return 1;
+			}
+			TheTVDBEpisodeResponse formattedResponse = gson.fromJson(response.body(), TheTVDBEpisodeResponse.class);
+			return formattedResponse.getEpisodeCount();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 1;
+		}
+	}
 }

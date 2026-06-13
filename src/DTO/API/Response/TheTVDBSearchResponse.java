@@ -3,7 +3,7 @@ package DTO.API.Response;
 /**
  * This is the request object for the TheTVDB API.
  */
-public class TheTVDBSearchRespose {
+public class TheTVDBSearchResponse {
 	private Data[] data; // The data returned by the request
 	private String status; // The status of the request (e.g. "success", "error")
 
@@ -24,6 +24,16 @@ public class TheTVDBSearchRespose {
 
 		public String getDescription() {
 			return overview;
+		}
+
+		/**
+		 * This is needed as the Base Query can't give EP count so this has to be found
+		 * in a different call
+		 *
+		 * @param episodes The Number of Episodes in a Show
+		 */
+		public void setEpisodeCount(int episodes) {
+			episode_count = episodes;
 		}
 
 		public int getEpisodeCount() {

@@ -1,6 +1,6 @@
 package DTO.API.Response;
 
-public class TheTVDBLoginResponce {
+public class TheTVDBLoginResponse {
 	private Data data; // The data returned by the request
 	private String status; // The status of the request (e.g. "success", "error")
 
