@@ -1,7 +1,15 @@
 package UI.Pages;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Insets;
+import java.net.URI;
+import java.net.URL;
+
 import javax.imageio.ImageIO;
-import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -11,18 +19,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Insets;
-import java.net.URI;
-import java.net.URL;
-
 import UI.Style;
-
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-
 import UI.UI;
 
 /**
@@ -236,7 +233,7 @@ public class SearchPage extends Page {
 
 		// get serach number
 		// and do search itself
-		
+
 		// for testing purposes simply
 		for (int i = 0; i < test; i++) {
 			scrollContentPanel.add(getSearchResultPanel());

@@ -1,6 +1,5 @@
 package UI.Pages;
 
-import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -153,7 +152,8 @@ public class CreateUserPage extends Page {
 		pwdConfirmField = new JPasswordField(20);
 		pwdConfirmField.setFont(Style.BASE_FONT); // Set the font of the confirm password text field
 		pwdConfirmField.setBackground(Style.TEA_GREEN); // set the background colour of the confirm password text field
-		pwdConfirmField.setForeground(Style.BALTIC_BLUE); // set the font color of the confirm password text field's text
+		pwdConfirmField.setForeground(Style.BALTIC_BLUE); // set the font color of the confirm password text field's
+															// text
 		pwdConfirmField.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR));
 		char pwdEchoChar = (char) 0; // Character to show when password is hidden (0 means no character)
 		// Character to show when password is visible (0 means no character)
@@ -241,7 +241,8 @@ public class CreateUserPage extends Page {
 
 		createButton.addActionListener(e -> {
 			// Check if the password fields match
-			if (!new String(pwdField.getPassword()).equals(new String(pwdConfirmField.getPassword()))) { // NOTE This is Deprecated
+			if (!new String(pwdField.getPassword()).equals(new String(pwdConfirmField.getPassword()))) { // NOTE This is
+																											// Deprecated
 				JOptionPane.showMessageDialog(this, "Passwords do not match", "Error", JOptionPane.ERROR_MESSAGE);
 				// Clear Text Fields and set Color Red
 				pwdField.setText("");
@@ -252,7 +253,8 @@ public class CreateUserPage extends Page {
 			}
 			// check if password box is blank
 			else if (usernameField.getText().isEmpty() || new String(pwdField.getPassword()).isEmpty()) {
-				JOptionPane.showMessageDialog(this, "Cannot leave any fields empty", "Error", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(this, "Cannot leave any fields empty", "Error",
+						JOptionPane.ERROR_MESSAGE);
 				return;
 			}
 
@@ -263,7 +265,7 @@ public class CreateUserPage extends Page {
 				pwdField.setText("");
 				pwdConfirmField.setText("");
 				// Set Color Normal
-				
+
 			} else {
 				JOptionPane.showMessageDialog(this, "Unable to Create User, Try again", "Error",
 						JOptionPane.ERROR_MESSAGE);

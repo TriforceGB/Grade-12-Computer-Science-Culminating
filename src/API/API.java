@@ -19,16 +19,14 @@ public class API {
 			.build();
 
 	// Variables
-	private DB db; // Reference to the Local DB
 	private Gson gson; // Reference to the Gson library
 	private AniList aniList; // Reference to the AniList API
 	private TheTVDB theTVDB; // Reference to the TheTVDB API
 
-	public API(DB db) {
-		this.db = db;
+	public API(String tvdb_api_key) {
 		this.gson = new Gson();
 		this.aniList = new AniList(this.CLIENT, this.gson);
-		this.theTVDB = new TheTVDB(this.CLIENT, this.gson);
+		this.theTVDB = new TheTVDB(this.CLIENT, this.gson, tvdb_api_key);
 	}
 
 	/**

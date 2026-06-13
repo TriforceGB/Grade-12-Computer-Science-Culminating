@@ -10,18 +10,29 @@ public class Media {
 	private int externalId; // The external ID from the API
 	private String name; // Name of Media
 	private String description; // Description of Media
-	private int episodeCount;
-	private String posterPath;
-	private String posterLink;
+	private int episodeCount; // The Total Number of Episodes
+	private String posterPath; // The path to the poster image
+	private String posterLink; // The URL of the poster image
 
 	// Extra User Info
-	private int status;
-	private int rating;
-	private int lastEpisode;
-	private String review;
-	private int rewatched;
+	private int status; // The status of the media (0 = undefined, 1 = backlog, 2 = watching, 3 =
+						// finished, 4 = completed)
+	private int rating; // User Rating
+	private int lastEpisode; // The last episode watched
+	private String review; // User Review
+	private int rewatched; // The number of times the media has been rewatched
 
-	// Just Media Info
+	/**
+	 * Stores Just media Information no User Info
+	 *
+	 * @param id          The ID of in the database (int)
+	 * @param type        The type of media (int)
+	 * @param externalId  The external ID from the API (int)
+	 * @param name        The name of the media (String)
+	 * @param description The description of the media (String)
+	 * @param posterPath  The path to the poster image (String)
+	 * @param posterLink  The URL of the poster image (String)
+	 */
 	public Media(int id, int type, int externalId, String name, String description, String posterPath,
 			String posterLink) {
 		this.id = id;
@@ -33,7 +44,22 @@ public class Media {
 		this.posterLink = posterLink;
 	}
 
-	// Everything
+	/**
+	 * Stores Everything about media related to the user
+	 *
+	 * @param id          The ID of in the database (int)
+	 * @param type        The type of media (int)
+	 * @param externalId  The external ID from the API (int)
+	 * @param name        The name of the media (String)
+	 * @param description The description of the media (String)
+	 * @param posterPath  The path to the poster image (String)
+	 * @param posterLink  The URL of the poster image (String)
+	 * @param status      The status of the media (int)
+	 * @param rating      User Rating (int)
+	 * @param lastEpisode The last episode watched (int)
+	 * @param review      User Review (String)
+	 * @param rewatched   The number of times the media has been rewatched (int)
+	 */
 	public Media(int id, int type, int externalId, String name, String description, String posterPath,
 			String posterLink, int status, int rating, int lastEpisode, String review, int rewatched) {
 		this.id = id;
@@ -50,6 +76,12 @@ public class Media {
 		this.rewatched = rewatched;
 	}
 
+	/**
+	 * Imports a Anime from Anilist into the Media format
+	 *
+	 * @param response The response from the Anilist API
+	 *                 (AniListSearchResponse.Data.Page.Anime)
+	 */
 	public Media(AniListSearchResponse.Data.Page.Anime response) {
 		this.id = 0; // Unknown (DB will give it a real one later)
 		this.type = response.getType();
@@ -60,6 +92,12 @@ public class Media {
 		this.posterLink = response.getImageUrl();
 	}
 
+	/**
+	 * Imports a Movie/Show from TheTVDB into the Media format
+	 *
+	 * @param response The response from the TheTVDB API
+	 *                 (TheTVDBSearchResponse.Data)
+	 */
 	public Media(TheTVDBSearchResponse.Data response) {
 		this.id = 0; // Unknown (DB will give it a real one later)
 		this.type = response.getType();
@@ -72,6 +110,7 @@ public class Media {
 			this.posterPath = "assets/Images/Shows/" + response.getId() + ".jpg";
 		}
 		this.posterLink = response.getImageUrl();
+
 	}
 
 	// Getter

@@ -1,31 +1,28 @@
 package UI.Pages;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
-import UI.Style;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import javax.swing.SpinnerNumberModel;
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
 
-
+import UI.Style;
 import UI.UI;
 
 /**
@@ -72,7 +69,8 @@ public class ListPage extends Page {
 
 	private JButton searchButton;
 
-	private final Border border = BorderFactory.createLineBorder(Style.BORDER_COLOR, 4, true); // true allows for rounded
+	private final Border border = BorderFactory.createLineBorder(Style.BORDER_COLOR, 4, true); // true allows for
+																								// rounded
 
 	/**
 	 * Create the List Page
@@ -114,7 +112,7 @@ public class ListPage extends Page {
 		contentPanel = new JPanel();
 		contentPanel.setBackground(PageColor);
 		contentPanel.setLayout(new BorderLayout());
-		
+
 		// add content panel to main panel
 		this.add(contentPanel);
 	}
@@ -128,7 +126,6 @@ public class ListPage extends Page {
 		movieTypeLbl.setForeground(Style.TEA_GREEN); // set the font color of the password label
 		movieType = new JCheckBox();
 		movieType.setBackground(Style.BALTIC_BLUE);
-		
 
 		showTypeLbl = new JLabel("TV Show: ");
 		showTypeLbl.setFont(Style.BASE_FONT);
@@ -182,7 +179,7 @@ public class ListPage extends Page {
 		nameFilter.setSize(new Dimension(100, 10));
 		nameFilter.setFont(Style.BASE_FONT);
 		nameFilter.setBackground(Style.TEA_GREEN);
-		nameFilter.setForeground(Style.BALTIC_BLUE); 
+		nameFilter.setForeground(Style.BALTIC_BLUE);
 		nameFilter.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR));
 
 		statusFilterLbl = new JLabel("Status: ");
@@ -299,7 +296,6 @@ public class ListPage extends Page {
 			boolean canBeShow = showType.isSelected();
 			boolean canBeAnime = animeType.isSelected();
 
-			
 		});
 
 		gbc.gridy = 6; // row 7
