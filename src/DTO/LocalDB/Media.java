@@ -83,11 +83,10 @@ public class Media {
 	 *                 (AniListSearchResponse.Data.Page.Anime)
 	 */
 	public Media(AniListSearchResponse.Data.Page.Anime response) {
-		this.id = 0; // Unknown (DB will give it a real one later)
-		this.type = response.getType();
-		this.externalId = response.getId();
 		this.name = response.getName();
 		this.description = response.getDescription();
+		this.type = response.getType();
+		this.externalId = response.getId();
 		this.posterPath = "assets/Images/Anime/" + response.getId() + ".png";
 		this.posterLink = response.getImageUrl();
 	}
@@ -99,11 +98,10 @@ public class Media {
 	 *                 (TheTVDBSearchResponse.Data)
 	 */
 	public Media(TheTVDBSearchResponse.Data response) {
-		this.id = 0; // Unknown (DB will give it a real one later)
-		this.type = response.getType();
-		this.externalId = response.getId();
 		this.name = response.getName();
 		this.description = response.getDescription();
+		this.type = response.getType();
+		this.externalId = response.getId();
 		if (response.getType() == 1) {
 			this.posterPath = "assets/Images/Movies/" + response.getId() + ".jpg";
 		} else {

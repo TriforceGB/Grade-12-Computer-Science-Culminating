@@ -131,18 +131,17 @@ public class UI extends JFrame implements EventListener {
 	 * @return
 	 */
 	public boolean createUser(String username, String password, boolean isAdmin) {
-		boolean created = db.createUser(username, password, isAdmin);
+		boolean created = db.createUser(new User(username, password, isAdmin));
 		if (created) {
 			this.switchPanel("login");
 		}
 		return created;
 	}
 
-
 	public ImageIcon resizeImg(ImageIcon original, int width, int height) {
-        Image ogImage = original.getImage();
-        Image resizedImage = ogImage.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-        ImageIcon newicon = new ImageIcon(resizedImage);
+		Image ogImage = original.getImage();
+		Image resizedImage = ogImage.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+		ImageIcon newicon = new ImageIcon(resizedImage);
 		return newicon;
 	}
 

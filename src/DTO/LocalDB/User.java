@@ -32,6 +32,18 @@ public class User {
 		this.lastLogin = lastLogin;
 	}
 
+	/**
+	 * A Cut down version of the Object for User Creation
+	 *
+	 * @param username the User's username (String)
+	 * @param password the User's password (String)
+	 * @param isAdmin  whether the User is an Admin (boolean)
+	 */
+	public User(String username, String password, boolean isAdmin) {
+		this.username = username;
+		this.password = password;
+		this.isAdmin = isAdmin;
+	}
 	// Getters
 
 	/**
