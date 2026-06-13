@@ -6,8 +6,8 @@ import java.time.Duration;
 import com.google.gson.Gson;
 
 import DB.DB;
-import DTO.API.Response.AniListSearchResponce;
-import DTO.API.Response.TheTVDBSearchRespose;
+import DTO.API.Response.AniListSearchResponse;
+import DTO.API.Response.TheTVDBSearchResponse;
 
 public class API {
 	// Constants
@@ -38,12 +38,16 @@ public class API {
 	 * @param amount The number of show to return
 	 * @return
 	 */
-	public AniListSearchResponce.Data.Page.Anime[] searchAnime(String name, int amount) {
+	public AniListSearchResponse.Data.Page.Anime[] searchAnime(String name, int amount) {
 		return aniList.searchAnime(name, amount).getAnime();
 	}
 
-	public TheTVDBSearchRespose.Data[] searchMovie(String name, int amount) {
+	public TheTVDBSearchResponse.Data[] searchMovie(String name, int amount) {
 		return theTVDB.Search(name, "Movie", amount).getData();
+	}
+
+	public TheTVDBSearchResponse.Data[] searchShow(String name, int amount) {
+		return theTVDB.Search(name, "Series", amount).getData();
 	}
 
 }

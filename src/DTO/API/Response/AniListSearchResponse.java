@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 /**
  * The Object that the AniList API returns.
  */
-public class AniListSearchResponce {
+public class AniListSearchResponse {
 	// Top Level of the Json
 	private Data data; // Private so no info is exposed
 
@@ -30,8 +30,8 @@ public class AniListSearchResponce {
 			public class Anime {
 				private int id;
 				private Title title;
-				private int episodes;
 				private String description;
+				private int episodes;
 				private CoverImage coverImage;
 
 				// Classes To Hold Data and Help with Gson
@@ -49,7 +49,7 @@ public class AniListSearchResponce {
 					return id;
 				}
 
-				public String getTitle() {
+				public String getName() {
 					// If no English title was found, return the romaji title
 					if (title.english == null) {
 						return title.romaji;
@@ -57,17 +57,21 @@ public class AniListSearchResponce {
 					return title.english;
 				}
 
-				public int getEpisodes() {
-					return episodes;
-				}
-
 				public String getDescription() {
 					return description;
 				}
 
-				public String getCoverImage() {
+				public int getEpisodeCount() {
+					return episodes;
+				}
+
+				public String getImageUrl() {
 					// Return the String rather then the Object
 					return coverImage.large;
+				}
+
+				public int getType() {
+					return 3;
 				}
 
 			}
@@ -76,7 +80,7 @@ public class AniListSearchResponce {
 	}
 
 	// Getter
-	public AniListSearchResponce.Data.Page.Anime[] getAnime() {
+	public AniListSearchResponse.Data.Page.Anime[] getAnime() {
 		return this.data.page.media;
 	}
 

@@ -4,7 +4,7 @@ package DTO.API.Request;
  * Object that holds the values needed for the request for Anilist
  * The class is formatted for Gson usage
  */
-public class AniListSearchMessage {
+public class AniListSearchRequest {
 	private String query; // The query for the request, holds what information we want
 	private variables variables; // the values we give to help find the information we want
 
@@ -16,7 +16,7 @@ public class AniListSearchMessage {
 	 * @param show   Name of Anime (String)
 	 * @param amount Number of Anime to Return (int)
 	 */
-	public AniListSearchMessage(String query, String show, int amount) {
+	public AniListSearchRequest(String query, String show, int amount) {
 		this.query = query;
 		this.variables = new variables(show, amount);
 	}

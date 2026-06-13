@@ -1,7 +1,5 @@
 import UI.UI;
 import DB.DB;
-import DTO.API.Response.AniListSearchResponce;
-import DTO.API.Response.TheTVDBSearchRespose;
 import API.API;
 
 public class FTS {
@@ -16,9 +14,6 @@ public class FTS {
 	public static void main(String[] args) {
 		db = new DB(DB_PATH);
 		api = new API(db);
-		AniListSearchResponce.Data.Page.Anime[] teest = api.searchAnime("Attack", 5);
-		TheTVDBSearchRespose.Data[] movies = api.searchMovie("Backrooms", 2);
-
 		ui = new UI(db);
 	}
 }
