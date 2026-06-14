@@ -12,6 +12,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 
+import DTO.LocalDB.Media;
+
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
@@ -50,7 +52,7 @@ public class SearchPage extends Page {
 	private JPanel scrollWrapperPanel;
 	private JPanel scrollContentPanel;
 
-	private final int POSTER_WIDTH = 200;
+	private final int POSTER_WIDTH = 133;
 	private final int POSTER_HEIGHT = 200;
 	private final Dimension POSTER_SIZE = new Dimension(POSTER_WIDTH, POSTER_HEIGHT);
 
@@ -157,7 +159,7 @@ public class SearchPage extends Page {
 		// padding for 20px right to match offset from searchField
 		gbc.insets = new Insets(0, 0, 10, 20);
 
-		searchBtn.addActionListener(e -> procureSearches(5));
+		searchBtn.addActionListener(e -> procureSearches());
 
 		searchPanel.add(searchBtn, gbc);
 	}
@@ -169,25 +171,20 @@ public class SearchPage extends Page {
 		listScrollPane = new JScrollPane(scrollWrapperPanel);
 		listScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		listScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		listScrollPane.setPreferredSize(new Dimension(1500, 900));
+		listScrollPane.setPreferredSize(new Dimension(1500, 800));
 		listScrollPane.getVerticalScrollBar().setUnitIncrement(16);
 
 		listPanel.add(listScrollPane);
 	}
 
-	// poster
-	// name (big)
-	// desc. (small)
-	// button to add to local db
-
-	JPanel getSearchResultPanel() {
+	JPanel getSearchResultPanel(Media obj) {
 		JPanel result = new JPanel();
 		result.setBackground(PageColor);
 		result.setBorder(BorderFactory.createLineBorder(Color.black, 4, true));
 		result.setLayout(new GridBagLayout());
 		gbc = new GridBagConstraints(); // reset gbc to ensure ready to go
 
-		String urlString = "";
+		String urlString = obj.getPosterLink();
 
 		// get url in try catch
 		URL url;
@@ -206,7 +203,7 @@ public class SearchPage extends Page {
 		// create poster
 		gbc.gridy = 0; // row is always 0
 		gbc.gridx = 0; // col 1
-		gbc.insets = new Insets(20, 20, 20, 100);
+		gbc.insets = new Insets(20, 20, 20, 200);
 
 		JLabel posterLbl = new JLabel();
 		posterLbl.setIcon(poster);
@@ -217,24 +214,24 @@ public class SearchPage extends Page {
 
 
 		// add name
-		String testingTitle = "Testing Egregious Long Title of Many Words";
-		JLabel name = new JLabel(ui.getHtmlFormatText(testingTitle, TITLE_CPERLINE, MAX_PASS));
-		name.setFont(Style.TITLE_FONT);
+		String titleString = obj.getName();
+		JLabel titleLbl = new JLabel(ui.getHtmlFormatText(titleString, TITLE_CPERLINE, MAX_PASS));
+		titleLbl.setFont(Style.TITLE_FONT);
 
 		gbc.gridx = 1; // col 2
 		gbc.insets = new Insets(20, 0, 20, 100);
-		result.add(name, gbc);
+		result.add(titleLbl, gbc);
 
 		// add desc.
 		// description is mounted via singular line
-		String testingDesc = "Sir James Bond 007, a legendary British spy who retired from the secret service 20 years previously, is visited by the head of British Secret Intelligence Service, M (James Bond), CIA representative Ransome, KGB representative Smernov, and Deuxième Bureau representative Le Grand. All implore Bond to come out of retirement to deal with SMERSH (James Bond) who have been eliminating agents: Bond spurns all their pleas. When Bond continues to stand firm, his mansion is destroyed by a mortar attack at the orders of M, who is, however, killed in the explosion.";
-		JLabel desc = new JLabel(ui.getHtmlFormatText(testingDesc, DESCRIPTION_CPERLINE, MAX_PASS));
-		desc.setFont(Style.DESC_FONT);
+		String descString = obj.getDescription();
+		JLabel descLbl = new JLabel(ui.getHtmlFormatText(descString, DESCRIPTION_CPERLINE, MAX_PASS));
+		descLbl.setFont(Style.DESC_FONT);
 
 		gbc.gridx = 2; // col 3
 		gbc.insets = new Insets(20, 0, 20, 70);
 
-		result.add(desc, gbc);
+		result.add(descLbl, gbc);
 
 		// add button
 		JButton addToDb = new JButton("+");
@@ -256,12 +253,23 @@ public class SearchPage extends Page {
 
 				JComboBox<String> showStatus = new JComboBox<String>(SHOW_STATUS_OPTIONS);
 				showStatus.setFont(Style.BASE_FONT);
+				showStatus.setFocusable(false);
+
+				// on picking new option
+				showStatus.addActionListener(event -> {
+					// TODO Knowing existing search data and current user data, find the show again, and change user information based on:
+					String showStatusToUpdate = showStatus.getSelectedItem().toString();
+				});	
 
 				gbc2.gridy = 0;
 				gbc2.gridx = 3; // col 4
 				gbc2.insets = new Insets(20, 0, 20, 20);
 
 				result.add(showStatus);
+
+				// repaint scroll view
+				listScrollPane.revalidate();
+				listScrollPane.repaint();
 			} else {
 				JOptionPane.showMessageDialog(this, "Failed to add show to local database.", "Error", JOptionPane.ERROR_MESSAGE);
 			}
@@ -291,16 +299,27 @@ public class SearchPage extends Page {
 		}
 	}
 
-	void procureSearches(int test) {
+	void procureSearches() {
 		// empty existing
 		scrollContentPanel.removeAll();
 
+
+		// TODO implement db search and pull
 		// get serach number
 		// and do search itself
 		
 		// for testing purposes simply
+		// but basically pull searches and iterate through them passing the media object through
+		int test = 5;
 		for (int i = 0; i < test; i++) {
-			scrollContentPanel.add(getSearchResultPanel());
+			String testingUrl = "";
+			if (i == (test - 1))
+				testingUrl = "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx129874-g6ZKXB94Hui1.jpg";
+			else if (i == (test - 2))
+				testingUrl = "https://artworks.thetvdb.com/banners/posters/81189-10.jpg";
+			else
+				testingUrl = "bad-url";
+			scrollContentPanel.add(getSearchResultPanel(new Media(42, 420, 69, "Testing Egregious Long Title of Many Words", "Sir James Bond 007, a legendary British spy who retired from the secret service 20 years previously, is visited by the head of British Secret Intelligence Service, M (James Bond), CIA representative Ransome, KGB representative Smernov, and Deuxième Bureau representative Le Grand. All implore Bond to come out of retirement to deal with SMERSH (James Bond) who have been eliminating agents: Bond spurns all their pleas. When Bond continues to stand firm, his mansion is destroyed by a mortar attack at the orders of M, who is, however, killed in the explosion.", "maybe temp path?", testingUrl)));
 			listScrollPane.getViewport().revalidate();
 		}
 		scrollContentPanel.revalidate();
