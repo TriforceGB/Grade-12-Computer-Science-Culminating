@@ -7,10 +7,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.io.File;
 
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-
-import javax.swing.SpinnerNumberModel;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -27,8 +23,8 @@ import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
 
 import DTO.LocalDB.Media;
-import UI.UI;
 import UI.Style;
+import UI.UI;
 
 /**
  * The List Page Class. Used to display a list of media for the user.
@@ -64,7 +60,8 @@ public class ListPage extends Page {
 	private JLabel statusFilterLbl;
 
 	private JComboBox<String> statusFilter;
-	private final String[] SHOW_STATUS_OPTIONS = new String[] { "", "Undecided", "Backlog", "Watching", "Completed", "Dropped" };
+	private final String[] SHOW_STATUS_OPTIONS = new String[] { "", "Undecided", "Backlog", "Watching", "Completed",
+			"Dropped" };
 
 	private JLabel minRatingLbl;
 	private JSpinner minRating;
@@ -83,7 +80,10 @@ public class ListPage extends Page {
 																								// rounded
 
 	// TODO Remove when done testing
-	private Media testMedia = new Media(42, 420, 69, "Testing Egregious Long Title of Many Words", "Sir James Bond 007, a legendary British spy who retired from the secret service 20 years previously, is visited by the head of British Secret Intelligence Service, M (James Bond), CIA representative Ransome, KGB representative Smernov, and Deuxième Bureau representative Le Grand. All implore Bond to come out of retirement to deal with SMERSH (James Bond) who have been eliminating agents: Bond spurns all their pleas. When Bond continues to stand firm, his mansion is destroyed by a mortar attack at the orders of M, who is, however, killed in the explosion.", "maybe temp path?", "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx129874-g6ZKXB94Hui1.jpg");
+	private Media testMedia = new Media(42, 420, 69, "Testing Egregious Long Title of Many Words",
+			"Sir James Bond 007, a legendary British spy who retired from the secret service 20 years previously, is visited by the head of British Secret Intelligence Service, M (James Bond), CIA representative Ransome, KGB representative Smernov, and Deuxième Bureau representative Le Grand. All implore Bond to come out of retirement to deal with SMERSH (James Bond) who have been eliminating agents: Bond spurns all their pleas. When Bond continues to stand firm, his mansion is destroyed by a mortar attack at the orders of M, who is, however, killed in the explosion.",
+			"maybe temp path?",
+			"https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx129874-g6ZKXB94Hui1.jpg");
 
 	/**
 	 * Create the List Page
@@ -125,7 +125,7 @@ public class ListPage extends Page {
 	void createContentPanel() {
 		contentPanel = new JPanel(new BorderLayout());
 		contentPanel.setBackground(PageColor);
-		
+
 		// add content panel to main panel
 		this.add(contentPanel);
 	}

@@ -14,7 +14,9 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 
+import API.API;
 import DB.DB;
+import DTO.LocalDB.Media;
 import DTO.LocalDB.User;
 import UI.Pages.*;
 
@@ -29,6 +31,7 @@ public class UI extends JFrame implements EventListener {
 	private static final int HEIGHT = 1080; // Height of the window
 	// Variables
 	private DB db; // reference to the database
+	private API api; // reference to the database
 	private User currentUser; // Info about the Current Login User
 
 	// Panels
@@ -48,9 +51,10 @@ public class UI extends JFrame implements EventListener {
 	/**
 	 * This Create the UI and Display it for the User
 	 */
-	public UI(DB db) {
+	public UI(DB db, API api) {
 		// Taking in the Reference(s)
 		this.db = db;
+		this.api = api;
 
 		// Settings
 		this.setTitle(Style.APP_TITLE); // Set the title of the window
@@ -184,12 +188,47 @@ public class UI extends JFrame implements EventListener {
 		}
 	}
 
+	// API Shells
+
+	/**
+	 * Just a Shell for the searchMovie Method in API
+	 *
+	 * @param query  The Query for the Show
+	 * @param amount The Number of Show to Return
+	 * @return A Media Array
+	 */
+	public Media[] searchMovie(String query, int amount) {
+		return this.api.searchMovie(query, amount);
+	}
+
+	/**
+	 * Just a Shell for the searchShow Method in API
+	 *
+	 * @param query  The Query for the Show
+	 * @param amount The Number of Show to Return
+	 * @return A Media Array
+	 */
+	public Media[] searchShow(String query, int amount) {
+		return this.api.searchShow(query, amount);
+	}
+
+	/**
+	 * Just a Shell for the searchAnime Method in API
+	 *
+	 * @param query  The Query for the Show
+	 * @param amount The Number of Show to Return
+	 * @return A Media Array
+	 */
+	public Media[] searchAnime(String query, int amount) {
+		return this.api.searchAnime(query, amount);
+	}
+
 	// Image and Other UI Methods
 	public ImageIcon resizeImg(ImageIcon original, int width, int height) {
 		Image ogImage = original.getImage();
 		Image resizedImage = ogImage.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-		ImageIcon newicon = new ImageIcon(resizedImage);
-		return newicon;
+		ImageIcon newIcon = new ImageIcon(resizedImage);
+		return newIcon;
 	}
 
 	public void addButtonImg(JButton button, ImageIcon image, int gap, int width, int height) {
