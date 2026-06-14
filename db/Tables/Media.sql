@@ -3,9 +3,11 @@
 CREATE TABLE IF NOT EXISTS "Media" (
 	"id" INTEGER NOT NULL UNIQUE PRIMARY KEY,
 	"type" INTEGER NOT NULL,
-	"externalId" INTEGER NOT NULL, -- Might not be an Int
+	"externalId" INTEGER NOT NULL,
 	"name" TEXT NOT NULL,
 	"description" TEXT,
-	"releaseDate" TEXT,
-	"posterPath" TEXT
+	"episodeCount" INTEGER,
+	"posterPath" TEXT,
+	"posterLink" TEXT
+	UNIQUE(externalId,type)
 );

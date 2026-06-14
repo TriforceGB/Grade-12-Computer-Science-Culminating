@@ -1,120 +1,70 @@
 package API;
 
-import java.net.URI;
 import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.util.Scanner;
+import java.time.Duration;
+
+import com.google.gson.Gson;
+
+import DTO.API.Response.TheTVDBSearchResponse.Data;
+import DTO.API.Response.AniListSearchResponse.Data.Page.Anime;
+import DTO.LocalDB.Media;
 
 public class API {
+	// Constants
+	private final Duration CONNECT_TIMEOUT = Duration.ofSeconds(10);
+	// The Client Used to Connect to API
+	public final HttpClient CLIENT = HttpClient.newBuilder()
+			.connectTimeout(CONNECT_TIMEOUT) // Set the connect timeout
+			.followRedirects(HttpClient.Redirect.NORMAL) // Follow redirects normally
+			.build();
 
-    public static void main(String[] args) {
-        Scanner input = new Scanner(System.in);
-        HttpClient client = HttpClient.newHttpClient();
+	// Variables
+	private Gson gson; // Reference to the Gson library
+	private AniList aniList; // Reference to the AniList API
+	private TheTVDB theTVDB; // Reference to the TheTVDB API
 
-        System.out.println("--- ANILIST DISPLAY CONFIGURATION ---");
-        System.out.println("1. English Titles");
-        System.out.println("2. Japanese Romaji Titles");
-        System.out.print("Choose display language (1 or 2): ");
-        
-        int choice = input.nextInt();
-        input.nextLine(); 
+	public API(String tvdb_api_key) {
+		this.gson = new Gson();
+		this.aniList = new AniList(this.CLIENT, this.gson);
+		this.theTVDB = new TheTVDB(this.CLIENT, this.gson, tvdb_api_key);
+	}
 
-        String targetKey = (choice == 1) ? "\"english\":\"" : "\"romaji\":\"";
+	/**
+	 * Search AniList for x amount of shows related to the given name
+	 *
+	 * @param name   The name of this show(s) you are Searching for
+	 * @param amount The number of show to return
+	 * @return
+	 */
+	public Media[] searchAnime(String name, int amount) {
+		Anime[] foundAnime = aniList.searchAnime(name, amount).getAnime();
+		// Turns the Anime Class into a Media Class
+		Media[] returnMedia = new Media[foundAnime.length];
+		for (int i = 0; i < foundAnime.length; i++) {
+			returnMedia[i] = new Media(foundAnime[i]);
+		}
+		return returnMedia; // Return Info as Media
+	}
 
-        System.out.print("\nEnter anime search query (e.g., Attack on Titan): ");
-        String searchAnime = input.nextLine();
+	public Media[] searchMovie(String name, int amount) {
+		Data[] foundMovie = theTVDB.Search(name, "Movie", amount).getData();
+		// Turns the Data Class into a Media Class
+		Media[] returnMedia = new Media[foundMovie.length];
+		for (int i = 0; i < foundMovie.length; i++) {
+			returnMedia[i] = new Media(foundMovie[i]);
+		}
+		return returnMedia; // Return Info as Media
 
-        // Updated GraphQL query to include type: ANIME filter
-        String query = "query ($id: Int, $page: Int, $perPage: Int, $search: String) {\n" +
-                       "  Page (page: $page, perPage: $perPage) {\n" +
-                       "    pageInfo {\n" +
-                       "      currentPage\n" +
-                       "      hasNextPage\n" +
-                       "      perPage\n" +
-                       "    }\n" +
-                       "    media (id: $id, search: $search, type: ANIME) {\n" + // <-- ADDED type: ANIME HERE
-                       "      id\n" +
-                       "      title {\n" +
-                       "        english\n" +
-                       "        romaji\n" +
-                       "      }\n" +
-                       "    }\n" +
-                       "  }\n" +
-                       "}";
+	}
 
-        int page = 1;
-        int perPage = 10; 
+	public Media[] searchShow(String name, int amount) {
+		Data[] foundShow = theTVDB.Search(name, "Movie", amount).getData();
+		// Turns the Data Class into a Media Class
+		Media[] returnMedia = new Media[foundShow.length];
+		for (int i = 0; i < foundShow.length; i++) {
+			returnMedia[i] = new Media(foundShow[i]);
+		}
+		return returnMedia; // Return Info as Media
+	}
 
-        String variables = "{\n" +
-                           "  \"search\": \"" + searchAnime + "\",\n" +
-                           "  \"page\": " + page + ",\n" +
-                           "  \"perPage\": " + perPage + "\n" +
-                           "}";
-
-        String jsonRequestBody = "{\n" +
-                                 "  \"query\": " + convertStringToJSONValue(query) + ",\n" +
-                                 "  \"variables\": " + variables + "\n" +
-                                 "}";
-
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://graphql.anilist.co"))
-                .header("Content-Type", "application/json")
-                .header("Accept", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(jsonRequestBody))
-                .build();
-
-        try {
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-            if (response.statusCode() == 200) {
-                String responseBody = response.body();
-
-                System.out.println("\n--- ANIME SEARCH RESULTS ---");
-                
-                int currentIndex = 0;
-                int matchCount = 1;
-
-                while ((currentIndex = responseBody.indexOf(targetKey, currentIndex)) != -1) {
-                    int startPos = currentIndex + targetKey.length();
-                    int endPos = responseBody.indexOf("\"", startPos);
-                    
-                    String animeTitle = responseBody.substring(startPos, endPos);
-                    
-                    if (choice == 1 && animeTitle.equals("null")) {
-                        String romajiKey = "\"romaji\":\"";
-                        int romStart = responseBody.indexOf(romajiKey, currentIndex - 20); 
-                        if (romStart != -1) {
-                            int romEnd = responseBody.indexOf("\"", romStart + romajiKey.length());
-                            animeTitle = responseBody.substring(romStart + romajiKey.length(), romEnd) + " (No Eng Title)";
-                        }
-                    }
-
-                    System.out.println(matchCount + ". " + animeTitle);
-                    
-                    matchCount++;
-                    currentIndex = endPos;
-                }
-                
-                if (matchCount == 1) {
-                    System.out.println("No matching anime found.");
-                }
-
-            } else {
-                System.out.println("API Error: Status Code " + response.statusCode());
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            input.close(); 
-        }
-    }
-
-    private static String convertStringToJSONValue(String input) {
-        return "\"" + input.replace("\\", "\\\\")
-                           .replace("\"", "\\\"")
-                           .replace("\n", "\\n")
-                           .replace("\r", "\\r") + "\"";
-    }
 }
