@@ -100,7 +100,6 @@ class Query {
 			DELETE FROM "Media"
 			WHERE "id" = ?
 			""";
-
 	public static final String FIND_MEDIA = """
 				SELECT
 					m.*,
@@ -121,7 +120,13 @@ class Query {
 					m.name LIKE ? AND
 					ud.rating > ? AND
 					ud.rating < ?
-				SORT BY ud.rating DESC
+				SORT BY ud.status DESC
+			""";
+	public static final String ALL_MEDIA = """
+				SELECT
+					m.*,
+					count(*) OVER() AS count
+				FROM Media AS m
 			""";
 	// NOTE Sort might want to change
 

@@ -314,7 +314,6 @@ public class DB {
 	 * @return a List of Media that match the given filters
 	 */
 	public Media[] findMedia(int userId, boolean isMovie, boolean isTV, Boolean isAnime, int status, String name,
-
 			int ratingMin, int ratingMax) {
 		try (PreparedStatement stmt = dbConnect.prepareStatement(Query.FIND_MEDIA)) {
 			stmt.setInt(1, userId);
@@ -327,10 +326,10 @@ public class DB {
 			stmt.setInt(8, ratingMax + 1); // +1 to include ratingMax in the range
 			ResultSet rs = stmt.executeQuery();
 			if (rs.getInt("count") > 0) {
-				Media[] foundmeta = new Media[rs.getInt("count")];
+				Media[] foundMedia = new Media[rs.getInt("count")];
 				int i = 0;
 				while (rs.next()) {
-					foundmeta[i] = new Media(
+					foundMedia[i] = new Media(
 							rs.getInt("id"),
 							rs.getInt("type"),
 							rs.getInt("externalId"),
@@ -345,7 +344,7 @@ public class DB {
 							rs.getInt("rewatched"));
 					i++;
 				}
-				return foundmeta;
+				return foundMedia;
 			} else {
 				System.err.println("Unable to Find Media with this filter");
 				return null;
@@ -356,6 +355,56 @@ public class DB {
 			e.printStackTrace();
 			return null;
 		}
+	}
 
+	/**
+	 * This Export all Media Stored in the database into a Object that will be turn
+	 * into a Json by Gson
+	 *
+	 * @return Media[] array of all Media Stored in the database
+	 */
+	public Media[] exportMedia() {
+		try (PreparedStatement stmt = dbConnect.prepareStatement(Query.ALL_MEDIA)) {
+			ResultSet rs = stmt.executeQuery();
+			if (rs.getInt("count") > 0) {
+				Media[] allMedia = new Media[rs.getInt("count")];
+				int i = 0;
+				while (rs.next()) {
+					allMedia[i] = new Media(
+							rs.getInt("id"),
+							rs.getInt("type"),
+							rs.getInt("externalId"),
+							rs.getString("name"),
+							rs.getString("description"),
+							rs.getString("posterPath"),
+							rs.getString("posterLink"));
+					i++;
+				}
+				return allMedia;
+			} else {
+				System.err.println("Unable to Find Media with this filter");
+				return null;
+			}
+
+		} catch (SQLException e) {
+			System.err.println("Exception while exporting media:");
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	/**
+	 * Imports an array of Media into the database
+	 *
+	 * @param media array of Media to import
+	 * @return true if all the import was successful, false otherwise
+	 */
+	public boolean importMedia(Media[] mediaList) {
+		for (Media media : mediaList) {
+			if (!this.createMedia(media)) {
+				return false; // Return False if any media fails to be added
+			}
+		}
+		return true; // Returns True if the Import Fully works
 	}
 }
