@@ -76,7 +76,7 @@ class Query {
 
 	// Finds a user Via Username and Password
 	public static final String LOGIN_USER = """
-			SELECT *
+			SELECT *, count(*) OVER() AS count
 			FROM "User"
 			WHERE "username" = ? AND "password" = ?
 			""";
@@ -85,6 +85,11 @@ class Query {
 			UPDATE "User"
 			SET "lastLogin" = ?
 			WHERE "id" = ?
+			""";
+	// Finds all Users
+	public static final String ALL_USERS = """
+			SELECT *
+			FROM "User"
 			""";
 
 	// Media Queries

@@ -235,6 +235,36 @@ public class DB {
 	}
 
 	/**
+	 * A Method that finds all User in the DB and return them as an Array
+	 *
+	 * @return an Array of User Objects
+	 */
+	public User[] getAllUsers() {
+		try (Statement stmt = dbConnect.createStatement()) {
+			ResultSet rs = stmt.executeQuery(Query.ALL_USERS);
+			User[] UserList = new User[rs.getInt("count")];
+			int i = 0;
+			while (rs.next()) {
+				UserList[i] = new User(
+						rs.getInt("id"),
+						rs.getString("username"),
+						rs.getString("password"),
+						rs.getBoolean("isAdmin"),
+						rs.getString("created"),
+						rs.getString("lastLogin"));
+				i++;
+			}
+			return UserList;
+
+		} catch (Exception e) {
+			System.err.println("Exception While Finding All Users: ");
+			e.printStackTrace();
+			return null;
+		}
+
+	}
+
+	/**
 	 * Add a Media Object into the DB
 	 *
 	 * @param newMedia the Media to add (Media)
@@ -362,13 +392,14 @@ public class DB {
 
 	/**
 	 * This Export all Media Stored in the database into a Object that will be turn
-	 * into a Json by Gson
+	 * into a Json by Gson. It can also be used to Just make a list of all Media in
+	 * the DB
 	 *
 	 * @return Media[] array of all Media Stored in the database
 	 */
 	public Media[] exportMedia() {
-		try (PreparedStatement stmt = dbConnect.prepareStatement(Query.ALL_MEDIA)) {
-			ResultSet rs = stmt.executeQuery();
+		try (Statement stmt = dbConnect.createStatement()) {
+			ResultSet rs = stmt.executeQuery(Query.ALL_MEDIA);
 			if (rs.getInt("count") > 0) {
 				Media[] allMedia = new Media[rs.getInt("count")];
 				int i = 0;
