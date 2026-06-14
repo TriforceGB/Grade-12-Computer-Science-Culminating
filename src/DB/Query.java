@@ -37,6 +37,7 @@ class Query {
 				"releaseDate" TEXT,
 				"posterPath" TEXT,
 				"posterLink" TEXT
+				UNIQUE(externalId,type)
 				)
 			""";
 	// Create UserData Table
@@ -54,6 +55,7 @@ class Query {
 				"rewatched" INTEGER,
 				FOREIGN KEY ("userId") REFERENCES "Users"("id") ON DELETE CASCADE
 				FOREIGN KEY ("mediaId") REFERENCES "Media"("id") ON DELETE CASCADE
+				UNIQUE(userId,mediaId)
 				)
 			""";
 	// User Queries
@@ -128,6 +130,19 @@ class Query {
 					count(*) OVER() AS count
 				FROM Media AS m
 			""";
-	// NOTE Sort might want to change
-
+	// User Data Query
+	// Create Edit Delete
+	public static final String CREATE_USERDATA = """
+			INSERT INTO "UserData" ("userId", "mediaId", "status", "startDate", "finishDate", "rating", "lastEpisode", "review", "rewatched")
+			VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+			""";
+	public static final String EDIT_USERDATA = """
+			UPDATE "UserData"
+			SET "status" = ?, "startDate" = ?, "finishDate" = ?, "rating" = ?, "lastEpisode" = ?, "review" = ?, "rewatched" = ?
+			WHERE "userId" = ? AND "mediaID" = ?
+			""";
+	public static final String DELETE_USERDATA = """
+			DELETE FROM "UserData"
+			WHERE "userId" = ? AND "mediaID" = ?
+			""";
 }

@@ -10,6 +10,7 @@ import java.time.LocalDate;
 
 import DTO.LocalDB.Media;
 import DTO.LocalDB.User;
+import DTO.LocalDB.Media.UserData;
 
 /**
  * This is the public interface for the application to interact with the
@@ -338,6 +339,8 @@ public class DB {
 							rs.getString("posterPath"),
 							rs.getString("posterLink"),
 							rs.getInt("status"),
+							rs.getString("startDate"),
+							rs.getString("finishDate"),
 							rs.getInt("rating"),
 							rs.getInt("lastEpisode"),
 							rs.getString("review"),
@@ -400,11 +403,95 @@ public class DB {
 	 * @return true if all the import was successful, false otherwise
 	 */
 	public boolean importMedia(Media[] mediaList) {
+		boolean cleanImport = true;
 		for (Media media : mediaList) {
 			if (!this.createMedia(media)) {
-				return false; // Return False if any media fails to be added
+				cleanImport = false; // Return false if any media fails to be added
+				System.err.println(
+						"Failed to add %s to the Database. Possibility was already there".formatted(media.getName()));
+			} else {
+				System.out.println("Imported: " + media.getName());
 			}
 		}
-		return true; // Returns True if the Import Fully works
+		return cleanImport; // returns if everything imported cleanly
+	}
+
+	/**
+	 * Create User Data and connect it to the Given User Id and Media ID
+	 *
+	 * @param userId   The ID of the User (int)
+	 * @param mediaId  The ID of the Media (int)
+	 * @param userData The Info being added (UserData)
+	 * @return
+	 */
+	public boolean createUserData(int userId, int mediaId, UserData userData) {
+		try (PreparedStatement stmt = dbConnect.prepareStatement(Query.CREATE_USERDATA)) {
+			stmt.setInt(1, userId);
+			stmt.setInt(2, mediaId);
+			stmt.setInt(3, userData.getStatus());
+			stmt.setString(4, userData.getStartDate());
+			stmt.setString(5, userData.getFinishDate());
+			stmt.setInt(6, userData.getRating());
+			stmt.setInt(7, userData.getLastEpisode());
+			stmt.setString(8, userData.getReview());
+			stmt.setInt(9, userData.getRewatched());
+			int rowsAffected = stmt.executeUpdate(); // Runs Command
+			return rowsAffected > 0; // If a row was affected, return true else false
+
+		} catch (Exception e) {
+			System.err.println("Exception while Adding UserData:");
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	/**
+	 * Edits a UserData for a Given User and Media
+	 *
+	 * @param userId   The ID of the Current User (Int)
+	 * @param mediaId  The ID of the Media in the Local DB (int)
+	 * @param userData The Information that is being edited (UserData)
+	 * @return True if Changes could be made, False Otherwise
+	 */
+	public boolean editUserData(int userId, int mediaId, UserData userData) {
+		try (PreparedStatement stmt = dbConnect.prepareStatement(Query.EDIT_USERDATA)) {
+			stmt.setInt(1, userData.getStatus());
+			stmt.setString(2, userData.getStartDate());
+			stmt.setString(3, userData.getFinishDate());
+			stmt.setInt(4, userData.getRating());
+			stmt.setInt(5, userData.getLastEpisode());
+			stmt.setString(6, userData.getReview());
+			stmt.setInt(7, userData.getRewatched());
+			// Match Based off ID
+			stmt.setInt(8, userId);
+			stmt.setInt(9, mediaId);
+			int rowsAffected = stmt.executeUpdate(); // Runs Command
+			return rowsAffected > 0; // If a row was affected, return true else false
+
+		} catch (Exception e) {
+			System.err.println("Exception while Adding UserData:");
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	/**
+	 * Delete a Media Entry
+	 *
+	 * @param userId  the User's id (int)
+	 * @param mediaId the Media's id (int)
+	 * @return true if the Media was deleted, false otherwise
+	 */
+	public boolean deleteUserData(int userId, int mediaId) {
+		try (PreparedStatement stmt = dbConnect.prepareStatement(Query.DELETE_USERDATA)) {
+			stmt.setInt(1, userId);
+			stmt.setInt(2, mediaId);
+			int rowsAffected = stmt.executeUpdate(); // Runs Command
+			return rowsAffected > 0; // If a row was affected, return true else false
+		} catch (SQLException e) {
+			System.err.println("Exception while deleting media:");
+			e.printStackTrace();
+			return false;
+		}
 	}
 }

@@ -5,7 +5,6 @@ import java.time.Duration;
 
 import com.google.gson.Gson;
 
-import DB.DB;
 import DTO.API.Response.TheTVDBSearchResponse.Data;
 import DTO.API.Response.AniListSearchResponse.Data.Page.Anime;
 import DTO.LocalDB.Media;
