@@ -6,8 +6,9 @@ import java.time.Duration;
 import com.google.gson.Gson;
 
 import DB.DB;
-import DTO.API.Response.AniListSearchResponse;
-import DTO.API.Response.TheTVDBSearchResponse;
+import DTO.API.Response.TheTVDBSearchResponse.Data;
+import DTO.API.Response.AniListSearchResponse.Data.Page.Anime;
+import DTO.LocalDB.Media;
 
 public class API {
 	// Constants
@@ -36,16 +37,35 @@ public class API {
 	 * @param amount The number of show to return
 	 * @return
 	 */
-	public AniListSearchResponse.Data.Page.Anime[] searchAnime(String name, int amount) {
-		return aniList.searchAnime(name, amount).getAnime();
+	public Media[] searchAnime(String name, int amount) {
+		Anime[] foundAnime = aniList.searchAnime(name, amount).getAnime();
+		// Turns the Anime Class into a Media Class
+		Media[] returnMedia = new Media[foundAnime.length];
+		for (int i = 0; i < foundAnime.length; i++) {
+			returnMedia[i] = new Media(foundAnime[i]);
+		}
+		return returnMedia; // Return Info as Media
 	}
 
-	public TheTVDBSearchResponse.Data[] searchMovie(String name, int amount) {
-		return theTVDB.Search(name, "Movie", amount).getData();
+	public Media[] searchMovie(String name, int amount) {
+		Data[] foundMovie = theTVDB.Search(name, "Movie", amount).getData();
+		// Turns the Data Class into a Media Class
+		Media[] returnMedia = new Media[foundMovie.length];
+		for (int i = 0; i < foundMovie.length; i++) {
+			returnMedia[i] = new Media(foundMovie[i]);
+		}
+		return returnMedia; // Return Info as Media
+
 	}
 
-	public TheTVDBSearchResponse.Data[] searchShow(String name, int amount) {
-		return theTVDB.Search(name, "Series", amount).getData();
+	public Media[] searchShow(String name, int amount) {
+		Data[] foundShow = theTVDB.Search(name, "Movie", amount).getData();
+		// Turns the Data Class into a Media Class
+		Media[] returnMedia = new Media[foundShow.length];
+		for (int i = 0; i < foundShow.length; i++) {
+			returnMedia[i] = new Media(foundShow[i]);
+		}
+		return returnMedia; // Return Info as Media
 	}
 
 }
