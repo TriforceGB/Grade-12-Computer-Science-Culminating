@@ -1,5 +1,14 @@
 package UI.Pages;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Insets;
+import java.net.URI;
+import java.net.URL;
+
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -304,7 +313,7 @@ public class SearchPage extends Page {
 		// TODO implement db search and pull
 		// get serach number
 		// and do search itself
-		
+
 		// for testing purposes simply
 		// but basically pull searches and iterate through them passing the media object through
 		int test = 5;

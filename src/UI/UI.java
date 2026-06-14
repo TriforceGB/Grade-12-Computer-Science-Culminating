@@ -138,7 +138,7 @@ public class UI extends JFrame implements EventListener {
 	 * @return
 	 */
 	public boolean createUser(String username, String password, boolean isAdmin) {
-		boolean created = db.createUser(username, password, isAdmin);
+		boolean created = db.createUser(new User(username, password, isAdmin));
 		if (created) {
 			this.switchPanel("login");
 		}

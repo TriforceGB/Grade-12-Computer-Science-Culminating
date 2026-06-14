@@ -37,6 +37,7 @@ class Query {
 				"releaseDate" TEXT,
 				"posterPath" TEXT,
 				"posterLink" TEXT
+				UNIQUE(externalId,type)
 				)
 			""";
 	// Create UserData Table
@@ -54,26 +55,53 @@ class Query {
 				"rewatched" INTEGER,
 				FOREIGN KEY ("userId") REFERENCES "Users"("id") ON DELETE CASCADE
 				FOREIGN KEY ("mediaId") REFERENCES "Media"("id") ON DELETE CASCADE
+				UNIQUE(userId,mediaId)
 				)
 			""";
 	// User Queries
-	// Create User
+	// Creation, Editing, Deletion of Users
 	public static final String CREATE_USER = """
 			INSERT INTO "User" ("username", "password", "isAdmin", "created", "lastLogin")
 			VALUES (?, ?, ?, ?, ?)
 			""";
+	public static final String EDIT_USER = """
+			UPDATE "User"
+			SET "username" = ?, "password" = ?, "isAdmin" = ?
+			WHERE "id" = ?
+			""";
+	public static final String DELETE_USER = """
+			DELETE FROM "User"
+			WHERE "id" = ?
+			""";
+
+	// Finds a user Via Username and Password
 	public static final String LOGIN_USER = """
 			SELECT *
 			FROM "User"
 			WHERE "username" = ? AND "password" = ?
 			""";
-
+	// Update the last login time of a user
 	public static final String UPDATE_LOGIN = """
 			UPDATE "User"
 			SET "lastLogin" = ?
 			WHERE "id" = ?
 			""";
+
 	// Media Queries
+	// Creation, Editing, Deletion of Media
+	public static final String CREATE_MEDIA = """
+			INSERT INTO "Media" ("type", "externalId", "name", "description", "episodeCount", "posterPath", "posterLink")
+			VALUES (?, ?, ?, ?, ?, ?, ?)
+			""";
+	public static final String EDIT_MEDIA = """
+			UPDATE "Media"
+			SET "type" = ?, "externalId" = ?, "name" = ?, "description" = ?, "episodeCount" = ?, "posterPath" = ?, "posterLink" = ?
+			WHERE "id" = ?
+			""";
+	public static final String DELETE_MEDIA = """
+			DELETE FROM "Media"
+			WHERE "id" = ?
+			""";
 	public static final String FIND_MEDIA = """
 				SELECT
 					m.*,
@@ -83,16 +111,38 @@ class Query {
 					ud.startDate,
 					ud.finishDate,
 					ud.rewatched,
+					count(*) OVER() AS count
 				FROM Media AS m
 				JOIN UserData AS ud
 				WHERE
 					m.id = ud.mediaId AND
 					ud.userId = ? AND
-					ud.type = ? AND
+					ud.type = IN (?, ?, ?) AND
 					ud.status = ? AND
 					m.name LIKE ? AND
 					ud.rating > ? AND
 					ud.rating < ?
+				SORT BY ud.status DESC
 			""";
-
+	public static final String ALL_MEDIA = """
+				SELECT
+					m.*,
+					count(*) OVER() AS count
+				FROM Media AS m
+			""";
+	// User Data Query
+	// Create Edit Delete
+	public static final String CREATE_USERDATA = """
+			INSERT INTO "UserData" ("userId", "mediaId", "status", "startDate", "finishDate", "rating", "lastEpisode", "review", "rewatched")
+			VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+			""";
+	public static final String EDIT_USERDATA = """
+			UPDATE "UserData"
+			SET "status" = ?, "startDate" = ?, "finishDate" = ?, "rating" = ?, "lastEpisode" = ?, "review" = ?, "rewatched" = ?
+			WHERE "userId" = ? AND "mediaID" = ?
+			""";
+	public static final String DELETE_USERDATA = """
+			DELETE FROM "UserData"
+			WHERE "userId" = ? AND "mediaID" = ?
+			""";
 }

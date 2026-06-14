@@ -5,7 +5,9 @@ package DTO.API.Request;
  * The class is formatted for Gson usage
  */
 public class AniListSearchRequest {
+	@SuppressWarnings("unused")
 	private String query; // The query for the request, holds what information we want
+	@SuppressWarnings("unused")
 	private variables variables; // the values we give to help find the information we want
 
 	/**
@@ -25,7 +27,9 @@ public class AniListSearchRequest {
 	 * Send Item of the Json that holds the Value used in the Search
 	 */
 	private static class variables {
+		@SuppressWarnings("unused")
 		private String show; // Name of Anime
+		@SuppressWarnings("unused")
 		private int amount; // Number of Anime to Return
 
 		/**
