@@ -5,9 +5,13 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.io.File;
 
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+
+import javax.swing.SpinnerNumberModel;
 import javax.swing.BorderFactory;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -22,8 +26,9 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
 
-import UI.Style;
+import DTO.LocalDB.Media;
 import UI.UI;
+import UI.Style;
 
 /**
  * The List Page Class. Used to display a list of media for the user.
@@ -59,7 +64,7 @@ public class ListPage extends Page {
 	private JLabel statusFilterLbl;
 
 	private JComboBox<String> statusFilter;
-	private String[] showStatus = new String[] { "", "Undecided", "Backlog", "Watching", "Completed", "Dropped" };
+	private final String[] SHOW_STATUS_OPTIONS = new String[] { "", "Undecided", "Backlog", "Watching", "Completed", "Dropped" };
 
 	private JLabel minRatingLbl;
 	private JSpinner minRating;
@@ -68,9 +73,17 @@ public class ListPage extends Page {
 	private JSpinner maxRating;
 
 	private JButton searchButton;
+	private JButton refreshButton;
+
+	private final String PATH_FOR_DEFAULT_IMAGE = "assets/UI/filal.png";
+	private final int POSTER_WIDTH = 33;
+	private final int POSTER_HEIGHT = 50;
 
 	private final Border border = BorderFactory.createLineBorder(Style.BORDER_COLOR, 4, true); // true allows for
 																								// rounded
+
+	// TODO Remove when done testing
+	private Media testMedia = new Media(42, 420, 69, "Testing Egregious Long Title of Many Words", "Sir James Bond 007, a legendary British spy who retired from the secret service 20 years previously, is visited by the head of British Secret Intelligence Service, M (James Bond), CIA representative Ransome, KGB representative Smernov, and Deuxième Bureau representative Le Grand. All implore Bond to come out of retirement to deal with SMERSH (James Bond) who have been eliminating agents: Bond spurns all their pleas. When Bond continues to stand firm, his mansion is destroyed by a mortar attack at the orders of M, who is, however, killed in the explosion.", "maybe temp path?", "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx129874-g6ZKXB94Hui1.jpg");
 
 	/**
 	 * Create the List Page
@@ -90,6 +103,7 @@ public class ListPage extends Page {
 		addNameSatusButtons();
 		addRatingSelectorButtons();
 		addSearchButton();
+		addRefreshButton();
 
 		createListPanel();
 
@@ -109,10 +123,9 @@ public class ListPage extends Page {
 	}
 
 	void createContentPanel() {
-		contentPanel = new JPanel();
+		contentPanel = new JPanel(new BorderLayout());
 		contentPanel.setBackground(PageColor);
-		contentPanel.setLayout(new BorderLayout());
-
+		
 		// add content panel to main panel
 		this.add(contentPanel);
 	}
@@ -185,7 +198,7 @@ public class ListPage extends Page {
 		statusFilterLbl = new JLabel("Status: ");
 		statusFilterLbl.setFont(Style.BASE_FONT);
 		statusFilterLbl.setForeground(Style.TEA_GREEN);
-		statusFilter = new JComboBox<String>(showStatus);
+		statusFilter = new JComboBox<String>(SHOW_STATUS_OPTIONS);
 		statusFilter.setFont(Style.BASE_FONT);
 		statusFilter.setBackground(Style.TEA_GREEN);
 		statusFilter.setForeground(Style.BALTIC_BLUE);
@@ -286,6 +299,7 @@ public class ListPage extends Page {
 		searchButton.setFont(Style.BASE_FONT);
 		ui.addButtonImg(searchButton, new ImageIcon("assets/UI/searchicon.png"), 20, 30, 30);
 		searchButton.addActionListener(e -> {
+			clearListTable(); // clears the table so ready for adding
 			// TODO: Implement db. also verify if selector for name and status are blank to
 			// not care
 			String nameToCheck = nameFilter.getText();
@@ -296,11 +310,31 @@ public class ListPage extends Page {
 			boolean canBeShow = showType.isSelected();
 			boolean canBeAnime = animeType.isSelected();
 
+			// then simply call addToListTable() where valid paramters are passed
+			// run that for each search result
 		});
 
 		gbc.gridy = 6; // row 7
 		gbc.gridx = 0; // col 1
 		filterPanel.add(searchButton, gbc);
+	}
+
+	void addRefreshButton() {
+		refreshButton = new JButton("Refresh");
+		refreshButton.setBackground(Style.LIGHT_GREEN);
+		refreshButton.setForeground(Style.BALTIC_BLUE);
+		refreshButton.setFont(Style.BASE_FONT);
+		ui.addButtonImg(refreshButton, new ImageIcon("assets/UI/changeicon.png"), 20, 30, 30);
+		refreshButton.addActionListener(e -> {
+			clearListTable();
+			addDefaultListToTable();
+
+			// TODO add confirmation prompt
+		});
+
+		gbc.gridy = 6; // row 7
+		gbc.gridx = 1; // col 2
+		filterPanel.add(refreshButton, gbc);
 	}
 
 	void createListPanel() {
@@ -324,8 +358,8 @@ public class ListPage extends Page {
 			@Override
 			public Class<?> getColumnClass(int column) {
 				// Tell the table that column index 1 contains Icons
-				if (column == 1) {
-					return Icon.class;
+				if (column == 0) {
+					return ImageIcon.class;
 				}
 				return super.getColumnClass(column);
 			}
@@ -336,12 +370,50 @@ public class ListPage extends Page {
 		listTable.getTableHeader().setBackground(Style.TROPICAL_TEAL);
 		listTable.getTableHeader().setForeground(Style.TEA_GREEN);
 		listTable.getTableHeader().setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR));
+		listTable.setRowHeight(POSTER_HEIGHT); // for poster height accounting
 		tableScrollContainer = new JScrollPane(listTable);
 		tableScrollContainer.setBackground(Style.BALTIC_BLUE);
 		tableScrollContainer.setBorder(border);
 		tableScrollContainer.getViewport().setBackground(PageColor);
+		tableScrollContainer.setMaximumSize(new Dimension(Short.MAX_VALUE, 500));
 
 		contentPanel.add(filterPanel, BorderLayout.WEST);
 		contentPanel.add(tableScrollContainer, BorderLayout.CENTER);
+		JPanel bufferPanel = new JPanel();
+		bufferPanel.setBackground(PageColor);
+		bufferPanel.setPreferredSize(new Dimension(0, 80));
+		contentPanel.add(bufferPanel, BorderLayout.SOUTH);
+	}
+
+	public void addDefaultListToTable() {
+		// TODO Pull data from db and add herer
+		int test = 200;
+		for (int i = 0; i < test; i++) {
+			addToListTable(testMedia);
+		}
+	}
+
+	void addToListTable(Media obj) {
+		Object[] toAddToTable = new Object[colNames.length];
+		// "Icon", "Name", "Status", "Rating", "Last EP", "Rewatch"
+		File posterFile = new File(obj.getPosterPath());
+		if (posterFile.exists()) {
+			toAddToTable[0] = ui.resizeImg(new ImageIcon(posterFile.getPath()), POSTER_WIDTH, POSTER_HEIGHT);
+		} else {
+			toAddToTable[0] = ui.resizeImg(new ImageIcon(PATH_FOR_DEFAULT_IMAGE), POSTER_WIDTH, POSTER_HEIGHT);
+		}
+
+		// TODO verify all data gets pulled properly dependent on media
+		toAddToTable[1] = obj.getName();
+		toAddToTable[2] = obj.getStatus();
+		toAddToTable[3] = obj.getRating();
+		toAddToTable[4] = obj.getLastEpisode();
+		toAddToTable[5] = obj.getRewatched();
+
+		listTableModel.addRow(toAddToTable);
+	}
+
+	void clearListTable() {
+		listTableModel.setRowCount(0);
 	}
 }

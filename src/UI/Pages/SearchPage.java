@@ -10,14 +10,29 @@ import java.net.URI;
 import java.net.URL;
 
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
+
+import DTO.LocalDB.Media;
+
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Insets;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+
+import java.net.URI;
+import java.net.URL;
 
 import UI.Style;
 import UI.UI;
@@ -36,17 +51,25 @@ public class SearchPage extends Page {
 	private JLabel searchLbl;
 	private JTextField searchField;
 	private JComboBox<String> searchTypeBox;
-	private final String[] types = new String[] { "Movie", "TV Show", "Anime" };
+	private final String[] TYPES = new String[] { "Movie", "TV Show", "Anime" };
 	private JButton searchBtn;
 
-	private JScrollPane listScrollContainer;
-
+	private JScrollPane listScrollPane;
+	private JPanel scrollWrapperPanel;
 	private JPanel scrollContentPanel;
 
-	private final int posterWidth = 200;
-	private final int posterHeight = 200;
+	private final int POSTER_WIDTH = 133;
+	private final int POSTER_HEIGHT = 200;
+	private final Dimension POSTER_SIZE = new Dimension(POSTER_WIDTH, POSTER_HEIGHT);
 
-	private final String testUrlString = "https://images.unsplash.com/photo-1450558415837-1f5e21a17709?ixid=M3w4MjcwNjd8MHwxfHNlYXJjaHwzfHxqZXN1c3xlbnwwfHx8fDE3ODEyMjk4ODh8MA&ixlib=rb-4.1.0&fit=max&q=80";
+
+	private final int DESCRIPTION_CPERLINE = 50;
+	private final int TITLE_CPERLINE = 12;
+	private final int MAX_PASS = 5;
+
+	private final String PATH_FOR_DEFAULT_IMAGE = "assets/UI/filal.png";
+
+	private final String[] SHOW_STATUS_OPTIONS = new String[] { "Undecided", "Backlog", "Watching", "Completed", "Dropped" };
 
 	/**
 	 * Create the Search Page
@@ -68,11 +91,6 @@ public class SearchPage extends Page {
 		createListPanel();
 
 		addListScrollContainer();
-
-		// for testing purposes simply
-		for (int i = 0; i < 3; i++) {
-			scrollContentPanel.add(getSearchResultPanel());
-		}
 	}
 
 	void createContentPanel() {
@@ -125,7 +143,7 @@ public class SearchPage extends Page {
 	}
 
 	void addSearchTypeBox() {
-		searchTypeBox = new JComboBox<String>(types);
+		searchTypeBox = new JComboBox<String>(TYPES);
 		searchTypeBox.setFont(Style.BASE_FONT);
 
 		gbc.gridy = 0; // only one row
@@ -147,35 +165,37 @@ public class SearchPage extends Page {
 		// padding for 20px right to match offset from searchField
 		gbc.insets = new Insets(0, 0, 10, 20);
 
-		searchBtn.addActionListener(e -> procureSearches(1));
+		searchBtn.addActionListener(e -> procureSearches());
 
 		searchPanel.add(searchBtn, gbc);
 	}
 
 	void addListScrollContainer() {
-		scrollContentPanel = new JPanel(new GridLayout(0, 1, posterHeight + 20, 0));
-		listScrollContainer = new JScrollPane(scrollContentPanel);
-		listScrollContainer.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		listScrollContainer.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollWrapperPanel = new JPanel(new BorderLayout());
+		scrollContentPanel = new JPanel(new GridLayout(0, 1, 0, 20));
+		scrollWrapperPanel.add(scrollContentPanel, BorderLayout.NORTH);
+		listScrollPane = new JScrollPane(scrollWrapperPanel);
+		listScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		listScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		listScrollPane.setPreferredSize(new Dimension(1500, 800));
+		listScrollPane.getVerticalScrollBar().setUnitIncrement(16);
 
-		listPanel.add(listScrollContainer);
+		listPanel.add(listScrollPane);
 	}
 
-	// poster
-	// name (big)
-	// desc. (small)
-	// button to add to local db
-
-	JPanel getSearchResultPanel() {
+	JPanel getSearchResultPanel(Media obj) {
 		JPanel result = new JPanel();
 		result.setBackground(PageColor);
+		result.setBorder(BorderFactory.createLineBorder(Color.black, 4, true));
 		result.setLayout(new GridBagLayout());
 		gbc = new GridBagConstraints(); // reset gbc to ensure ready to go
+
+		String urlString = obj.getPosterLink();
 
 		// get url in try catch
 		URL url;
 		try {
-			url = new URI(testUrlString).toURL();
+			url = new URI(urlString).toURL();
 		} catch (Exception e) {
 			url = null;
 		}
@@ -183,65 +203,135 @@ public class SearchPage extends Page {
 		ImageIcon poster;
 		if (url != null)
 			poster = getSearchResultPoster(url);
-		else
-			poster = null;
+		else // if fails to grab poster, set poster to Filal Baruqi
+			poster = getDefaultPoster();
 
 		// create poster
 		gbc.gridy = 0; // row is always 0
 		gbc.gridx = 0; // col 1
-		gbc.insets = new Insets(posterHeight / 2, posterWidth / 2, posterHeight / 2, posterWidth / 2);
+		gbc.insets = new Insets(20, 20, 20, 200);
 
-		result.add(new JLabel(poster));
+		JLabel posterLbl = new JLabel();
+		posterLbl.setIcon(poster);
+		posterLbl.setPreferredSize(POSTER_SIZE);
+		posterLbl.setMinimumSize(POSTER_SIZE);
+		posterLbl.setMaximumSize(POSTER_SIZE);
+		result.add(posterLbl, gbc);
+
 
 		// add name
-		JLabel name = new JLabel("Testing");
-		name.setFont(Style.BASE_FONT);
+		String titleString = obj.getName();
+		JLabel titleLbl = new JLabel(ui.getHtmlFormatText(titleString, TITLE_CPERLINE, MAX_PASS));
+		titleLbl.setFont(Style.TITLE_FONT);
 
-		gbc.gridx = 1;
-		result.add(name);
+		gbc.gridx = 1; // col 2
+		gbc.insets = new Insets(20, 0, 20, 100);
+		result.add(titleLbl, gbc);
 
 		// add desc.
-		JLabel desc = new JLabel("<html>Testing description.<br>With second line too.</hmtl>");
-		desc.setFont(Style.BASE_FONT);
+		// description is mounted via singular line
+		String descString = obj.getDescription();
+		JLabel descLbl = new JLabel(ui.getHtmlFormatText(descString, DESCRIPTION_CPERLINE, MAX_PASS));
+		descLbl.setFont(Style.DESC_FONT);
 
-		gbc.gridx = 2;
+		gbc.gridx = 2; // col 3
+		gbc.insets = new Insets(20, 0, 20, 70);
 
-		result.add(desc);
+		result.add(descLbl, gbc);
 
 		// add button
 		JButton addToDb = new JButton("+");
 		addToDb.setFont(Style.BASE_FONT);
 
-		gbc.gridx = 3;
+		addToDb.addActionListener(e -> {
+			boolean addedToDb = false;
 
-		result.add(addToDb);
+			// TODO Add to db and check whether that failed or not
+			// for testing below remove
+			addedToDb = true;
+
+			if (addedToDb) {
+				JOptionPane.showMessageDialog(this, "Successfully added show to local database.", "Success", JOptionPane.INFORMATION_MESSAGE);
+				// update the current panel and replace the button with the dropdown
+
+				result.remove(addToDb);
+				GridBagConstraints gbc2 = new GridBagConstraints();
+
+				JComboBox<String> showStatus = new JComboBox<String>(SHOW_STATUS_OPTIONS);
+				showStatus.setFont(Style.BASE_FONT);
+				showStatus.setFocusable(false);
+
+				// on picking new option
+				showStatus.addActionListener(event -> {
+					// TODO Knowing existing search data and current user data, find the show again, and change user information based on:
+					String showStatusToUpdate = showStatus.getSelectedItem().toString();
+				});	
+
+				gbc2.gridy = 0;
+				gbc2.gridx = 3; // col 4
+				gbc2.insets = new Insets(20, 0, 20, 20);
+
+				result.add(showStatus);
+
+				// repaint scroll view
+				listScrollPane.revalidate();
+				listScrollPane.repaint();
+			} else {
+				JOptionPane.showMessageDialog(this, "Failed to add show to local database.", "Error", JOptionPane.ERROR_MESSAGE);
+			}
+		});
+
+		gbc.gridx = 3; // col 4
+		gbc.insets = new Insets(20, 0, 20, 20);
+
+		result.add(addToDb, gbc);
 
 		return result;
 	}
 
 	ImageIcon getSearchResultPoster(URL url) {
 		try {
-			return ui.resizeImg(new ImageIcon(ImageIO.read(url)), posterWidth, posterHeight);
+			return ui.resizeImg(new ImageIcon(ImageIO.read(url)), POSTER_WIDTH, POSTER_HEIGHT);
 		} catch (Exception e) {
 			return null;
 		}
 	}
 
-	void procureSearches(int test) {
+	ImageIcon getDefaultPoster() {
+		try {
+			return ui.resizeImg(new ImageIcon(PATH_FOR_DEFAULT_IMAGE), POSTER_WIDTH, POSTER_HEIGHT);
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	void procureSearches() {
 		// empty existing
 		scrollContentPanel.removeAll();
 
+
+		// TODO implement db search and pull
 		// get serach number
 		// and do search itself
 
 		// for testing purposes simply
+		// but basically pull searches and iterate through them passing the media object through
+		int test = 5;
 		for (int i = 0; i < test; i++) {
-			scrollContentPanel.add(getSearchResultPanel());
+			String testingUrl = "";
+			if (i == (test - 1))
+				testingUrl = "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx129874-g6ZKXB94Hui1.jpg";
+			else if (i == (test - 2))
+				testingUrl = "https://artworks.thetvdb.com/banners/posters/81189-10.jpg";
+			else
+				testingUrl = "bad-url";
+			scrollContentPanel.add(getSearchResultPanel(new Media(42, 420, 69, "Testing Egregious Long Title of Many Words", "Sir James Bond 007, a legendary British spy who retired from the secret service 20 years previously, is visited by the head of British Secret Intelligence Service, M (James Bond), CIA representative Ransome, KGB representative Smernov, and Deuxième Bureau representative Le Grand. All implore Bond to come out of retirement to deal with SMERSH (James Bond) who have been eliminating agents: Bond spurns all their pleas. When Bond continues to stand firm, his mansion is destroyed by a mortar attack at the orders of M, who is, however, killed in the explosion.", "maybe temp path?", testingUrl)));
+			listScrollPane.getViewport().revalidate();
 		}
 		scrollContentPanel.revalidate();
 		scrollContentPanel.repaint();
 
-		listScrollContainer.revalidate();
-		listScrollContainer.repaint();
+		listScrollPane.revalidate();
+		listScrollPane.repaint();
 	}
 }

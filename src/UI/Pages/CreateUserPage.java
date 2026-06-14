@@ -192,6 +192,8 @@ public class CreateUserPage extends Page {
 			}
 		});
 
+		pwdConfirmField.addActionListener(e -> createUser());
+
 		// Add to panel
 		this.add(showPwdCheckBox, gbc);
 	}
@@ -239,39 +241,7 @@ public class CreateUserPage extends Page {
 		createButton.setVerticalAlignment(SwingConstants.CENTER);
 		createButton.setIconTextGap(20);
 
-		createButton.addActionListener(e -> {
-			// Check if the password fields match
-			if (!new String(pwdField.getPassword()).equals(new String(pwdConfirmField.getPassword()))) { // NOTE This is
-																											// Deprecated
-				JOptionPane.showMessageDialog(this, "Passwords do not match", "Error", JOptionPane.ERROR_MESSAGE);
-				// Clear Text Fields and set Color Red
-				pwdField.setText("");
-				pwdConfirmField.setText("");
-				// pwdField.setBackground(Color.RED);
-				// pwdConfirmField.setBackground(Color.RED);
-				return;
-			}
-			// check if password box is blank
-			else if (usernameField.getText().isEmpty() || new String(pwdField.getPassword()).isEmpty()) {
-				JOptionPane.showMessageDialog(this, "Cannot leave any fields empty", "Error",
-						JOptionPane.ERROR_MESSAGE);
-				return;
-			}
-
-			// Try to Create New User
-			if (ui.createUser(usernameField.getText(), new String(pwdField.getPassword()), false)) {
-				// Clear Text Fields
-				usernameField.setText("");
-				pwdField.setText("");
-				pwdConfirmField.setText("");
-				// Set Color Normal
-
-			} else {
-				JOptionPane.showMessageDialog(this, "Unable to Create User, Try again", "Error",
-						JOptionPane.ERROR_MESSAGE);
-			}
-
-		});
+		createButton.addActionListener(e -> createUser());
 
 		// Add to nested panel
 		nestedBtnPanel.add(createButton);
@@ -282,5 +252,42 @@ public class CreateUserPage extends Page {
 		gbc.gridwidth = 1; // Span across 1 column
 		gbc.insets = Style.BTN_PADS; // Add padding around the buttons
 		this.add(nestedBtnPanel, gbc);
+	}
+
+	void createUser() {
+		// Check if the password fields match
+		if (!new String(pwdField.getPassword()).equals(new String(pwdConfirmField.getPassword()))) { 
+			JOptionPane.showMessageDialog(this, "Passwords do not match", "Error", JOptionPane.ERROR_MESSAGE);
+			// Clear Text Fields and set Color Red
+			pwdField.setText("");
+			pwdConfirmField.setText("");
+			// pwdField.setBackground(Color.RED);
+			// pwdConfirmField.setBackground(Color.RED);
+
+			// TODO what is going on here? I mean like above.
+			return;
+		}
+		// check if password box is blank
+		else if (usernameField.getText().isEmpty() || new String(pwdField.getPassword()).isEmpty()) {
+			JOptionPane.showMessageDialog(this, "Cannot leave any fields empty", "Error", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+
+		// Try to Create New User
+		if (ui.createUser(usernameField.getText(), new String(pwdField.getPassword()), false)) {
+			// Clear Text Fields
+			usernameField.setText("");
+			pwdField.setText("");
+			pwdConfirmField.setText("");
+			// Set Color Normal
+			// TODO what is says above?
+			JOptionPane.showMessageDialog(this, "Successfully created new user.", "Success",
+					JOptionPane.INFORMATION_MESSAGE);
+
+		} else {
+			JOptionPane.showMessageDialog(this, "Unable to Create User, Try again", "Error",
+					JOptionPane.ERROR_MESSAGE);
+		}
+
 	}
 }
