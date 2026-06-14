@@ -17,22 +17,21 @@ import DTO.API.Response.TheTVDBSearchResponse;
 public class TheTVDB {
 	// Constants
 	private String ENDPOINT = "https://api4.thetvdb.com/v4";
-	private String KEY_PATH = "key/TVDB_KEY.txt";
 
 	// Variables
 	private HttpClient client; // Reference to the HttpClient instance
 	private Gson gson; // Reference to the Gson instance
 	private String token; // Token used for auth
 
-	public TheTVDB(HttpClient client, Gson gson) {
+	public TheTVDB(HttpClient client, Gson gson, String key_path) {
 		this.client = client;
 		this.gson = gson;
-		this.token = login();
+		this.token = login(key_path);
 
 	}
 
-	private String getKey() {
-		try (BufferedReader br = new BufferedReader(new FileReader(KEY_PATH))) {
+	private String getKey(String key_path) {
+		try (BufferedReader br = new BufferedReader(new FileReader(key_path))) {
 			String key = br.readLine();
 			return key;
 		} catch (Exception e) {
@@ -42,8 +41,8 @@ public class TheTVDB {
 		}
 	}
 
-	private String login() {
-		TheTVDBLoginRequest requestBody = new TheTVDBLoginRequest(getKey()); // Create the Json as an Object
+	private String login(String key_path) {
+		TheTVDBLoginRequest requestBody = new TheTVDBLoginRequest(getKey(key_path)); // Create the Json as an Object
 		try {
 			HttpRequest request = HttpRequest.newBuilder()
 					.uri(new URI(ENDPOINT + "/login"))

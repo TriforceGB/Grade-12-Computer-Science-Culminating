@@ -68,7 +68,6 @@ class AniList {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
-			// TODO: handle exception
 		}
 	}
 }

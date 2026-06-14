@@ -1,17 +1,13 @@
 package UI.Pages;
+
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.SwingConstants;
-import javax.swing.border.Border;
 
 import UI.Style;
 import UI.UI;
@@ -28,8 +24,6 @@ public class SettingsPage extends Page {
 	public SettingsPage(UI ui) {
 		super(ui); // Uses the basic page layout and background color
 
-
-
 		JPanel contentPanel = new JPanel();
 		contentPanel.setLayout(new BorderLayout());
 		contentPanel.setBackground(this.PageColor);
@@ -39,12 +33,10 @@ public class SettingsPage extends Page {
 		JPanel statPanel = new JPanel();
 		statPanel.setBackground(this.PageColor);
 
-
 		// Button Panel
 		int hgap = 20;
 		int vgap = 20;
 		buttonPanel.setLayout(new GridLayout(0, 2, hgap, vgap));
-		
 
 		// Buttons
 		JButton chngUserButton = new JButton("Change Username");
@@ -93,7 +85,7 @@ public class SettingsPage extends Page {
 		adminButton.setForeground(Style.BALTIC_BLUE);
 
 		// Images
-		
+
 		ui.addButtonImg(chngUserButton, new ImageIcon("assets/UI/changeicon.png"), 20, 45, 45);
 		ui.addButtonImg(chngPassButton, new ImageIcon("assets/UI/changeicon.png"), 20, 45, 45);
 		ui.addButtonImg(expUserButton, new ImageIcon("assets/UI/exporticon.png"), 40, 45, 45);
@@ -102,45 +94,48 @@ public class SettingsPage extends Page {
 		ui.addButtonImg(impMediaButton, new ImageIcon("assets/UI/importicon.png"), 20, 45, 45);
 		ui.addButtonImg(delUserButton, new ImageIcon("assets/UI/binicon.png"), 20, 45, 45);
 		ui.addButtonImg(adminButton, new ImageIcon("assets/UI/adminicon.png"), 20, 45, 45);
-		
+
 		ImageIcon filal = ui.resizeImg(new ImageIcon("assets/UI/filal.png"), 45, 45);
-		
-		
 
-
-		// Button Functionality TODO vvv
+		// TODO: Button Functionality
 		chngUserButton.addActionListener(e -> {
 			String changeduser = JOptionPane.showInputDialog("Enter new username"); // Prompt to change username
 			if (changeduser.isEmpty()) {
-				JOptionPane.showMessageDialog(this, "Cannot have an empty username.", "Error", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(this, "Cannot have an empty username.", "Error",
+						JOptionPane.ERROR_MESSAGE);
 				return;
 			}
-			// Database changing code here
+			// TODO Database changing code here
 		});
 		chngPassButton.addActionListener(e -> {
 			String changedpass = JOptionPane.showInputDialog("Enter new password"); // Prompt to change the password
 			if (changedpass == null) {
 				return;
 			}
-			String chanagedpassconfirm = JOptionPane.showInputDialog("Re-enter password to confirm"); // Prompt to confirm password
-			if (!changedpass.equals(chanagedpassconfirm)) { // checks to see if both entries match, if not then the user will have to retry
+			// Prompt to confirm password
+			String chanagedpassconfirm = JOptionPane.showInputDialog("Re-enter password to confirm");
+			// checks to see if both entries match, if not then the user will have to retry
+			if (!changedpass.equals(chanagedpassconfirm)) {
 				JOptionPane.showMessageDialog(this, "Passwords do not match.", "Error", JOptionPane.ERROR_MESSAGE);
 				return;
 			}
 			if (changedpass.isEmpty()) { // checks to see if password field was entered as empty
-				JOptionPane.showMessageDialog(this, "Cannot have an empty password.", "Error", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(this, "Cannot have an empty password.", "Error",
+						JOptionPane.ERROR_MESSAGE);
 				return;
 			}
-			//Changing password code here
+			// Changing password code here
 		});
 		expUserButton.addActionListener(e -> ui.switchPanel("search")); // TODO
 		impUserButton.addActionListener(e -> ui.switchPanel("setting")); // TODO
 		expMediaButton.addActionListener(e -> ui.logout()); // TODO
 		impMediaButton.addActionListener(e -> ui.logout()); // TODO
 		delUserButton.addActionListener(e -> {
-			int confirm = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete your account?"); // Prompt to confirm account deletion
+			// Prompt to confirm account deletion
+			int confirm = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete your account?");
 			if (confirm == 1) {
-				// Check for admin code here (if admin wants to delete account but they're the only admin force them to appoint new admin)
+				// Check for admin code here (if admin wants to delete account but they're the
+				// only admin force them to appoint new admin)
 				// Delete code here
 			}
 
@@ -148,8 +143,7 @@ public class SettingsPage extends Page {
 		adminButton.addActionListener(e -> ui.logout()); // TODO
 
 		// Stat Panel
-		// Michael pls do this
-
+		// TODO: Michael pls do this
 
 		buttonPanel.add(chngUserButton);
 		buttonPanel.add(chngPassButton);
@@ -159,17 +153,13 @@ public class SettingsPage extends Page {
 		buttonPanel.add(impMediaButton);
 		buttonPanel.add(delUserButton);
 		buttonPanel.add(adminButton); // TODO (make sure only admins can see this button)
-		
-		
-		buttonPanel.setBorder(BorderFactory.createEmptyBorder(300,250,300,850));
+
+		buttonPanel.setBorder(BorderFactory.createEmptyBorder(300, 250, 300, 850));
 		// STILL NEED STAT PANEL
-		
+
 		contentPanel.add(buttonPanel, BorderLayout.CENTER);
 		contentPanel.add(statPanel, BorderLayout.LINE_END);
-		
-		this.add(contentPanel, BorderLayout.CENTER);
-		
 
+		this.add(contentPanel, BorderLayout.CENTER);
 	}
-	
 }

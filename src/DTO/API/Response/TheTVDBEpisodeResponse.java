@@ -13,10 +13,19 @@ public class TheTVDBEpisodeResponse {
 
 		public class Episode {
 			private int absoluteNumber;
+
+			public int getAbsoluteNumber() {
+				return absoluteNumber;
+			}
 		}
+	}
+
+	public String getStatus() {
+		return status;
 	}
 
 	public int getEpisodeCount() {
 		return data.episodes.length;
 	}
+
 }

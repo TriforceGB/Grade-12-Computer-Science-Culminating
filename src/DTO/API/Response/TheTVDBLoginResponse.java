@@ -6,10 +6,14 @@ public class TheTVDBLoginResponse {
 
 	public class Data {
 		private String token;
-
 	}
 
 	public String getToken() {
 		return data.token;
 	}
+
+	public String getStatus() {
+		return status;
+	}
+
 }

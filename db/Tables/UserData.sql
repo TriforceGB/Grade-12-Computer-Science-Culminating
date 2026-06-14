@@ -13,4 +13,5 @@ CREATE TABLE IF NOT EXISTS "UserData" (
 	"rewatched" INTEGER,
 	FOREIGN KEY ("userId") REFERENCES "Users"("id") ON DELETE CASCADE
 	FOREIGN KEY ("mediaId") REFERENCES "Media"("id") ON DELETE CASCADE
+	UNIQUE(userId,mediaId)
 );

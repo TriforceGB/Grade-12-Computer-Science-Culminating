@@ -1,6 +1,8 @@
 package UI.Pages;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.io.File;
@@ -20,6 +22,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
 
@@ -76,7 +79,8 @@ public class ListPage extends Page {
 	private final int POSTER_WIDTH = 33;
 	private final int POSTER_HEIGHT = 50;
 
-	private final Border border = BorderFactory.createLineBorder(Style.BORDER_COLOR, 4, true); // true allows for rounded
+	private final Border border = BorderFactory.createLineBorder(Style.BORDER_COLOR, 4, true); // true allows for
+																								// rounded
 
 	// TODO Remove when done testing
 	private Media testMedia = new Media(42, 420, 69, "Testing Egregious Long Title of Many Words", "Sir James Bond 007, a legendary British spy who retired from the secret service 20 years previously, is visited by the head of British Secret Intelligence Service, M (James Bond), CIA representative Ransome, KGB representative Smernov, and Deuxième Bureau representative Le Grand. All implore Bond to come out of retirement to deal with SMERSH (James Bond) who have been eliminating agents: Bond spurns all their pleas. When Bond continues to stand firm, his mansion is destroyed by a mortar attack at the orders of M, who is, however, killed in the explosion.", "maybe temp path?", "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx129874-g6ZKXB94Hui1.jpg");
@@ -135,7 +139,6 @@ public class ListPage extends Page {
 		movieTypeLbl.setForeground(Style.TEA_GREEN); // set the font color of the password label
 		movieType = new JCheckBox();
 		movieType.setBackground(Style.BALTIC_BLUE);
-		
 
 		showTypeLbl = new JLabel("TV Show: ");
 		showTypeLbl.setFont(Style.BASE_FONT);
@@ -189,7 +192,7 @@ public class ListPage extends Page {
 		nameFilter.setSize(new Dimension(100, 10));
 		nameFilter.setFont(Style.BASE_FONT);
 		nameFilter.setBackground(Style.TEA_GREEN);
-		nameFilter.setForeground(Style.BALTIC_BLUE); 
+		nameFilter.setForeground(Style.BALTIC_BLUE);
 		nameFilter.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR));
 
 		statusFilterLbl = new JLabel("Status: ");

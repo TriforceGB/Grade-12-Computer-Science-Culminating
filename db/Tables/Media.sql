@@ -9,4 +9,5 @@ CREATE TABLE IF NOT EXISTS "Media" (
 	"episodeCount" INTEGER,
 	"posterPath" TEXT,
 	"posterLink" TEXT
+	UNIQUE(externalId,type)
 );
