@@ -17,18 +17,15 @@ import DTO.LocalDB.Media;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.net.URI;
-import java.net.URL;
-
-import UI.Style;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 
+import java.net.URI;
+import java.net.URL;
+
+import UI.Style;
 import UI.UI;
 
 /**

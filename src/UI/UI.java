@@ -2,15 +2,12 @@ package UI;
 
 import java.awt.CardLayout;
 import java.awt.Container;
-import java.awt.Graphics2D;
+import java.awt.Image;
+
 import java.util.EventListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-
-import java.awt.Image;
-import java.awt.RenderingHints;
-import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -45,6 +42,7 @@ public class UI extends JFrame implements EventListener {
 	private SettingsPage settingPage;
 	private MediaPage mediaPage;
 
+	private boolean loadedMediaPageOnce = false;
 	/**
 	 * This Create the UI and Display it for the User
 	 */
@@ -98,6 +96,11 @@ public class UI extends JFrame implements EventListener {
 	 */
 	public void switchPanel(String panelName) {
 		this.card.show(this.panelContainer, panelName);
+
+		if (panelName.equals("list") && !loadedMediaPageOnce) {
+			loadedMediaPageOnce = true;
+			listPage.addDefaultListToTable();
+		}
 	}
 
 	/**
