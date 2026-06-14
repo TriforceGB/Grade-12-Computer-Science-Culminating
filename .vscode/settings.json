@@ -4,10 +4,9 @@
     "java.project.referencedLibraries": {
         "include": [
             "lib/**/*.jar",
-            "c:\\Users\\bilal\\Downloads\\gson-2.14.0.jar"
         ],
         "exclude": [
-            "lib/gson-2.14.0.jar"
+            
         ]
     }
 }

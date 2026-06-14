@@ -1,6 +1,6 @@
-import UI.UI;
-import DB.DB;
 import API.API;
+import DB.DB;
+import UI.UI;
 
 public class FTS {
 	// Settings
@@ -13,9 +13,11 @@ public class FTS {
 	private static DB db;
 	private static API api;
 
+
 	public static void main(String[] args) {
 		db = new DB(DB_PATH);
 		api = new API(TVDB_API_KEY);
 		ui = new UI(db);
+
 	}
 }
