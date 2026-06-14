@@ -62,7 +62,7 @@ public class ListPage extends Page {
 	private JLabel statusFilterLbl;
 
 	private JComboBox<String> statusFilter;
-	private String[] showStatus = new String[] { "", "Undecided", "Backlog", "Watching", "Completed", "Dropped" };
+	private final String[] SHOW_STATUS_OPTIONS = new String[] { "", "Undecided", "Backlog", "Watching", "Completed", "Dropped" };
 
 	private JLabel minRatingLbl;
 	private JSpinner minRating;
@@ -188,7 +188,7 @@ public class ListPage extends Page {
 		statusFilterLbl = new JLabel("Status: ");
 		statusFilterLbl.setFont(Style.BASE_FONT);
 		statusFilterLbl.setForeground(Style.TEA_GREEN);
-		statusFilter = new JComboBox<String>(showStatus);
+		statusFilter = new JComboBox<String>(SHOW_STATUS_OPTIONS);
 		statusFilter.setFont(Style.BASE_FONT);
 		statusFilter.setBackground(Style.TEA_GREEN);
 		statusFilter.setForeground(Style.BALTIC_BLUE);

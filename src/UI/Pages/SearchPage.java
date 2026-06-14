@@ -6,6 +6,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -49,15 +50,18 @@ public class SearchPage extends Page {
 	private JPanel scrollWrapperPanel;
 	private JPanel scrollContentPanel;
 
-	private final int POSTER_WIDTH = 100;
-	private final int POSTER_HEIGHT = 100;
+	private final int POSTER_WIDTH = 200;
+	private final int POSTER_HEIGHT = 200;
 	private final Dimension POSTER_SIZE = new Dimension(POSTER_WIDTH, POSTER_HEIGHT);
 
 
-	private final int DESCRIPTION_CPERLINE = 40;
+	private final int DESCRIPTION_CPERLINE = 50;
+	private final int TITLE_CPERLINE = 12;
 	private final int MAX_PASS = 5;
 
 	private final String PATH_FOR_DEFAULT_IMAGE = "assets/UI/filal.png";
+
+	private final String[] SHOW_STATUS_OPTIONS = new String[] { "Undecided", "Backlog", "Watching", "Completed", "Dropped" };
 
 	/**
 	 * Create the Search Page
@@ -165,7 +169,7 @@ public class SearchPage extends Page {
 		listScrollPane = new JScrollPane(scrollWrapperPanel);
 		listScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		listScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		listScrollPane.setPreferredSize(new Dimension(1200, 900));
+		listScrollPane.setPreferredSize(new Dimension(1500, 900));
 		listScrollPane.getVerticalScrollBar().setUnitIncrement(16);
 
 		listPanel.add(listScrollPane);
@@ -202,24 +206,24 @@ public class SearchPage extends Page {
 		// create poster
 		gbc.gridy = 0; // row is always 0
 		gbc.gridx = 0; // col 1
-		gbc.insets = new Insets(POSTER_HEIGHT / 2, POSTER_WIDTH / 2, POSTER_HEIGHT / 2, POSTER_WIDTH / 2);
+		gbc.insets = new Insets(20, 20, 20, 100);
 
 		JLabel posterLbl = new JLabel();
 		posterLbl.setIcon(poster);
 		posterLbl.setPreferredSize(POSTER_SIZE);
 		posterLbl.setMinimumSize(POSTER_SIZE);
 		posterLbl.setMaximumSize(POSTER_SIZE);
-		result.add(posterLbl);
+		result.add(posterLbl, gbc);
 
-		// revalidate all the stuff
-		
 
 		// add name
-		JLabel name = new JLabel("Testing");
-		name.setFont(Style.BASE_FONT);
+		String testingTitle = "Testing Egregious Long Title of Many Words";
+		JLabel name = new JLabel(ui.getHtmlFormatText(testingTitle, TITLE_CPERLINE, MAX_PASS));
+		name.setFont(Style.TITLE_FONT);
 
-		gbc.gridx = 1;
-		result.add(name);
+		gbc.gridx = 1; // col 2
+		gbc.insets = new Insets(20, 0, 20, 100);
+		result.add(name, gbc);
 
 		// add desc.
 		// description is mounted via singular line
@@ -227,17 +231,46 @@ public class SearchPage extends Page {
 		JLabel desc = new JLabel(ui.getHtmlFormatText(testingDesc, DESCRIPTION_CPERLINE, MAX_PASS));
 		desc.setFont(Style.DESC_FONT);
 
-		gbc.gridx = 2;
+		gbc.gridx = 2; // col 3
+		gbc.insets = new Insets(20, 0, 20, 70);
 
-		result.add(desc);
+		result.add(desc, gbc);
 
 		// add button
 		JButton addToDb = new JButton("+");
 		addToDb.setFont(Style.BASE_FONT);
 
-		gbc.gridx = 3;
+		addToDb.addActionListener(e -> {
+			boolean addedToDb = false;
 
-		result.add(addToDb);
+			// TODO Add to db and check whether that failed or not
+			// for testing below remove
+			addedToDb = true;
+
+			if (addedToDb) {
+				JOptionPane.showMessageDialog(this, "Successfully added show to local database.", "Success", JOptionPane.INFORMATION_MESSAGE);
+				// update the current panel and replace the button with the dropdown
+
+				result.remove(addToDb);
+				GridBagConstraints gbc2 = new GridBagConstraints();
+
+				JComboBox<String> showStatus = new JComboBox<String>(SHOW_STATUS_OPTIONS);
+				showStatus.setFont(Style.BASE_FONT);
+
+				gbc2.gridy = 0;
+				gbc2.gridx = 3; // col 4
+				gbc2.insets = new Insets(20, 0, 20, 20);
+
+				result.add(showStatus);
+			} else {
+				JOptionPane.showMessageDialog(this, "Failed to add show to local database.", "Error", JOptionPane.ERROR_MESSAGE);
+			}
+		});
+
+		gbc.gridx = 3; // col 4
+		gbc.insets = new Insets(20, 0, 20, 20);
+
+		result.add(addToDb, gbc);
 
 		return result;
 	}
@@ -252,9 +285,8 @@ public class SearchPage extends Page {
 
 	ImageIcon getDefaultPoster() {
 		try {
-			return ui.resizeImg(new ImageIcon(PATH_FOR_DEFAULT_IMAGE), WIDTH, HEIGHT);
+			return ui.resizeImg(new ImageIcon(PATH_FOR_DEFAULT_IMAGE), POSTER_WIDTH, POSTER_HEIGHT);
 		} catch (Exception e) {
-			System.out.println(System.getProperty("user.dir"));
 			return null;
 		}
 	}
