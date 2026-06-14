@@ -219,38 +219,13 @@ public class LoginPage extends Page {
 		loginButton.setVerticalAlignment(SwingConstants.CENTER);
 		loginButton.setIconTextGap(20);
 
-		loginButton.addActionListener(e -> {
-			String username = usernameField.getText(); // Get the username from the text field
-			String password = new String(passwordField.getPassword()); // Get the password from the password field
-
-			// Tries to Login
-			if (ui.login(username, password)) {
-				// User is found
-				// Clear Text Fields
-				usernameField.setText("");
-				passwordField.setText("");
-
-			} else { // If User is not found
-				/*
-				 * usernameField.setBackground(Color.RED);
-				 * passwordField.setBackground(Color.RED);
-				 */
-				// Reset password
-				passwordField.setText("");
-				JOptionPane.showMessageDialog(this, "Invalid username or password", "Error", JOptionPane.ERROR_MESSAGE);
-			}
-		});
+		loginButton.addActionListener(e -> login());
 
 		// this code is for the password field because the login btn needs to be
 		// intialized first
 
 		// add enter key functionality to the password field to trigger the login button
-		passwordField.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				loginButton.doClick(); // Trigger the login button when the enter key is pressed in the password field
-			}
-		});
+		passwordField.addActionListener(e -> login());
 
 		// Add to nested panel
 		nestedBtnPanel.add(loginButton);
@@ -261,5 +236,27 @@ public class LoginPage extends Page {
 		gbc.gridwidth = 1; // Span across 1 column
 		gbc.insets = Style.BTN_PADS; // Add padding around the buttons
 		this.add(nestedBtnPanel, gbc);
+	}
+
+	void login() {
+		String username = usernameField.getText(); // Get the username from the text field
+		String password = new String(passwordField.getPassword()); // Get the password from the password field
+
+		// Tries to Login
+		if (ui.login(username, password)) {
+			// User is found
+			// Clear Text Fields
+			usernameField.setText("");
+			passwordField.setText("");
+
+		} else { // If User is not found
+			/*
+			 * usernameField.setBackground(Color.RED);
+			 * passwordField.setBackground(Color.RED);
+			 */
+			// Reset password
+			passwordField.setText("");
+			JOptionPane.showMessageDialog(this, "Invalid username or password", "Error", JOptionPane.ERROR_MESSAGE);
+		}
 	}
 }
