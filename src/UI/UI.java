@@ -11,6 +11,7 @@ import javax.swing.JButton;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 
 import DB.DB;
@@ -43,6 +44,7 @@ public class UI extends JFrame implements EventListener {
 	private MediaPage mediaPage;
 
 	private boolean loadedMediaPageOnce = false;
+
 	/**
 	 * This Create the UI and Display it for the User
 	 */
@@ -132,19 +134,57 @@ public class UI extends JFrame implements EventListener {
 	/**
 	 * Is a Shell for the create User Method for DB
 	 *
-	 * @param username The username of the user to create (String)
-	 * @param password The password of the user to create (String)
-	 * @param isAdmin  Whether the user is an admin (boolean)
-	 * @return
+	 * @param newUser a User object that will be enter into the DB
+	 * @return if the Change was Made
 	 */
-	public boolean createUser(String username, String password, boolean isAdmin) {
-		boolean created = db.createUser(new User(username, password, isAdmin));
+	public boolean createUser(User newUser) {
+		boolean created = db.createUser(newUser);
 		if (created) {
 			this.switchPanel("login");
 		}
 		return created;
 	}
 
+	/**
+	 * Edit the Current User Username
+	 *
+	 * @param newUsername The New Username (String)
+	 * @return True if Changed on DB, False Otherwise
+	 */
+	public boolean editUsername(String newUsername) {
+		this.currentUser.setUsername(newUsername); // Change Username on the Object
+		return db.editUser(this.currentUser); // Change the Username on the DB
+	}
+
+	/**
+	 * Edit the Current User Password
+	 *
+	 * @param newPassword The New Password (String)
+	 * @return True if Changed on DB, False Otherwise
+	 */
+	public boolean editPassword(String newPassword) {
+		this.currentUser.setPassword(newPassword); // Change Username on the Object
+		return db.editUser(this.currentUser); // Change the Username on the DB
+	}
+
+	/**
+	 * Delete the Current User. Only works if your Not an Admin
+	 *
+	 * @return True if Changed on DB, False Otherwise
+	 */
+	public boolean deleteUser() {
+		// Check if User is Admin
+		if (this.currentUser.isAdmin()) {
+			JOptionPane.showMessageDialog(this,
+					"Cannot Delete a Admin User, Please Have Another Admin Remove Power Before Deletion", "Error",
+					JOptionPane.ERROR_MESSAGE);
+			return false;
+		} else {
+			return db.deleteUser(this.currentUser.getId());
+		}
+	}
+
+	// Image and Other UI Methods
 	public ImageIcon resizeImg(ImageIcon original, int width, int height) {
 		Image ogImage = original.getImage();
 		Image resizedImage = ogImage.getScaledInstance(width, height, Image.SCALE_SMOOTH);

@@ -36,7 +36,7 @@ class Query {
 				"episodeCount" INTEGER,
 				"releaseDate" TEXT,
 				"posterPath" TEXT,
-				"posterLink" TEXT
+				"posterLink" TEXT,
 				UNIQUE(externalId,type)
 				)
 			""";
@@ -53,9 +53,9 @@ class Query {
 				"lastEpisode" INTEGER,
 				"review" TEXT,
 				"rewatched" INTEGER,
+				UNIQUE(userId,mediaId),
 				FOREIGN KEY ("userId") REFERENCES "Users"("id") ON DELETE CASCADE
 				FOREIGN KEY ("mediaId") REFERENCES "Media"("id") ON DELETE CASCADE
-				UNIQUE(userId,mediaId)
 				)
 			""";
 	// User Queries
