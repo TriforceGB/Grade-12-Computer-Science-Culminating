@@ -86,10 +86,10 @@ public class SettingsPage extends Page {
 
 		// Images
 
-		ui.addButtonImg(chngUserButton, new ImageIcon("assets/UI/changeicon.png"), 20, 45, 45);
-		ui.addButtonImg(chngPassButton, new ImageIcon("assets/UI/changeicon.png"), 20, 45, 45);
-		ui.addButtonImg(expUserButton, new ImageIcon("assets/UI/exporticon.png"), 40, 45, 45);
-		ui.addButtonImg(impUserButton, new ImageIcon("assets/UI/importicon.png"), 40, 45, 45);
+		ui.addButtonImg(chngUserButton, new ImageIcon("assets/UI/changenameicon.png"), 20, 45, 45);
+		ui.addButtonImg(chngPassButton, new ImageIcon("assets/UI/changepassicon.png"), 20, 45, 45);
+		ui.addButtonImg(expUserButton, new ImageIcon("assets/UI/exportusericon.png"), 40, 45, 45);
+		ui.addButtonImg(impUserButton, new ImageIcon("assets/UI/importusericon.png"), 40, 45, 45);
 		ui.addButtonImg(expMediaButton, new ImageIcon("assets/UI/exporticon.png"), 20, 45, 45);
 		ui.addButtonImg(impMediaButton, new ImageIcon("assets/UI/importicon.png"), 20, 45, 45);
 		ui.addButtonImg(delUserButton, new ImageIcon("assets/UI/binicon.png"), 20, 45, 45);

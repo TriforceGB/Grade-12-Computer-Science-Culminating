@@ -20,6 +20,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.plaf.basic.BasicScrollBarUI;
 
 import DTO.LocalDB.Media;
 
@@ -121,6 +122,8 @@ public class SearchPage extends Page {
 	void addSearchLabel() {
 		searchLbl = new JLabel("Search: ");
 		searchLbl.setFont(Style.BASE_FONT);
+		searchLbl.setBackground(this.PageColor);
+		searchLbl.setForeground(Style.TEA_GREEN);
 
 		gbc.gridy = 0; // only one row
 		gbc.gridx = 0; // col 1
@@ -132,6 +135,9 @@ public class SearchPage extends Page {
 	void addSearchField() {
 		searchField = new JTextField(20);
 		searchField.setFont(Style.BASE_FONT);
+		searchField.setBackground(Style.TEA_GREEN);
+		searchField.setForeground(Style.BALTIC_BLUE);
+		searchField.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR));
 
 		gbc.gridy = 0; // only one row
 		gbc.gridx = 1; // col 2
@@ -145,6 +151,10 @@ public class SearchPage extends Page {
 	void addSearchTypeBox() {
 		searchTypeBox = new JComboBox<String>(TYPES);
 		searchTypeBox.setFont(Style.BASE_FONT);
+		searchTypeBox.setBackground(Style.TEA_GREEN);
+		searchTypeBox.setForeground(Style.BALTIC_BLUE);
+		searchTypeBox.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR));
+		searchTypeBox.setFocusable(false);
 
 		gbc.gridy = 0; // only one row
 		gbc.gridx = 2; // col 3
@@ -152,12 +162,33 @@ public class SearchPage extends Page {
 		// only padding on bottom for spacing
 		gbc.insets = new Insets(0, 0, 10, 0);
 
+		searchTypeBox.addActionListener(e ->{
+			String showtype = searchTypeBox.getSelectedItem().toString();
+			if (showtype.equals("Movie")) {
+				ui.addButtonImg(searchBtn, new ImageIcon("assets/UI/moviesearchicon.png"), 20, 30, 30);
+				}
+				else if (showtype.equals("TV Show")) {
+					ui.addButtonImg(searchBtn, new ImageIcon("assets/UI/tvsearchicon.png"), 20, 30, 30);
+				}
+				else if (showtype.equals("Anime")) {
+					ui.addButtonImg(searchBtn, new ImageIcon("assets/UI/animesearchicon.png"), 20, 30, 30);
+				}
+				else {
+					ui.addButtonImg(searchBtn, new ImageIcon("assets/UI/searchicon.png"), 20, 30, 30);
+				}
+
+		});
 		searchPanel.add(searchTypeBox, gbc);
 	}
 
 	void addSearchBtn() {
 		searchBtn = new JButton("Search");
 		searchBtn.setFont(Style.BASE_FONT);
+		searchBtn.setBackground(Style.LIGHT_GREEN);
+		searchBtn.setForeground(Style.BALTIC_BLUE);
+		searchBtn.setFont(Style.BASE_FONT);
+		ui.addButtonImg(searchBtn, new ImageIcon("assets/UI/moviesearchicon.png"), 20, 30, 30);
+		searchBtn.setFocusable(false);
 
 		gbc.gridy = 0; // only one row
 		gbc.gridx = 3; // col 4
@@ -180,13 +211,28 @@ public class SearchPage extends Page {
 		listScrollPane.setPreferredSize(new Dimension(1500, 800));
 		listScrollPane.getVerticalScrollBar().setUnitIncrement(16);
 
+		scrollContentPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 4, true));
+		scrollContentPanel.setBackground(Style.TEA_GREEN);
+		listScrollPane.setBackground(Style.BORDER_COLOR);
+		listScrollPane.setForeground(Style.BORDER_COLOR);
+		listScrollPane.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR));
+		scrollWrapperPanel.setBackground(Style.BORDER_COLOR);
+		// scrollWrapperPanel.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR));
+
+		listScrollPane.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
+			@Override
+			protected void configureScrollBarColors() {
+				this.thumbColor = Style.BORDER_COLOR;
+				this.trackColor = Style.TEA_GREEN;
+			}
+		} );
 		listPanel.add(listScrollPane);
 	}
 
 	JPanel getSearchResultPanel(Media obj) {
 		JPanel result = new JPanel();
-		result.setBackground(PageColor);
-		result.setBorder(BorderFactory.createLineBorder(Color.black, 4, true));
+		result.setBackground(Style.BORDER_COLOR);
+		// result.setBorder(BorderFactory.createLineBorder(Color.BLACK, 4, true));
 		result.setLayout(new GridBagLayout());
 		gbc = new GridBagConstraints(); // reset gbc to ensure ready to go
 
@@ -217,12 +263,14 @@ public class SearchPage extends Page {
 		posterLbl.setMinimumSize(POSTER_SIZE);
 		posterLbl.setMaximumSize(POSTER_SIZE);
 		result.add(posterLbl, gbc);
+		
 
 
 		// add name
 		String titleString = obj.getName();
 		JLabel titleLbl = new JLabel(ui.getHtmlFormatText(titleString, TITLE_CPERLINE, MAX_PASS));
 		titleLbl.setFont(Style.TITLE_FONT);
+		titleLbl.setForeground(Style.TEA_GREEN);
 
 		gbc.gridx = 1; // col 2
 		gbc.insets = new Insets(20, 0, 20, 100);
@@ -233,6 +281,8 @@ public class SearchPage extends Page {
 		String descString = obj.getDescription();
 		JLabel descLbl = new JLabel(ui.getHtmlFormatText(descString, DESCRIPTION_CPERLINE, MAX_PASS));
 		descLbl.setFont(Style.DESC_FONT);
+		descLbl.setForeground(Style.TEA_GREEN);
+		
 
 		gbc.gridx = 2; // col 3
 		gbc.insets = new Insets(20, 0, 20, 70);
@@ -240,8 +290,12 @@ public class SearchPage extends Page {
 		result.add(descLbl, gbc);
 
 		// add button
-		JButton addToDb = new JButton("+");
+		JButton addToDb = new JButton();
 		addToDb.setFont(Style.BASE_FONT);
+		addToDb.setBackground(Style.LIGHT_GREEN);
+		addToDb.setForeground(Style.BALTIC_BLUE);
+		addToDb.setFont(Style.BASE_FONT);
+		ui.addButtonImg(addToDb, new ImageIcon("assets/UI/plus.png"), 20, 30, 30);
 
 		addToDb.addActionListener(e -> {
 			boolean addedToDb = false;
