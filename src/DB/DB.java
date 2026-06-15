@@ -346,9 +346,9 @@ public class DB {
 	 * @param ratingMax the maximum rating (int)
 	 * @return a List of Media that match the given filters
 	 */
-	public Media[] findMedia(int userId, boolean isMovie, boolean isTV, Boolean isAnime, boolean isUndecided,
+	public Media[] findMedia(int userId, boolean isMovie, boolean isTV, boolean isAnime, boolean isUndecided,
 			boolean isDropped,
-			boolean isBackLog, boolean isWatching, Boolean isCompleted, String name,
+			boolean isBackLog, boolean isWatching, boolean isCompleted, String name,
 			int ratingMin, int ratingMax) {
 		try (PreparedStatement stmt = dbConnect.prepareStatement(Query.FIND_MEDIA)) {
 			stmt.setString(1, "%" + name + "%"); // Wild Card of both the left and right side of the name
