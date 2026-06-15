@@ -52,7 +52,7 @@ public class MediaPage extends Page {
 	private final int CPERLINE_DESC = 40;
 	private final int MAXPASS_DESC = 5;
 	private JLabel statusLabel;
-	private final String[] TYPES = new String[] { "Movie", "TV Show", "Anime" };
+	private final String[] TYPES = new String[] { "Undecided", "Dropped", "Backlog", "Watching", "Completed" };
 	private JComboBox<String> statusSelector;
 	private JLabel usrRatingLabel;
 	private JSpinner usrRatingSelector;
