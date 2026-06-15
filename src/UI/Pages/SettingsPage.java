@@ -2,18 +2,13 @@ package UI.Pages;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
-import java.io.File;
-import java.io.FileWriter;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
-import DTO.LocalDB.User;
 import UI.Style;
 import UI.UI;
 
@@ -160,7 +155,17 @@ public class SettingsPage extends Page {
 						JOptionPane.ERROR_MESSAGE);
 			}
 		});
-		impMediaButton.addActionListener(e -> ui.logout()); // TODO
+		impMediaButton.addActionListener(e -> {
+			if (ui.importMedia()) {
+				// Change is Made
+				JOptionPane.showMessageDialog(this, "Successfully Imported Media", "Success",
+						JOptionPane.INFORMATION_MESSAGE);
+			} else {
+				// Change wasn't made
+				JOptionPane.showMessageDialog(this, "Unable to Import Media, Try again", "Error",
+						JOptionPane.ERROR_MESSAGE);
+			}
+		});
 		delUserButton.addActionListener(e -> {
 			// Prompt to confirm account deletion
 			int confirm = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete your account?");
@@ -193,7 +198,7 @@ public class SettingsPage extends Page {
 		buttonPanel.add(adminButton); // TODO (make sure only admins can see this button)
 
 		buttonPanel.setBorder(BorderFactory.createEmptyBorder(300, 250, 300, 850));
-		// STILL NEED STAT PANEL
+		// TODO STILL NEED STAT PANEL
 
 		contentPanel.add(buttonPanel, BorderLayout.CENTER);
 		contentPanel.add(statPanel, BorderLayout.LINE_END);

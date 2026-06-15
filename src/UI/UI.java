@@ -5,6 +5,7 @@ import java.awt.Container;
 import java.awt.Image;
 import java.io.File;
 import java.io.FileWriter;
+import java.nio.file.Files;
 import java.util.EventListener;
 
 import javax.swing.ImageIcon;
@@ -36,6 +37,8 @@ public class UI extends JFrame implements EventListener {
 	// Variables
 	private DB db; // reference to the database
 	private API api; // reference to the database
+	private Gson gson; // reference to the Gson library
+
 	private User currentUser; // Info about the Current Login User
 
 	// Panels
@@ -55,10 +58,11 @@ public class UI extends JFrame implements EventListener {
 	/**
 	 * This Create the UI and Display it for the User
 	 */
-	public UI(DB db, API api) {
+	public UI(DB db, API api, Gson gson) {
 		// Taking in the Reference(s)
 		this.db = db;
 		this.api = api;
+		this.gson = gson;
 
 		// Settings
 		this.setTitle(Style.APP_TITLE); // Set the title of the window
@@ -228,14 +232,29 @@ public class UI extends JFrame implements EventListener {
 			return false;
 		}
 		// Create a New Json
-		// TODO Make this Match the one Used in API (AKA make a System Gson)
-		Gson gson = new Gson();
 		String json = gson.toJson(media);
-		System.out.println(json); // TODO Put this into a File
 		saveFile("Media_Export", json);
 		return true;
 
 	}
+
+	public Boolean importMedia() {
+		String json = openFile();
+		Media[] mediaList = gson.fromJson(json, Media[].class);
+		// Throw an error if media is null
+		if (mediaList == null) {
+			return false;
+		}
+
+		for (Media media : mediaList) {
+			if (!db.createMedia(media)) {
+				System.err.println("Failed to create media: " + media.getName());
+			}
+		}
+		return true;
+
+	}
+
 	// API Shells
 
 	/**
@@ -373,4 +392,38 @@ public class UI extends JFrame implements EventListener {
 		}
 	}
 
+	/**
+	 * Opens a Pop up that will let the User Select a Json.
+	 *
+	 * @return Returns the Content of the File as String
+	 */
+	public String openFile() {
+		JFileChooser fileChooser = new JFileChooser();
+		fileChooser.setDialogTitle("Select a Json to Import");
+
+		// Make Sure it Export as a JSON
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("JSON Files", "json");
+		fileChooser.setFileFilter(filter);
+
+		// Show Open Dialog
+		int result = fileChooser.showOpenDialog(this);
+		// If they Pick a Location
+		if (result == JFileChooser.APPROVE_OPTION) {
+			File file = fileChooser.getSelectedFile(); // Create a File at that Location
+
+			// Read the File
+			try {
+				String output = Files.readString(file.toPath());
+				return output;
+
+			} catch (Exception e) {
+				// Show Error Message
+				JOptionPane.showMessageDialog(this, "Unable to Open File, Try again", "Error",
+						JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
+
+		}
+		return null;
+	}
 }

@@ -23,8 +23,8 @@ public class API {
 	private AniList aniList; // Reference to the AniList API
 	private TheTVDB theTVDB; // Reference to the TheTVDB API
 
-	public API(String tvdb_api_key) {
-		this.gson = new Gson();
+	public API(String tvdb_api_key, Gson gson) {
+		this.gson = gson;
 		this.aniList = new AniList(this.CLIENT, this.gson);
 		this.theTVDB = new TheTVDB(this.CLIENT, this.gson, tvdb_api_key);
 	}
