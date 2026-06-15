@@ -1,16 +1,14 @@
 package UI.Pages;
 
+import UI.Style;
+import UI.UI;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
-
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
-
-import UI.Style;
-import UI.UI;
 
 /**
  * The Home Page Class. Used to Create the Main Page of the UI.
@@ -60,9 +58,29 @@ public class HomePage extends Page {
 		JPanel blbuttonpanel = new JPanel();
 		blbuttonpanel.setBackground(this.PageColor);
 		blbuttonpanel.setLayout(new GridLayout(0, cols, hgap, 20));
+
 		for (int i = 1; i <= 25; i++) {
-			blbuttonpanel.add(new JButton(String.valueOf(i)));
+			JButton Test = new JButton(String.valueOf(i));
+			blbuttonpanel.add(Test);
+			Test.addActionListener(e -> {
+
+				ui.switchPanel("media");
+
+
+			});
 		}
+
+		
+
+
+		/*
+				for (int i = 1; i <= 25; i++) {
+
+			blbuttonpanel.add(new JButton(String.valueOf(i)));
+
+		}
+		
+		*/
 
 		JScrollPane blScrollPane = new JScrollPane(blbuttonpanel);
 		blScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);

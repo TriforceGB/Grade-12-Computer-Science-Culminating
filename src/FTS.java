@@ -1,9 +1,12 @@
 import UI.UI;
+import Util.MoniagaStringList;
 import DB.DB;
 
 import com.google.gson.Gson;
 
 import API.API;
+import DB.DB;
+import UI.UI;
 
 public class FTS {
 	// Settings
@@ -16,6 +19,7 @@ public class FTS {
 	private static DB db;
 	private static API api;
 	private static Gson gson;
+
 
 	public static void main(String[] args) {
 		gson = new Gson();

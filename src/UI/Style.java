@@ -13,6 +13,7 @@ public class Style {
 
 	public static final Font TITLE_FONT = new Font("Arial", Font.BOLD, 32);
 	public static final Font BASE_FONT = new Font("Arial", Font.PLAIN, 24);
+	public static final Font HEADER_FONT = new Font("Arial", Font.BOLD, 28);
 	public static final Font BASE_FONT_BIG = new Font("Arial", Font.PLAIN, 32);
 	public static final Font DESC_FONT = new Font("Arial", Font.PLAIN, 16);
 	public static final Color TEA_GREEN = new Color(199, 209, 244); // color of font (used for text above background) (Lightest, 5)
