@@ -437,7 +437,7 @@ public class ListPage extends Page {
 		listTable.setRowHeight(POSTER_HEIGHT); // for poster height accounting
 
 		// column resizizing
-		listTable.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
+		listTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 		TableColumnModel cM = listTable.getColumnModel();
 		cM.getColumn(0).setPreferredWidth(POSTER_WIDTH);
 		cM.getColumn(1).setPreferredWidth(500);
