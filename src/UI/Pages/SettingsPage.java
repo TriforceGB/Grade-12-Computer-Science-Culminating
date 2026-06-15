@@ -220,4 +220,5 @@ public class SettingsPage extends Page {
 
 		this.add(contentPanel, BorderLayout.CENTER);
 	}
+
 }

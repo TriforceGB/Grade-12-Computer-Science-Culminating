@@ -187,7 +187,7 @@ public class UI extends JFrame implements EventListener {
 	 */
 	public boolean deleteUser() {
 		// Check if User is Admin
-		if (this.currentUser.isAdmin()) {
+		if (this.currentUser.getIsAdmin()) {
 			JOptionPane.showMessageDialog(this,
 					"Cannot Delete a Admin User, Please Have Another Admin Remove Power Before Deletion", "Error",
 					JOptionPane.ERROR_MESSAGE);
@@ -480,4 +480,5 @@ public class UI extends JFrame implements EventListener {
 		}
 		return null;
 	}
+
 }

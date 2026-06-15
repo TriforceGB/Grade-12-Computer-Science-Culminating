@@ -125,7 +125,7 @@ public class DB {
 		try (PreparedStatement stmt = dbConnect.prepareStatement(Query.CREATE_USER)) {
 			stmt.setString(1, newUser.getUsername());
 			stmt.setString(2, newUser.getPassword());
-			stmt.setBoolean(3, newUser.isAdmin());
+			stmt.setBoolean(3, newUser.getIsAdmin());
 			stmt.setString(4, created);
 			stmt.setString(5, lastLogin);
 			int rowsAffected = stmt.executeUpdate(); // Runs Command
@@ -150,7 +150,7 @@ public class DB {
 			// Values to Change
 			stmt.setString(1, editUser.getUsername());
 			stmt.setString(2, editUser.getPassword());
-			stmt.setBoolean(3, editUser.isAdmin());
+			stmt.setBoolean(3, editUser.getIsAdmin());
 			// Matching Base off ID
 			stmt.setInt(4, editUser.getId());
 			int rowsAffected = stmt.executeUpdate(); // Runs Command
