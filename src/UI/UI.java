@@ -283,6 +283,7 @@ public class UI extends JFrame implements EventListener {
 	public Boolean importUser() {
 		String json = openFile();
 		User newUser = gson.fromJson(json, User.class);
+		newUser.setAdmin(false); // Imported User are Not Admins by default
 		// Throw an error if user is null
 		if (newUser == null) {
 			return false;
