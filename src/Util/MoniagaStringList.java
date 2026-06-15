@@ -8,8 +8,6 @@ public class MoniagaStringList {
         count = 0;
     }
 
-
-    // TODO check if used, else remove
     public MoniagaStringList(String[] startVals) {
         for (int i = 0; i < startVals.length; i++) {
             add(startVals[i]);
@@ -57,5 +55,16 @@ public class MoniagaStringList {
             return null;
         else
             return items[index];
+    }
+
+    public boolean exists(String check) {
+        boolean result = false;
+        for (int i = 0; i < count; i++) {
+            if (items[i].equals(check)) {
+                result = true;
+                break;
+            }
+        }
+        return result;
     }
 }
