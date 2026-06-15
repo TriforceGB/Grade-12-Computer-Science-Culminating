@@ -79,6 +79,7 @@ public class UI extends JFrame implements EventListener {
 		this.searchPage = new SearchPage(this);
 		this.settingPage = new SettingsPage(this);
 		this.mediaPage = new MediaPage(this);
+
 		// TODO add later one we got Admin Panel working
 		// this.adminPanel = new adminPanel(this, this.db);
 
@@ -280,7 +281,7 @@ public class UI extends JFrame implements EventListener {
 		return true;
 	}
 
-	public boolean importUser() {
+	public Boolean importUser() {
 		String json = openFile();
 		User newUser = gson.fromJson(json, User.class);
 		// Throw an error if user is null

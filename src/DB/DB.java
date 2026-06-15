@@ -351,11 +351,11 @@ public class DB {
 			boolean isBackLog, boolean isWatching, boolean isCompleted, String name,
 			int ratingMin, int ratingMax) {
 		try (PreparedStatement stmt = dbConnect.prepareStatement(Query.FIND_MEDIA)) {
-			stmt.setString(1, "%" + name + "%"); // Wild Card of both the left and right side of the name
-			stmt.setInt(2, (isMovie) ? 1 : 0);
-			stmt.setInt(3, (isTV) ? 2 : 0);
-			stmt.setInt(4, (isAnime) ? 3 : 0);
-			stmt.setInt(5, userId);
+			stmt.setInt(1, userId);
+			stmt.setString(2, "%" + name + "%"); // Wild Card of both the left and right side of the name
+			stmt.setInt(3, (isMovie) ? 1 : 0);
+			stmt.setInt(4, (isTV) ? 2 : 0);
+			stmt.setInt(5, (isAnime) ? 3 : 0);
 			stmt.setInt(6, (isUndecided) ? 0 : -1);
 			stmt.setInt(7, (isDropped) ? 1 : -1);
 			stmt.setInt(8, (isBackLog) ? 2 : -1);

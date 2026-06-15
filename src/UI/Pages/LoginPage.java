@@ -258,4 +258,5 @@ public class LoginPage extends Page {
 			JOptionPane.showMessageDialog(this, "Invalid username or password", "Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
+
 }

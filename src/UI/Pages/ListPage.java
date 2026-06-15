@@ -387,7 +387,7 @@ public class ListPage extends Page {
 						break;
 				}
 			}
-			// refer to selectedOptions moniaga string list (has docs)
+			// refer to selectedOptions Moniaga string list (has docs)
 			int minRatingToCheck = (int) minRating.getValue();
 			int maxRatingToCheck = (int) maxRating.getValue();
 			boolean canBeMovie = movieType.isSelected();
