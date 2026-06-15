@@ -11,5 +11,9 @@ public class adminPage extends Page {
 		super(ui);
 	}
 
+
+	
+	
+
 	// TODO Rewrite header for the Admin Panel
 }

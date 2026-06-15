@@ -4,6 +4,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
+
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -218,7 +219,12 @@ public class LoginPage extends Page {
 		loginButton.setVerticalAlignment(SwingConstants.CENTER);
 		loginButton.setIconTextGap(20);
 
-		loginButton.addActionListener(e -> login());
+		loginButton.addActionListener(e -> {
+			
+			login();
+			
+			}
+		);
 
 		// this code is for the password field because the login btn needs to be
 		// intialized first
@@ -247,6 +253,7 @@ public class LoginPage extends Page {
 			// Clear Text Fields
 			usernameField.setText("");
 			passwordField.setText("");
+			ui.setAdmin(ui.isAdmin());
 
 		} else { // If User is not found
 			/*
