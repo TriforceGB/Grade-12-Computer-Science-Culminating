@@ -357,6 +357,7 @@ public class ListPage extends Page {
 		searchButton.setForeground(Style.BALTIC_BLUE);
 		searchButton.setFont(Style.BASE_FONT);
 		ui.addButtonImg(searchButton, new ImageIcon("assets/UI/searchicon.png"), 20, 30, 30);
+		searchButton.setFocusable(false);
 		searchButton.addActionListener(e -> {
 			clearListTable(); // clears the table so ready for adding
 			String nameToCheck = nameFilter.getText();
@@ -420,6 +421,7 @@ public class ListPage extends Page {
 		refreshButton.setForeground(Style.BALTIC_BLUE);
 		refreshButton.setFont(Style.BASE_FONT);
 		ui.addButtonImg(refreshButton, new ImageIcon("assets/UI/changeicon.png"), 20, 30, 30);
+		refreshButton.setFocusable(false);
 		refreshButton.addActionListener(e -> {
 			clearListTable();
 			addDefaultListToTable();
