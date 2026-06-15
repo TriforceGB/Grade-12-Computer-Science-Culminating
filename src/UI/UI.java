@@ -253,10 +253,12 @@ public class UI extends JFrame implements EventListener {
 	 */
 	public boolean importMedia() {
 		String json = openFile();
-		Media[] mediaList = gson.fromJson(json, Media[].class);
-		// Throw an error if media is null
-		if (mediaList == null) {
-			return false;
+		Media[] mediaList;
+		try {
+			mediaList = gson.fromJson(json, Media[].class);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false; // Throw an error if media is null
 		}
 
 		for (Media media : mediaList) {
@@ -290,9 +292,12 @@ public class UI extends JFrame implements EventListener {
 	 */
 	public Boolean importUser() {
 		String json = openFile();
-		User newUser = gson.fromJson(json, User.class);
-		// Throw an error if user is null
-		if (newUser == null) {
+		User newUser;
+
+		try {
+			newUser = gson.fromJson(json, User.class);
+		} catch (Exception e) {
+			e.printStackTrace(); // Throw Error if Not a Valid User
 			return false;
 		}
 
