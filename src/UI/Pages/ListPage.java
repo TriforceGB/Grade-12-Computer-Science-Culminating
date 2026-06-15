@@ -7,10 +7,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.io.File;
 
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-
-import javax.swing.SpinnerNumberModel;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -27,8 +23,8 @@ import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
 
 import DTO.LocalDB.Media;
-import UI.UI;
 import UI.Style;
+import UI.UI;
 
 /**
  * The List Page Class. Used to display a list of media for the user.
@@ -64,7 +60,8 @@ public class ListPage extends Page {
 	private JLabel statusFilterLbl;
 
 	private JComboBox<String> statusFilter;
-	private final String[] SHOW_STATUS_OPTIONS = new String[] { "", "Undecided", "Backlog", "Watching", "Completed", "Dropped" };
+	private final String[] SHOW_STATUS_OPTIONS = new String[] { "", "Undecided", "Backlog", "Watching", "Completed",
+			"Dropped" };
 
 	private JLabel minRatingLbl;
 	private JSpinner minRating;
@@ -83,7 +80,11 @@ public class ListPage extends Page {
 																								// rounded
 
 	// TODO Remove when done testing
-	private Media testMedia = new Media(42, 420, 69, "Testing Egregious Long Title of Many Words", "Sir James Bond 007, a legendary British spy who retired from the secret service 20 years previously, is visited by the head of British Secret Intelligence Service, M (James Bond), CIA representative Ransome, KGB representative Smernov, and Deuxième Bureau representative Le Grand. All implore Bond to come out of retirement to deal with SMERSH (James Bond) who have been eliminating agents: Bond spurns all their pleas. When Bond continues to stand firm, his mansion is destroyed by a mortar attack at the orders of M, who is, however, killed in the explosion.", "maybe temp path?", "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx129874-g6ZKXB94Hui1.jpg");
+	private Media testMedia = new Media(42, 420, 69, "Testing Egregious Long Title of Many Words",
+			"Sir James Bond 007, a legendary British spy who retired from the secret service 20 years previously, is visited by the head of British Secret Intelligence Service, M (James Bond), CIA representative Ransome, KGB representative Smernov, and Deuxième Bureau representative Le Grand. All implore Bond to come out of retirement to deal with SMERSH (James Bond) who have been eliminating agents: Bond spurns all their pleas. When Bond continues to stand firm, his mansion is destroyed by a mortar attack at the orders of M, who is, however, killed in the explosion.",
+			1,
+			"maybe temp path?",
+			"https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx129874-g6ZKXB94Hui1.jpg");
 
 	/**
 	 * Create the List Page
@@ -100,7 +101,7 @@ public class ListPage extends Page {
 
 		// add filter buttons
 		addTypeCheckboxes();
-		addNameSatusButtons();
+		addNameStatusButtons();
 		addRatingSelectorButtons();
 		addSearchButton();
 		addRefreshButton();
@@ -125,11 +126,12 @@ public class ListPage extends Page {
 	void createContentPanel() {
 		contentPanel = new JPanel(new BorderLayout());
 		contentPanel.setBackground(PageColor);
-		
+
 		// add content panel to main panel
 		this.add(contentPanel);
 	}
 
+	// TODO Have them On by Default
 	void addTypeCheckboxes() {
 		// three checkboxes in three different rows (type) (all require a label
 		// attached)
@@ -180,9 +182,11 @@ public class ListPage extends Page {
 		gbc.insets = new Insets(0, 0, 0, 140);
 		filterPanel.add(animeType, gbc);
 		gbc.insets = new Insets(0, 0, 0, 0);
+
 	}
 
-	void addNameSatusButtons() {
+	// TODO Have a Way to Mult Select
+	void addNameStatusButtons() {
 		// name & status row
 		// name is texfield and status is a dropdown
 		nameFilterLbl = new JLabel("Name: ");
@@ -300,18 +304,23 @@ public class ListPage extends Page {
 		ui.addButtonImg(searchButton, new ImageIcon("assets/UI/searchicon.png"), 20, 30, 30);
 		searchButton.addActionListener(e -> {
 			clearListTable(); // clears the table so ready for adding
-			// TODO: Implement db. also verify if selector for name and status are blank to
-			// not care
 			String nameToCheck = nameFilter.getText();
-			String statusToCheck = statusFilter.getSelectedItem().toString();
+			int statusToCheck = statusFilter.getSelectedIndex(); // NOTE Need to Let User Select More then One
 			int minRatingToCheck = (int) minRating.getValue();
 			int maxRatingToCheck = (int) maxRating.getValue();
 			boolean canBeMovie = movieType.isSelected();
 			boolean canBeShow = showType.isSelected();
 			boolean canBeAnime = animeType.isSelected();
 
-			// then simply call addToListTable() where valid paramters are passed
-			// run that for each search result
+			// Gets all Media that Fits Filter
+			Media[] vaildResponse = ui.findMedia(canBeMovie, canBeShow, canBeAnime, true, true, true, true, true,
+					nameToCheck,
+					minRatingToCheck, maxRatingToCheck);
+			// Add the Values to the Table
+			for (Media media : vaildResponse) {
+				addToListTable(media);
+
+			}
 		});
 
 		gbc.gridy = 6; // row 7
@@ -328,8 +337,6 @@ public class ListPage extends Page {
 		refreshButton.addActionListener(e -> {
 			clearListTable();
 			addDefaultListToTable();
-
-			// TODO add confirmation prompt
 		});
 
 		gbc.gridy = 6; // row 7
@@ -386,17 +393,16 @@ public class ListPage extends Page {
 	}
 
 	public void addDefaultListToTable() {
-		// TODO Pull data from db and add herer
-		int test = 200;
-		for (int i = 0; i < test; i++) {
-			addToListTable(testMedia);
+		Media[] foundMedia = ui.findMedia(true, true, true, true, true, true, true, true, "", 0, 10);
+		for (Media media : foundMedia) {
+			addToListTable(media);
 		}
 	}
 
-	void addToListTable(Media obj) {
+	void addToListTable(Media media) {
 		Object[] toAddToTable = new Object[colNames.length];
 		// "Icon", "Name", "Status", "Rating", "Last EP", "Rewatch"
-		File posterFile = new File(obj.getPosterPath());
+		File posterFile = new File(media.getPosterPath());
 		if (posterFile.exists()) {
 			toAddToTable[0] = ui.resizeImg(new ImageIcon(posterFile.getPath()), POSTER_WIDTH, POSTER_HEIGHT);
 		} else {
@@ -404,11 +410,11 @@ public class ListPage extends Page {
 		}
 
 		// TODO verify all data gets pulled properly dependent on media
-		toAddToTable[1] = obj.getName();
-		toAddToTable[2] = obj.getStatus();
-		toAddToTable[3] = obj.getRating();
-		toAddToTable[4] = obj.getLastEpisode();
-		toAddToTable[5] = obj.getRewatched();
+		toAddToTable[1] = media.getName();
+		toAddToTable[2] = media.getStatus();
+		toAddToTable[3] = media.getRating();
+		toAddToTable[4] = media.getLastEpisode();
+		toAddToTable[5] = media.getRewatched();
 
 		listTableModel.addRow(toAddToTable);
 	}

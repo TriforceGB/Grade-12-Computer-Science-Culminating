@@ -16,6 +16,6 @@ public class FTS {
 	public static void main(String[] args) {
 		db = new DB(DB_PATH);
 		api = new API(TVDB_API_KEY);
-		ui = new UI(db);
+		ui = new UI(db, api);
 	}
 }

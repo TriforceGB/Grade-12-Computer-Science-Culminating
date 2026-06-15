@@ -44,60 +44,54 @@ public class User {
 		this.password = password;
 		this.isAdmin = isAdmin;
 	}
-	// Getters
 
-	/**
-	 * Get the User's ID
-	 *
-	 * @return the User's ID (int)
-	 */
+	// Getters and Setters
 	public int getId() {
 		return id;
 	}
 
-	/**
-	 * Get the User's username
-	 *
-	 * @return the User's username (String)
-	 */
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	public String getUsername() {
 		return username;
 	}
 
-	/**
-	 * Get the User's password
-	 *
-	 * @return the User's password (String)
-	 */
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
 	public String getPassword() {
 		return password;
 	}
 
-	/**
-	 * Get whether the User is an Admin
-	 *
-	 * @return whether the User is an Admin (boolean)
-	 */
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
 	public boolean isAdmin() {
 		return isAdmin;
 	}
 
-	/**
-	 * Get the date the User was created
-	 *
-	 * @return the date the User was created (String)
-	 */
+	public void setAdmin(boolean isAdmin) {
+		this.isAdmin = isAdmin;
+	}
+
 	public String getCreated() {
 		return created;
 	}
 
-	/**
-	 * Get the date the User last logged in
-	 *
-	 * @return the date the User last logged in (String)
-	 */
+	public void setCreated(String created) {
+		this.created = created;
+	}
+
 	public String getLastLogin() {
 		return lastLogin;
+	}
+
+	public void setLastLogin(String lastLogin) {
+		this.lastLogin = lastLogin;
 	}
 
 }

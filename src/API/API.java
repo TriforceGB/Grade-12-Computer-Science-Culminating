@@ -30,11 +30,45 @@ public class API {
 	}
 
 	/**
+	 * Search and Returns a List of Movies
+	 *
+	 * @param name   The Name of the Movie you are Looking for (String)
+	 * @param amount The Number of Movies to Return (Int)
+	 * @return a Media Array
+	 */
+	public Media[] searchMovie(String name, int amount) {
+		Data[] foundMovie = theTVDB.Search(name, "Movie", amount).getData();
+		// Turns the Data Class into a Media Class
+		Media[] returnMedia = new Media[foundMovie.length];
+		for (int i = 0; i < foundMovie.length; i++) {
+			returnMedia[i] = new Media(foundMovie[i]);
+		}
+		return returnMedia; // Return Info as Media
+	}
+
+	/**
+	 * Search and Returns
+	 *
+	 * @param name   The Name of the Movie you are Looking for (String)
+	 * @param amount The Number of Movies to Return (Int)
+	 * @return A Media Array
+	 */
+	public Media[] searchShow(String name, int amount) {
+		Data[] foundShow = theTVDB.Search(name, "Series", amount).getData();
+		// Turns the Data Class into a Media Class
+		Media[] returnMedia = new Media[foundShow.length];
+		for (int i = 0; i < foundShow.length; i++) {
+			returnMedia[i] = new Media(foundShow[i]);
+		}
+		return returnMedia; // Return Info as Media
+	}
+
+	/**
 	 * Search AniList for x amount of shows related to the given name
 	 *
 	 * @param name   The name of this show(s) you are Searching for
 	 * @param amount The number of show to return
-	 * @return
+	 * @return A Media Array
 	 */
 	public Media[] searchAnime(String name, int amount) {
 		Anime[] foundAnime = aniList.searchAnime(name, amount).getAnime();
@@ -45,26 +79,4 @@ public class API {
 		}
 		return returnMedia; // Return Info as Media
 	}
-
-	public Media[] searchMovie(String name, int amount) {
-		Data[] foundMovie = theTVDB.Search(name, "Movie", amount).getData();
-		// Turns the Data Class into a Media Class
-		Media[] returnMedia = new Media[foundMovie.length];
-		for (int i = 0; i < foundMovie.length; i++) {
-			returnMedia[i] = new Media(foundMovie[i]);
-		}
-		return returnMedia; // Return Info as Media
-
-	}
-
-	public Media[] searchShow(String name, int amount) {
-		Data[] foundShow = theTVDB.Search(name, "Movie", amount).getData();
-		// Turns the Data Class into a Media Class
-		Media[] returnMedia = new Media[foundShow.length];
-		for (int i = 0; i < foundShow.length; i++) {
-			returnMedia[i] = new Media(foundShow[i]);
-		}
-		return returnMedia; // Return Info as Media
-	}
-
 }

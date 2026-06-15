@@ -34,9 +34,8 @@ class Query {
 				"name" TEXT NOT NULL,
 				"description" TEXT,
 				"episodeCount" INTEGER,
-				"releaseDate" TEXT,
 				"posterPath" TEXT,
-				"posterLink" TEXT
+				"posterLink" TEXT,
 				UNIQUE(externalId,type)
 				)
 			""";
@@ -53,9 +52,9 @@ class Query {
 				"lastEpisode" INTEGER,
 				"review" TEXT,
 				"rewatched" INTEGER,
+				UNIQUE(userId,mediaId),
 				FOREIGN KEY ("userId") REFERENCES "Users"("id") ON DELETE CASCADE
 				FOREIGN KEY ("mediaId") REFERENCES "Media"("id") ON DELETE CASCADE
-				UNIQUE(userId,mediaId)
 				)
 			""";
 	// User Queries
@@ -76,7 +75,7 @@ class Query {
 
 	// Finds a user Via Username and Password
 	public static final String LOGIN_USER = """
-			SELECT *
+			SELECT *, count(*) OVER() AS count
 			FROM "User"
 			WHERE "username" = ? AND "password" = ?
 			""";
@@ -85,6 +84,11 @@ class Query {
 			UPDATE "User"
 			SET "lastLogin" = ?
 			WHERE "id" = ?
+			""";
+	// Finds all Users
+	public static final String ALL_USERS = """
+			SELECT *
+			FROM "User"
 			""";
 
 	// Media Queries
@@ -106,23 +110,21 @@ class Query {
 				SELECT
 					m.*,
 					ud.status,
-					ud.rating,
-					ud.lastEpisode,
 					ud.startDate,
 					ud.finishDate,
+					ud.rating,
+					ud.lastEpisode,
+					ud.review,
 					ud.rewatched,
 					count(*) OVER() AS count
 				FROM Media AS m
-				JOIN UserData AS ud
+				LEFT JOIN UserData AS ud ON m.id = ud.mediaId
 				WHERE
-					m.id = ud.mediaId AND
-					ud.userId = ? AND
-					ud.type = IN (?, ?, ?) AND
-					ud.status = ? AND
 					m.name LIKE ? AND
-					ud.rating > ? AND
-					ud.rating < ?
-				SORT BY ud.status DESC
+					m.type IN (?, ?, ?) AND
+					(ud.userId = ? OR ud.userId IS NULL) AND
+					COALESCE(ud.status, 0) IN (?, ?, ?, ?, ?) AND
+					COALESCE(ud.rating, 0) BETWEEN ? AND ?
 			""";
 	public static final String ALL_MEDIA = """
 				SELECT

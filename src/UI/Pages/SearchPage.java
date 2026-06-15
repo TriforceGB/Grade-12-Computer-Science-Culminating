@@ -1,6 +1,7 @@
 package UI.Pages;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -22,18 +23,6 @@ import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 
 import DTO.LocalDB.Media;
-
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Insets;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-
-import java.net.URI;
-import java.net.URL;
-
 import UI.Style;
 import UI.UI;
 
@@ -62,14 +51,14 @@ public class SearchPage extends Page {
 	private final int POSTER_HEIGHT = 200;
 	private final Dimension POSTER_SIZE = new Dimension(POSTER_WIDTH, POSTER_HEIGHT);
 
-
 	private final int DESCRIPTION_CPERLINE = 50;
 	private final int TITLE_CPERLINE = 12;
 	private final int MAX_PASS = 5;
 
 	private final String PATH_FOR_DEFAULT_IMAGE = "assets/UI/filal.png";
 
-	private final String[] SHOW_STATUS_OPTIONS = new String[] { "Undecided", "Backlog", "Watching", "Completed", "Dropped" };
+	private final String[] SHOW_STATUS_OPTIONS = new String[] { "Undecided", "Dropped", "Backlog", "Watching",
+			"Completed" };
 
 	/**
 	 * Create the Search Page
@@ -165,7 +154,7 @@ public class SearchPage extends Page {
 		// padding for 20px right to match offset from searchField
 		gbc.insets = new Insets(0, 0, 10, 20);
 
-		searchBtn.addActionListener(e -> procureSearches());
+		searchBtn.addActionListener(e -> procureSearches(10, searchField.getText(), searchTypeBox.getSelectedIndex()));
 
 		searchPanel.add(searchBtn, gbc);
 	}
@@ -183,14 +172,14 @@ public class SearchPage extends Page {
 		listPanel.add(listScrollPane);
 	}
 
-	JPanel getSearchResultPanel(Media obj) {
+	JPanel getSearchResultPanel(Media givenMedia) {
 		JPanel result = new JPanel();
 		result.setBackground(PageColor);
 		result.setBorder(BorderFactory.createLineBorder(Color.black, 4, true));
 		result.setLayout(new GridBagLayout());
 		gbc = new GridBagConstraints(); // reset gbc to ensure ready to go
 
-		String urlString = obj.getPosterLink();
+		String urlString = givenMedia.getPosterLink();
 
 		// get url in try catch
 		URL url;
@@ -218,9 +207,8 @@ public class SearchPage extends Page {
 		posterLbl.setMaximumSize(POSTER_SIZE);
 		result.add(posterLbl, gbc);
 
-
 		// add name
-		String titleString = obj.getName();
+		String titleString = givenMedia.getName();
 		JLabel titleLbl = new JLabel(ui.getHtmlFormatText(titleString, TITLE_CPERLINE, MAX_PASS));
 		titleLbl.setFont(Style.TITLE_FONT);
 
@@ -230,7 +218,7 @@ public class SearchPage extends Page {
 
 		// add desc.
 		// description is mounted via singular line
-		String descString = obj.getDescription();
+		String descString = givenMedia.getDescription();
 		JLabel descLbl = new JLabel(ui.getHtmlFormatText(descString, DESCRIPTION_CPERLINE, MAX_PASS));
 		descLbl.setFont(Style.DESC_FONT);
 
@@ -244,14 +232,10 @@ public class SearchPage extends Page {
 		addToDb.setFont(Style.BASE_FONT);
 
 		addToDb.addActionListener(e -> {
-			boolean addedToDb = false;
 
-			// TODO Add to db and check whether that failed or not
-			// for testing below remove
-			addedToDb = true;
-
-			if (addedToDb) {
-				JOptionPane.showMessageDialog(this, "Successfully added show to local database.", "Success", JOptionPane.INFORMATION_MESSAGE);
+			if (ui.createMedia(givenMedia)) {
+				JOptionPane.showMessageDialog(this, "Successfully added show to local database.", "Success",
+						JOptionPane.INFORMATION_MESSAGE);
 				// update the current panel and replace the button with the dropdown
 
 				result.remove(addToDb);
@@ -263,9 +247,11 @@ public class SearchPage extends Page {
 
 				// on picking new option
 				showStatus.addActionListener(event -> {
-					// TODO Knowing existing search data and current user data, find the show again, and change user information based on:
-					String showStatusToUpdate = showStatus.getSelectedItem().toString();
-				});	
+					// TODO Knowing existing search data and current user data, find the show again,
+					// and change user information based on:
+					int showStatusToUpdate = showStatus.getSelectedIndex();
+					System.out.println(showStatusToUpdate);
+				});
 
 				gbc2.gridy = 0;
 				gbc2.gridx = 3; // col 4
@@ -277,7 +263,8 @@ public class SearchPage extends Page {
 				listScrollPane.revalidate();
 				listScrollPane.repaint();
 			} else {
-				JOptionPane.showMessageDialog(this, "Failed to add show to local database.", "Error", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(this, "Failed to add show to local database.", "Error",
+						JOptionPane.ERROR_MESSAGE);
 			}
 		});
 
@@ -305,32 +292,44 @@ public class SearchPage extends Page {
 		}
 	}
 
-	void procureSearches() {
+	/**
+	 * With the Given info, display info to the User to add to Local DB
+	 *
+	 * @param numResults how many media to Return
+	 * @param query      What is the Text to Search by
+	 * @param type       What is the Type of Media (0 = Movies, 1 = Shows, 2 =
+	 *                   Anime)
+	 */
+	void procureSearches(int numResults, String query, int type) {
 		// empty existing
 		scrollContentPanel.removeAll();
 
+		Media[] Results; // Create Array of Media Object
+		// Runs Different Method Based on Media
+		switch (type) {
+			case 0: // Movies
+				Results = ui.searchMovie(query, numResults);
+				break;
+			case 1: // Shows
+				Results = ui.searchShow(query, numResults);
+				break;
+			case 2: // Anime
+				Results = ui.searchAnime(query, numResults);
+				break;
+			default:
+				Results = new Media[0];
+		}
 
-		// TODO implement db search and pull
-		// get serach number
-		// and do search itself
-
-		// for testing purposes simply
-		// but basically pull searches and iterate through them passing the media object through
-		int test = 5;
-		for (int i = 0; i < test; i++) {
-			String testingUrl = "";
-			if (i == (test - 1))
-				testingUrl = "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx129874-g6ZKXB94Hui1.jpg";
-			else if (i == (test - 2))
-				testingUrl = "https://artworks.thetvdb.com/banners/posters/81189-10.jpg";
-			else
-				testingUrl = "bad-url";
-			scrollContentPanel.add(getSearchResultPanel(new Media(42, 420, 69, "Testing Egregious Long Title of Many Words", "Sir James Bond 007, a legendary British spy who retired from the secret service 20 years previously, is visited by the head of British Secret Intelligence Service, M (James Bond), CIA representative Ransome, KGB representative Smernov, and Deuxième Bureau representative Le Grand. All implore Bond to come out of retirement to deal with SMERSH (James Bond) who have been eliminating agents: Bond spurns all their pleas. When Bond continues to stand firm, his mansion is destroyed by a mortar attack at the orders of M, who is, however, killed in the explosion.", "maybe temp path?", testingUrl)));
+		for (int i = 0; i < Results.length; i++) {
+			scrollContentPanel.add(getSearchResultPanel(Results[i]));
 			listScrollPane.getViewport().revalidate();
 		}
+
+		// Re make THe Scroll Content
 		scrollContentPanel.revalidate();
 		scrollContentPanel.repaint();
 
+		// Re makes the List Pane
 		listScrollPane.revalidate();
 		listScrollPane.repaint();
 	}
