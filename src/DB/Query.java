@@ -147,4 +147,21 @@ class Query {
 			DELETE FROM "UserData"
 			WHERE "userId" = ? AND "mediaID" = ?
 			""";
+
+	// Export all Media that has a relationship with the UserData from Current User
+	public static final String EXPORT_USER_RELATION = """
+				SELECT
+					m.*,
+					ud.status,
+					ud.startDate,
+					ud.finishDate,
+					ud.rating,
+					ud.lastEpisode,
+					ud.review,
+					ud.rewatched,
+					COUNT(*) OVER() AS count
+				FROM Media AS m
+				JOIN UserData AS ud ON m.id = ud.mediaId
+				WHERE ud.userId = ?
+			""";
 }

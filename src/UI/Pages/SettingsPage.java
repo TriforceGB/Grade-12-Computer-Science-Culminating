@@ -9,7 +9,6 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import DTO.LocalDB.User;
 import UI.Style;
 import UI.UI;
 
@@ -96,7 +95,7 @@ public class SettingsPage extends Page {
 		ui.addButtonImg(delUserButton, new ImageIcon("assets/UI/binicon.png"), 20, 45, 45);
 		ui.addButtonImg(adminButton, new ImageIcon("assets/UI/adminicon.png"), 20, 45, 45);
 
-		ImageIcon filal = ui.resizeImg(new ImageIcon("assets/UI/filal.png"), 45, 45);
+		ImageIcon filal = ui.resizeImg(new ImageIcon("assets/UI/filal.png"), 45, 45); // TODO REMOVE?
 
 		chngUserButton.addActionListener(e -> {
 			String changedUsername = JOptionPane.showInputDialog("Enter new username"); // Prompt to change username
@@ -148,10 +147,40 @@ public class SettingsPage extends Page {
 
 			}
 		});
-		expUserButton.addActionListener(e -> ui.switchPanel("search")); // TODO
-		impUserButton.addActionListener(e -> ui.switchPanel("setting")); // TODO
-		expMediaButton.addActionListener(e -> ui.logout()); // TODO
-		impMediaButton.addActionListener(e -> ui.logout()); // TODO
+		expUserButton.addActionListener(e -> {
+			if (!ui.exportUser()) {
+				JOptionPane.showMessageDialog(this, "Unable to export User, Try again", "Error",
+						JOptionPane.ERROR_MESSAGE);
+			}
+		});
+		impUserButton.addActionListener(e -> {
+			if (ui.importUser()) {
+				// Change is Made
+				JOptionPane.showMessageDialog(this, "Successfully Imported Media", "Success",
+						JOptionPane.INFORMATION_MESSAGE);
+			} else {
+				// Change wasn't made
+				JOptionPane.showMessageDialog(this, "Unable to Import Media, Try again", "Error",
+						JOptionPane.ERROR_MESSAGE);
+			}
+		});
+		expMediaButton.addActionListener(e -> {
+			if (!ui.exportMedia()) {
+				JOptionPane.showMessageDialog(this, "Unable to export media, Try again", "Error",
+						JOptionPane.ERROR_MESSAGE);
+			}
+		});
+		impMediaButton.addActionListener(e -> {
+			if (ui.importMedia()) {
+				// Change is Made
+				JOptionPane.showMessageDialog(this, "Successfully Imported Media", "Success",
+						JOptionPane.INFORMATION_MESSAGE);
+			} else {
+				// Change wasn't made
+				JOptionPane.showMessageDialog(this, "Unable to Import Media, Try again", "Error",
+						JOptionPane.ERROR_MESSAGE);
+			}
+		});
 		delUserButton.addActionListener(e -> {
 			// Prompt to confirm account deletion
 			int confirm = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete your account?");
@@ -184,11 +213,12 @@ public class SettingsPage extends Page {
 		buttonPanel.add(adminButton); // TODO (make sure only admins can see this button)
 
 		buttonPanel.setBorder(BorderFactory.createEmptyBorder(300, 250, 300, 850));
-		// STILL NEED STAT PANEL
+		// TODO STILL NEED STAT PANEL
 
 		contentPanel.add(buttonPanel, BorderLayout.CENTER);
 		contentPanel.add(statPanel, BorderLayout.LINE_END);
 
 		this.add(contentPanel, BorderLayout.CENTER);
 	}
+
 }

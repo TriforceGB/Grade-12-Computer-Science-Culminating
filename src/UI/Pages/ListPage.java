@@ -79,13 +79,6 @@ public class ListPage extends Page {
 	private final Border border = BorderFactory.createLineBorder(Style.BORDER_COLOR, 4, true); // true allows for
 																								// rounded
 
-	// TODO Remove when done testing
-	private Media testMedia = new Media(42, 420, 69, "Testing Egregious Long Title of Many Words",
-			"Sir James Bond 007, a legendary British spy who retired from the secret service 20 years previously, is visited by the head of British Secret Intelligence Service, M (James Bond), CIA representative Ransome, KGB representative Smernov, and Deuxième Bureau representative Le Grand. All implore Bond to come out of retirement to deal with SMERSH (James Bond) who have been eliminating agents: Bond spurns all their pleas. When Bond continues to stand firm, his mansion is destroyed by a mortar attack at the orders of M, who is, however, killed in the explosion.",
-			1,
-			"maybe temp path?",
-			"https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx129874-g6ZKXB94Hui1.jpg");
-
 	/**
 	 * Create the List Page
 	 *

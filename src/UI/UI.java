@@ -3,16 +3,19 @@ package UI;
 import java.awt.CardLayout;
 import java.awt.Container;
 import java.awt.Image;
-
+import java.io.File;
+import java.io.FileWriter;
+import java.nio.file.Files;
 import java.util.EventListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.google.gson.Gson;
 
@@ -34,6 +37,8 @@ public class UI extends JFrame implements EventListener {
 	// Variables
 	private DB db; // reference to the database
 	private API api; // reference to the database
+	private Gson gson; // reference to the Gson library
+
 	private User currentUser; // Info about the Current Login User
 
 	// Panels
@@ -53,10 +58,11 @@ public class UI extends JFrame implements EventListener {
 	/**
 	 * This Create the UI and Display it for the User
 	 */
-	public UI(DB db, API api) {
+	public UI(DB db, API api, Gson gson) {
 		// Taking in the Reference(s)
 		this.db = db;
 		this.api = api;
+		this.gson = gson;
 
 		// Settings
 		this.setTitle(Style.APP_TITLE); // Set the title of the window
@@ -219,20 +225,89 @@ public class UI extends JFrame implements EventListener {
 				isWatching, isCompleted, name, ratingMin, ratingMax);
 	}
 
-	public boolean exportMedia() {
+	/**
+	 * Export All the Media in a DB onto a Json File
+	 *
+	 * @return true if the export was successful, false otherwise
+	 */
+	public Boolean exportMedia() {
 		Media[] media = db.exportMedia();
 		// Throw an error if media is null
 		if (media == null) {
 			return false;
 		}
 		// Create a New Json
-		// TODO Make this Match the one Used in API (AKA make a System Gson)
-		Gson gson = new Gson();
 		String json = gson.toJson(media);
-		System.out.println(json); // TODO Put this into a File
+		saveFile("Media_Export", json);
 		return true;
-
 	}
+
+	/**
+	 * Import Media From a Json onto the DB
+	 *
+	 * @return True if the import was successful, false otherwise
+	 */
+	public Boolean importMedia() {
+		String json = openFile();
+		Media[] mediaList = gson.fromJson(json, Media[].class);
+		// Throw an error if media is null
+		if (mediaList == null) {
+			return false;
+		}
+
+		for (Media media : mediaList) {
+			// TODO Make sure it Download Media while Importing?
+			// NOTE This might be done in the Media Creation
+			if (!db.createMedia(media)) {
+				System.err.println("Failed to create media: " + media.getName());
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * Export the Current User onto a Json File
+	 *
+	 * @return true if the export was successful, false otherwise
+	 */
+	public Boolean exportUser() {
+		Media[] media = db.exportUserRelation(this.currentUser.getId()); // Pull all Media and UserData Related to User
+		// Add Media to User
+		this.currentUser.setMediaRelation(media);
+		// Create a New Json
+		String json = gson.toJson(this.currentUser);
+		saveFile("User_Export", json);
+		return true;
+	}
+
+	public Boolean importUser() {
+		String json = openFile();
+		User newUser = gson.fromJson(json, User.class);
+		// Throw an error if user is null
+		if (newUser == null) {
+			return false;
+		}
+
+		// Add user to DB
+		if (!db.createUser(newUser)) {
+			return false;
+		}
+
+		// Add Media that Relate to User
+		for (Media media : newUser.getMediaRelation()) {
+			// TODO Make sure it Download Media while Importing?
+			// NOTE This might be done in the Media Creation
+			if (!db.createMedia(media)) {
+				System.err.println("Failed to create media: " + media.getName());
+			}
+			// Add UserDate to DB
+			if (!db.createUserData(newUser.getId(), media.getId(), media.getUserData())) {
+				System.err.println("Failed to create user media relation: " + media.getName());
+			}
+		}
+		return true;
+	}
+
 	// API Shells
 
 	/**
@@ -322,5 +397,86 @@ public class UI extends JFrame implements EventListener {
 		result += "</html>";
 
 		return result; // return once finished
+	}
+
+	// File Import and Export
+	/**
+	 * Prop the User to Pick a Location for a File to Save
+	 *
+	 * @param title The title of the file to save
+	 * @param body  The body of the file to save
+	 */
+	public void saveFile(String title, String body) {
+		JFileChooser fileChooser = new JFileChooser();
+		fileChooser.setDialogTitle("Where Do You Want to Save?");
+
+		// Make Sure it Export as a JSON
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("JSON Files", "json");
+		fileChooser.setFileFilter(filter);
+		// Set Default File Name
+		fileChooser.setSelectedFile(new File(title + ".json"));
+
+		// Show Save Dialog
+		int result = fileChooser.showSaveDialog(this);
+		// If they Pick a Location
+		if (result == JFileChooser.APPROVE_OPTION) {
+			File file = fileChooser.getSelectedFile(); // Create a File at that Location
+
+			// Add .json extension if not present
+			if (!file.getName().endsWith(".json")) {
+				file = new File(file.getParent(), file.getName() + ".json");
+			}
+
+			// Write to the File
+			try (FileWriter writer = new FileWriter(file)) {
+				writer.write(body);
+
+				// Show Success Message
+				JOptionPane.showMessageDialog(this, "Successfully Saved File", "Success",
+						JOptionPane.INFORMATION_MESSAGE);
+
+			} catch (Exception e) {
+				// Show Error Message
+				JOptionPane.showMessageDialog(this, "Unable to Save File, Try again", "Error",
+						JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
+
+		}
+	}
+
+	/**
+	 * Opens a Pop up that will let the User Select a Json.
+	 *
+	 * @return Returns the Content of the File as String
+	 */
+	public String openFile() {
+		JFileChooser fileChooser = new JFileChooser();
+		fileChooser.setDialogTitle("Select a Json to Import");
+
+		// Make Sure it Export as a JSON
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("JSON Files", "json");
+		fileChooser.setFileFilter(filter);
+
+		// Show Open Dialog
+		int result = fileChooser.showOpenDialog(this);
+		// If they Pick a Location
+		if (result == JFileChooser.APPROVE_OPTION) {
+			File file = fileChooser.getSelectedFile(); // Create a File at that Location
+
+			// Read the File
+			try {
+				String output = Files.readString(file.toPath());
+				return output;
+
+			} catch (Exception e) {
+				// Show Error Message
+				JOptionPane.showMessageDialog(this, "Unable to Open File, Try again", "Error",
+						JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
+
+		}
+		return null;
 	}
 }
