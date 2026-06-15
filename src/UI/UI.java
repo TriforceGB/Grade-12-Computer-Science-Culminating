@@ -14,6 +14,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 
+import com.google.gson.Gson;
+
 import API.API;
 import DB.DB;
 import DTO.LocalDB.Media;
@@ -188,6 +190,49 @@ public class UI extends JFrame implements EventListener {
 		}
 	}
 
+	/**
+	 * With the Given Object, Add to DB
+	 *
+	 * @param newMedia New Media from Search to add
+	 * @return True if added, False if not
+	 */
+	public boolean createMedia(Media newMedia) {
+		return db.createMedia(newMedia);
+	}
+
+	/**
+	 * Shell for Find Media
+	 *
+	 * @param isMovie   Can the Media a Movie (bool)
+	 * @param isTV      Can the Media a TV (bool)
+	 * @param isAnime   Can the Media a Anime (bool)
+	 * @param status    the Media status (int)
+	 * @param name      the Media name (String)
+	 * @param ratingMin the minimum rating (int)
+	 * @param ratingMax the maximum rating (int)
+	 * @return a List of Media that match the given filters
+	 */
+	public Media[] findMedia(boolean isMovie, boolean isTV, boolean isAnime, boolean isUndecided, boolean isDropped,
+			boolean isBackLog, boolean isWatching, Boolean isCompleted, String name,
+			int ratingMin, int ratingMax) {
+		return db.findMedia(this.currentUser.getId(), isMovie, isTV, isAnime, isUndecided, isDropped, isBackLog,
+				isWatching, isCompleted, name, ratingMin, ratingMax);
+	}
+
+	public boolean exportMedia() {
+		Media[] media = db.exportMedia();
+		// Throw an error if media is null
+		if (media == null) {
+			return false;
+		}
+		// Create a New Json
+		// TODO Make this Match the one Used in API (AKA make a System Gson)
+		Gson gson = new Gson();
+		String json = gson.toJson(media);
+		System.out.println(json); // TODO Put this into a File
+		return true;
+
+	}
 	// API Shells
 
 	/**

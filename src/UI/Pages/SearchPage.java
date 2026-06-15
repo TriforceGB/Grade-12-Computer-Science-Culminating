@@ -172,14 +172,14 @@ public class SearchPage extends Page {
 		listPanel.add(listScrollPane);
 	}
 
-	JPanel getSearchResultPanel(Media obj) {
+	JPanel getSearchResultPanel(Media givenMedia) {
 		JPanel result = new JPanel();
 		result.setBackground(PageColor);
 		result.setBorder(BorderFactory.createLineBorder(Color.black, 4, true));
 		result.setLayout(new GridBagLayout());
 		gbc = new GridBagConstraints(); // reset gbc to ensure ready to go
 
-		String urlString = obj.getPosterLink();
+		String urlString = givenMedia.getPosterLink();
 
 		// get url in try catch
 		URL url;
@@ -208,7 +208,7 @@ public class SearchPage extends Page {
 		result.add(posterLbl, gbc);
 
 		// add name
-		String titleString = obj.getName();
+		String titleString = givenMedia.getName();
 		JLabel titleLbl = new JLabel(ui.getHtmlFormatText(titleString, TITLE_CPERLINE, MAX_PASS));
 		titleLbl.setFont(Style.TITLE_FONT);
 
@@ -218,7 +218,7 @@ public class SearchPage extends Page {
 
 		// add desc.
 		// description is mounted via singular line
-		String descString = obj.getDescription();
+		String descString = givenMedia.getDescription();
 		JLabel descLbl = new JLabel(ui.getHtmlFormatText(descString, DESCRIPTION_CPERLINE, MAX_PASS));
 		descLbl.setFont(Style.DESC_FONT);
 
@@ -232,13 +232,8 @@ public class SearchPage extends Page {
 		addToDb.setFont(Style.BASE_FONT);
 
 		addToDb.addActionListener(e -> {
-			boolean addedToDb = false;
 
-			// TODO Add to db and check whether that failed or not
-			// for testing below remove
-			addedToDb = true;
-
-			if (addedToDb) {
+			if (ui.createMedia(givenMedia)) {
 				JOptionPane.showMessageDialog(this, "Successfully added show to local database.", "Success",
 						JOptionPane.INFORMATION_MESSAGE);
 				// update the current panel and replace the button with the dropdown
@@ -254,7 +249,8 @@ public class SearchPage extends Page {
 				showStatus.addActionListener(event -> {
 					// TODO Knowing existing search data and current user data, find the show again,
 					// and change user information based on:
-					String showStatusToUpdate = showStatus.getSelectedItem().toString();
+					int showStatusToUpdate = showStatus.getSelectedIndex();
+					System.out.println(showStatusToUpdate);
 				});
 
 				gbc2.gridy = 0;

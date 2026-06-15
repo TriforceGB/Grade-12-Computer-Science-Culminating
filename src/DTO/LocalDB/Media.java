@@ -20,44 +20,48 @@ public class Media {
 	/**
 	 * Stores Just media Information no User Info
 	 *
-	 * @param id          The ID of in the database (int)
-	 * @param type        The type of media (int)
-	 * @param externalId  The external ID from the API (int)
-	 * @param name        The name of the media (String)
-	 * @param description The description of the media (String)
-	 * @param posterPath  The path to the poster image (String)
-	 * @param posterLink  The URL of the poster image (String)
+	 * @param id           The ID of in the database (int)
+	 * @param type         The type of media (int)
+	 * @param externalId   The external ID from the API (int)
+	 * @param name         The name of the media (String)
+	 * @param description  The description of the media (String)
+	 * @param episodeCount The Total Number of Ep in the Media (int)
+	 * @param posterPath   The path to the poster image (String)
+	 * @param posterLink   The URL of the poster image (String)
 	 */
-	public Media(int id, int type, int externalId, String name, String description, String posterPath,
+	public Media(int id, int type, int externalId, String name, String description, int episodeCount, String posterPath,
 			String posterLink) {
 		this.id = id;
 		this.type = type;
 		this.externalId = externalId;
 		this.name = name;
 		this.description = description;
+		this.episodeCount = episodeCount;
 		this.posterPath = posterPath;
 		this.posterLink = posterLink;
+		this.userData = new UserData(0, "", "", 0, 0, "", 0);
 	}
 
 	/**
 	 * Stores Everything about media related to the user
 	 *
-	 * @param id          The ID of in the database (int)
-	 * @param type        The type of media (int)
-	 * @param externalId  The external ID from the API (int)
-	 * @param name        The name of the media (String)
-	 * @param description The description of the media (String)
-	 * @param posterPath  The path to the poster image (String)
-	 * @param posterLink  The URL of the poster image (String)
-	 * @param status      The status of the media (int)
-	 * @param startDate   When the User Started Watching (String)
-	 * @param finishDate  When the User Finish Watching (String)
-	 * @param rating      User Rating (int)
-	 * @param lastEpisode The last episode watched (int)
-	 * @param review      User Review (String)
-	 * @param rewatched   The number of times the media has been rewatched (int)
+	 * @param id           The ID of in the database (int)
+	 * @param type         The type of media (int)
+	 * @param externalId   The external ID from the API (int)
+	 * @param name         The name of the media (String)
+	 * @param description  The description of the media (String)
+	 * @param episodeCount The Total Number of Ep in the Media (int)
+	 * @param posterPath   The path to the poster image (String)
+	 * @param posterLink   The URL of the poster image (String)
+	 * @param status       The status of the media (int)
+	 * @param startDate    When the User Started Watching (String)
+	 * @param finishDate   When the User Finish Watching (String)
+	 * @param rating       User Rating (int)
+	 * @param lastEpisode  The last episode watched (int)
+	 * @param review       User Review (String)
+	 * @param rewatched    The number of times the media has been rewatched (int)
 	 */
-	public Media(int id, int type, int externalId, String name, String description, String posterPath,
+	public Media(int id, int type, int externalId, String name, String description, int episodeCount, String posterPath,
 			String posterLink, int status, String startDate, String finishDate, int rating, int lastEpisode,
 			String review, int rewatched) {
 		this.id = id;
@@ -65,6 +69,7 @@ public class Media {
 		this.externalId = externalId;
 		this.name = name;
 		this.description = description;
+		this.episodeCount = episodeCount;
 		this.posterPath = posterPath;
 		this.posterLink = posterLink;
 		this.userData = new UserData(status, startDate, finishDate, rating, lastEpisode, review, rewatched);
@@ -74,22 +79,24 @@ public class Media {
 	 * Stores Everything about media related to the user (but with a UserData
 	 * Object Input)
 	 *
-	 * @param id          The ID of in the database (int)
-	 * @param type        The type of media (int)
-	 * @param externalId  The external ID from the API (int)
-	 * @param name        The name of the media (String)
-	 * @param description The description of the media (String)
-	 * @param posterPath  The path to the poster image (String)
-	 * @param posterLink  The URL of the poster image (String)
-	 * @param userData    an User Data Object that holds UserData (UserData)
+	 * @param id           The ID of in the database (int)
+	 * @param type         The type of media (int)
+	 * @param externalId   The external ID from the API (int)
+	 * @param name         The name of the media (String)
+	 * @param description  The description of the media (String)
+	 * @param episodeCount The Total Number of Ep in the Media (int)
+	 * @param posterPath   The path to the poster image (String)
+	 * @param posterLink   The URL of the poster image (String)
+	 * @param userData     an User Data Object that holds UserData (UserData)
 	 */
-	public Media(int id, int type, int externalId, String name, String description, String posterPath,
+	public Media(int id, int type, int externalId, String name, String description, int episodeCount, String posterPath,
 			String posterLink, UserData userData) {
 		this.id = id;
 		this.type = type;
 		this.externalId = externalId;
 		this.name = name;
 		this.description = description;
+		this.episodeCount = episodeCount;
 		this.posterPath = posterPath;
 		this.posterLink = posterLink;
 		this.userData = userData;
@@ -104,6 +111,7 @@ public class Media {
 	public Media(AniListSearchResponse.Data.Page.Anime response) {
 		this.name = response.getName();
 		this.description = response.getDescription();
+		this.episodeCount = response.getEpisodeCount();
 		this.type = response.getType();
 		this.externalId = response.getId();
 		this.posterPath = "assets/Images/Anime/" + response.getId() + ".png";
@@ -119,6 +127,7 @@ public class Media {
 	public Media(TheTVDBSearchResponse.Data response) {
 		this.name = response.getName();
 		this.description = response.getDescription();
+		this.episodeCount = response.getEpisodeCount();
 		this.type = response.getType();
 		this.externalId = response.getId();
 		if (response.getType() == 1) {
@@ -127,7 +136,6 @@ public class Media {
 			this.posterPath = "assets/Images/Shows/" + response.getId() + ".jpg";
 		}
 		this.posterLink = response.getImageUrl();
-
 	}
 
 	/**

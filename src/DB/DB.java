@@ -337,24 +337,32 @@ public class DB {
 	 * Return a List of Media that match the given filters
 	 *
 	 * @param userId    the User's id (int)
-	 * @param type      the Media type (int)
+	 * @param isMovie   Can the Media a Movie (bool)
+	 * @param isTV      Can the Media a TV (bool)
+	 * @param isAnime   Can the Media a Anime (bool)
 	 * @param status    the Media status (int)
 	 * @param name      the Media name (String)
 	 * @param ratingMin the minimum rating (int)
 	 * @param ratingMax the maximum rating (int)
 	 * @return a List of Media that match the given filters
 	 */
-	public Media[] findMedia(int userId, boolean isMovie, boolean isTV, Boolean isAnime, int status, String name,
+	public Media[] findMedia(int userId, boolean isMovie, boolean isTV, Boolean isAnime, boolean isUndecided,
+			boolean isDropped,
+			boolean isBackLog, boolean isWatching, Boolean isCompleted, String name,
 			int ratingMin, int ratingMax) {
 		try (PreparedStatement stmt = dbConnect.prepareStatement(Query.FIND_MEDIA)) {
-			stmt.setInt(1, userId);
+			stmt.setString(1, "%" + name + "%"); // Wild Card of both the left and right side of the name
 			stmt.setInt(2, (isMovie) ? 1 : 0);
 			stmt.setInt(3, (isTV) ? 2 : 0);
 			stmt.setInt(4, (isAnime) ? 3 : 0);
-			stmt.setInt(5, status);
-			stmt.setString(6, "%" + name + "%"); // Wild Card of both the left and right side of the name
-			stmt.setInt(7, ratingMin - 1); // -1 to include ratingMin in the range
-			stmt.setInt(8, ratingMax + 1); // +1 to include ratingMax in the range
+			stmt.setInt(5, userId);
+			stmt.setInt(6, (isUndecided) ? 0 : -1);
+			stmt.setInt(7, (isDropped) ? 1 : -1);
+			stmt.setInt(8, (isBackLog) ? 2 : -1);
+			stmt.setInt(9, (isWatching) ? 3 : -1);
+			stmt.setInt(10, (isCompleted) ? 4 : -1);
+			stmt.setInt(11, ratingMin);
+			stmt.setInt(12, ratingMax);
 			ResultSet rs = stmt.executeQuery();
 			if (rs.getInt("count") > 0) {
 				Media[] foundMedia = new Media[rs.getInt("count")];
@@ -366,6 +374,7 @@ public class DB {
 							rs.getInt("externalId"),
 							rs.getString("name"),
 							rs.getString("description"),
+							rs.getInt("episodeCount"),
 							rs.getString("posterPath"),
 							rs.getString("posterLink"),
 							rs.getInt("status"),
@@ -384,7 +393,7 @@ public class DB {
 			}
 
 		} catch (SQLException e) {
-			System.err.println("Exception while creating user:");
+			System.err.println("Exception while Finding Media:");
 			e.printStackTrace();
 			return null;
 		}
@@ -410,6 +419,7 @@ public class DB {
 							rs.getInt("externalId"),
 							rs.getString("name"),
 							rs.getString("description"),
+							rs.getInt("episodeCount"),
 							rs.getString("posterPath"),
 							rs.getString("posterLink"));
 					i++;
