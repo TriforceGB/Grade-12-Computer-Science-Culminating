@@ -118,11 +118,10 @@ class Query {
 					ud.rewatched,
 					count(*) OVER() AS count
 				FROM Media AS m
-				LEFT JOIN UserData AS ud ON m.id = ud.mediaId
+				LEFT JOIN UserData AS ud ON m.id = ud.mediaId AND ud.userId = ?
 				WHERE
 					m.name LIKE ? AND
 					m.type IN (?, ?, ?) AND
-					(ud.userId = ? OR ud.userId IS NULL) AND
 					COALESCE(ud.status, 0) IN (?, ?, ?, ?, ?) AND
 					COALESCE(ud.rating, 0) BETWEEN ? AND ?
 			""";

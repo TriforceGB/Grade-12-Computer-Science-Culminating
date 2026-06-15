@@ -26,7 +26,6 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumnModel;
 
 import DTO.LocalDB.Media;
@@ -70,8 +69,8 @@ public class ListPage extends Page {
 	private JComboBox<String> statusFilter;
 	private final char CHECKBOX_CHAR = '☒';
 	private final char UNCHECKBOX_CHAR = '☐';
-	private final String[] SHOW_STATUS_DEFAULT_OPTIONS = new String[] { "Undecided", "Backlog", "Watching", "Completed",
-			"Dropped" };
+	private final String[] SHOW_STATUS_DEFAULT_OPTIONS = new String[] { "Undecided", "Dropped", "Backlog", "Watching",
+			"Completed" };
 	private final String[] SHOW_STATUS_COMBO_OPTIONS = new String[] { "All", "Undecided " + CHECKBOX_CHAR,
 			"Backlog " + CHECKBOX_CHAR, "Watching " + CHECKBOX_CHAR,
 			"Completed " + CHECKBOX_CHAR, "Dropped " + CHECKBOX_CHAR }; // space seperated checkbox representations
@@ -361,8 +360,34 @@ public class ListPage extends Page {
 		searchButton.addActionListener(e -> {
 			clearListTable(); // clears the table so ready for adding
 			String nameToCheck = nameFilter.getText();
-			// TODO make work here
-			// refer to selectedOptions moniaga string list (has docs)
+
+			// Fix Until we Fix the Box
+			boolean isUndecided = false;
+			boolean isDropped = false;
+			boolean isBacklog = false;
+			boolean isWatched = false;
+			boolean isCompleted = false;
+			for (int i = 0; i < selectedOptions.count(); i++) {
+				char c = selectedOptions.getAt(i).toLowerCase().charAt(0);
+				switch (c) {
+					case 'u':
+						isUndecided = true;
+						break;
+					case 'd':
+						isDropped = true;
+						break;
+					case 'b':
+						isBacklog = true;
+						break;
+					case 'w':
+						isWatched = true;
+						break;
+					case 'c':
+						isCompleted = true;
+						break;
+				}
+			}
+			// refer to selectedOptions Moniaga string list (has docs)
 			int minRatingToCheck = (int) minRating.getValue();
 			int maxRatingToCheck = (int) maxRating.getValue();
 			boolean canBeMovie = movieType.isSelected();
@@ -370,13 +395,13 @@ public class ListPage extends Page {
 			boolean canBeAnime = animeType.isSelected();
 
 			// Gets all Media that Fits Filter
-			Media[] vaildResponse = ui.findMedia(canBeMovie, canBeShow, canBeAnime, true, true, true, true, true,
+			Media[] vaildResponse = ui.findMedia(canBeMovie, canBeShow, canBeAnime, isUndecided, isDropped, isBacklog,
+					isWatched, isCompleted,
 					nameToCheck,
 					minRatingToCheck, maxRatingToCheck);
 			// Add the Values to the Table
 			for (Media media : vaildResponse) {
 				addToListTable(media);
-
 			}
 		});
 
@@ -385,6 +410,10 @@ public class ListPage extends Page {
 		filterPanel.add(searchButton, gbc);
 	}
 
+	/**
+	 * Does Nothing?
+	 * TODO REMOVE?
+	 */
 	void addRefreshButton() {
 		refreshButton = new JButton("Refresh");
 		refreshButton.setBackground(Style.LIGHT_GREEN);
@@ -436,15 +465,15 @@ public class ListPage extends Page {
 		listTable.getTableHeader().setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR));
 		listTable.setRowHeight(POSTER_HEIGHT); // for poster height accounting
 
-		// column resizizing
-		listTable.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
+		// column resizing
+		listTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 		TableColumnModel cM = listTable.getColumnModel();
 		cM.getColumn(0).setPreferredWidth(POSTER_WIDTH);
-		cM.getColumn(1).setPreferredWidth(500);
+		cM.getColumn(1).setPreferredWidth(450);
 		cM.getColumn(2).setPreferredWidth(90);
 		cM.getColumn(3).setPreferredWidth(50);
 		cM.getColumn(4).setPreferredWidth(50);
-		// cM.getColumn(5).setPreferredWidth(60);
+		cM.getColumn(5).setPreferredWidth(50);
 
 		// set table renderer for main objects
 		listTable.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
@@ -476,7 +505,7 @@ public class ListPage extends Page {
 				setHorizontalAlignment(DefaultTableCellRenderer.CENTER);
 
 				if (val instanceof Icon) {
-					setIcon((ImageIcon)val);
+					setIcon((ImageIcon) val);
 					setText("");
 				}
 

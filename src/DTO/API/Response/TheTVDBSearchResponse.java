@@ -10,10 +10,15 @@ public class TheTVDBSearchResponse {
 	public class Data {
 		private int tvdb_id; // The ID of the data
 		private String name; // The name of the data
-		private String overview; // The description of the data
+		private String overview; // General description of the Media
+		private Overviews overviews; // The description of the data but Localized
 		private int episode_count; // The number of episodes (has to be added in a separate request)
 		private String image_url; // The URL of the image associated with the data
 		private String primary_type; // The primary type of the data (is it a movie or a series)
+
+		public class Overviews {
+			private String eng;
+		}
 
 		public int getId() {
 			return tvdb_id;
@@ -24,7 +29,13 @@ public class TheTVDBSearchResponse {
 		}
 
 		public String getDescription() {
-			return overview;
+			if (overviews != null && overviews.eng != null) {
+				return overviews.eng; // English Translation
+			} else if (overview != null) {
+				return overview; // Original Description
+			} else {
+				return "No Description Available"; // No Description Available
+			}
 		}
 
 		/**

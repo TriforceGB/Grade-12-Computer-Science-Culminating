@@ -79,6 +79,7 @@ public class UI extends JFrame implements EventListener {
 		this.searchPage = new SearchPage(this);
 		this.settingPage = new SettingsPage(this);
 		this.mediaPage = new MediaPage(this);
+
 		// TODO add later one we got Admin Panel working
 		// this.adminPanel = new adminPanel(this, this.db);
 
@@ -186,7 +187,7 @@ public class UI extends JFrame implements EventListener {
 	 */
 	public boolean deleteUser() {
 		// Check if User is Admin
-		if (this.currentUser.isAdmin()) {
+		if (this.currentUser.getIsAdmin()) {
 			JOptionPane.showMessageDialog(this,
 					"Cannot Delete a Admin User, Please Have Another Admin Remove Power Before Deletion", "Error",
 					JOptionPane.ERROR_MESSAGE);
@@ -203,7 +204,9 @@ public class UI extends JFrame implements EventListener {
 	 * @return True if added, False if not
 	 */
 	public boolean createMedia(Media newMedia) {
-		return db.createMedia(newMedia);
+		boolean dbResult = db.createMedia(newMedia);
+		boolean apiResult = api.downloadImage(newMedia);
+		return dbResult && apiResult;
 	}
 
 	/**
@@ -219,7 +222,7 @@ public class UI extends JFrame implements EventListener {
 	 * @return a List of Media that match the given filters
 	 */
 	public Media[] findMedia(boolean isMovie, boolean isTV, boolean isAnime, boolean isUndecided, boolean isDropped,
-			boolean isBackLog, boolean isWatching, Boolean isCompleted, String name,
+			boolean isBackLog, boolean isWatching, boolean isCompleted, String name,
 			int ratingMin, int ratingMax) {
 		return db.findMedia(this.currentUser.getId(), isMovie, isTV, isAnime, isUndecided, isDropped, isBackLog,
 				isWatching, isCompleted, name, ratingMin, ratingMax);
@@ -230,7 +233,7 @@ public class UI extends JFrame implements EventListener {
 	 *
 	 * @return true if the export was successful, false otherwise
 	 */
-	public Boolean exportMedia() {
+	public boolean exportMedia() {
 		Media[] media = db.exportMedia();
 		// Throw an error if media is null
 		if (media == null) {
@@ -247,7 +250,7 @@ public class UI extends JFrame implements EventListener {
 	 *
 	 * @return True if the import was successful, false otherwise
 	 */
-	public Boolean importMedia() {
+	public boolean importMedia() {
 		String json = openFile();
 		Media[] mediaList = gson.fromJson(json, Media[].class);
 		// Throw an error if media is null
@@ -256,9 +259,7 @@ public class UI extends JFrame implements EventListener {
 		}
 
 		for (Media media : mediaList) {
-			// TODO Make sure it Download Media while Importing?
-			// NOTE This might be done in the Media Creation
-			if (!db.createMedia(media)) {
+			if (!db.createMedia(media) || !api.downloadImage(media)) {
 				System.err.println("Failed to create media: " + media.getName());
 			}
 		}
@@ -270,7 +271,7 @@ public class UI extends JFrame implements EventListener {
 	 *
 	 * @return true if the export was successful, false otherwise
 	 */
-	public Boolean exportUser() {
+	public boolean exportUser() {
 		Media[] media = db.exportUserRelation(this.currentUser.getId()); // Pull all Media and UserData Related to User
 		// Add Media to User
 		this.currentUser.setMediaRelation(media);
@@ -283,11 +284,12 @@ public class UI extends JFrame implements EventListener {
 	public Boolean importUser() {
 		String json = openFile();
 		User newUser = gson.fromJson(json, User.class);
-		newUser.setAdmin(false); // Imported User are Not Admins by default
 		// Throw an error if user is null
 		if (newUser == null) {
 			return false;
 		}
+
+		newUser.setAdmin(false); // Imported User are Not Admins by default
 
 		// Add user to DB
 		if (!db.createUser(newUser)) {
@@ -296,9 +298,7 @@ public class UI extends JFrame implements EventListener {
 
 		// Add Media that Relate to User
 		for (Media media : newUser.getMediaRelation()) {
-			// TODO Make sure it Download Media while Importing?
-			// NOTE This might be done in the Media Creation
-			if (!db.createMedia(media)) {
+			if (!db.createMedia(media) || !api.downloadImage(media)) {
 				System.err.println("Failed to create media: " + media.getName());
 			}
 			// Add UserDate to DB
@@ -480,4 +480,5 @@ public class UI extends JFrame implements EventListener {
 		}
 		return null;
 	}
+
 }

@@ -83,6 +83,7 @@ public class TheTVDB {
 				System.out.println(response.body());
 				return null;
 			}
+			System.out.println(response.body());
 			TheTVDBSearchResponse formattedResponse = gson.fromJson(response.body(), TheTVDBSearchResponse.class);
 			setEpisodeCount(formattedResponse, type);
 			return formattedResponse;
