@@ -1,17 +1,17 @@
 package UI.Pages;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+
 import java.io.File;
 
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-
-import javax.swing.SpinnerNumberModel;
 import javax.swing.BorderFactory;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -24,11 +24,15 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.Border;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableColumnModel;
 
 import DTO.LocalDB.Media;
-import UI.UI;
 import UI.Style;
+import UI.UI;
+import Util.MoniagaStringList;
 
 /**
  * The List Page Class. Used to display a list of media for the user.
@@ -64,7 +68,14 @@ public class ListPage extends Page {
 	private JLabel statusFilterLbl;
 
 	private JComboBox<String> statusFilter;
-	private final String[] SHOW_STATUS_OPTIONS = new String[] { "", "Undecided", "Backlog", "Watching", "Completed", "Dropped" };
+	private final char CHECKBOX_CHAR = '☒';
+	private final char UNCHECKBOX_CHAR = '☐';
+	private final String[] SHOW_STATUS_DEFAULT_OPTIONS = new String[] { "Undecided", "Backlog", "Watching", "Completed",
+			"Dropped" };
+	private final String[] SHOW_STATUS_COMBO_OPTIONS = new String[] { "All", "Undecided " + CHECKBOX_CHAR,
+			"Backlog " + CHECKBOX_CHAR, "Watching " + CHECKBOX_CHAR,
+			"Completed " + CHECKBOX_CHAR, "Dropped " + CHECKBOX_CHAR }; // space seperated checkbox representations
+	private MoniagaStringList selectedOptions = new MoniagaStringList(SHOW_STATUS_DEFAULT_OPTIONS);
 
 	private JLabel minRatingLbl;
 	private JSpinner minRating;
@@ -76,14 +87,11 @@ public class ListPage extends Page {
 	private JButton refreshButton;
 
 	private final String PATH_FOR_DEFAULT_IMAGE = "assets/UI/filal.png";
-	private final int POSTER_WIDTH = 33;
-	private final int POSTER_HEIGHT = 50;
+	private final int POSTER_WIDTH = 100;
+	private final int POSTER_HEIGHT = 150;
 
 	private final Border border = BorderFactory.createLineBorder(Style.BORDER_COLOR, 4, true); // true allows for
 																								// rounded
-
-	// TODO Remove when done testing
-	private Media testMedia = new Media(42, 420, 69, "Testing Egregious Long Title of Many Words", "Sir James Bond 007, a legendary British spy who retired from the secret service 20 years previously, is visited by the head of British Secret Intelligence Service, M (James Bond), CIA representative Ransome, KGB representative Smernov, and Deuxième Bureau representative Le Grand. All implore Bond to come out of retirement to deal with SMERSH (James Bond) who have been eliminating agents: Bond spurns all their pleas. When Bond continues to stand firm, his mansion is destroyed by a mortar attack at the orders of M, who is, however, killed in the explosion.", "maybe temp path?", "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx129874-g6ZKXB94Hui1.jpg");
 
 	/**
 	 * Create the List Page
@@ -100,7 +108,7 @@ public class ListPage extends Page {
 
 		// add filter buttons
 		addTypeCheckboxes();
-		addNameSatusButtons();
+		addNameStatusButtons();
 		addRatingSelectorButtons();
 		addSearchButton();
 		addRefreshButton();
@@ -125,7 +133,7 @@ public class ListPage extends Page {
 	void createContentPanel() {
 		contentPanel = new JPanel(new BorderLayout());
 		contentPanel.setBackground(PageColor);
-		
+
 		// add content panel to main panel
 		this.add(contentPanel);
 	}
@@ -138,18 +146,21 @@ public class ListPage extends Page {
 		movieTypeLbl.setFont(Style.BASE_FONT);
 		movieTypeLbl.setForeground(Style.TEA_GREEN); // set the font color of the password label
 		movieType = new JCheckBox();
+		movieType.setSelected(true);
 		movieType.setBackground(Style.BALTIC_BLUE);
 
 		showTypeLbl = new JLabel("TV Show: ");
 		showTypeLbl.setFont(Style.BASE_FONT);
 		showTypeLbl.setForeground(Style.TEA_GREEN);
 		showType = new JCheckBox();
+		showType.setSelected(true);
 		showType.setBackground(Style.BALTIC_BLUE);
 
 		animeTypeLbl = new JLabel("Anime: ");
 		animeTypeLbl.setFont(Style.BASE_FONT);
 		animeTypeLbl.setForeground(Style.TEA_GREEN);
 		animeType = new JCheckBox();
+		animeType.setSelected(true);
 		animeType.setBackground(Style.BALTIC_BLUE);
 
 		gbc.gridx = 0; // col 1
@@ -180,9 +191,10 @@ public class ListPage extends Page {
 		gbc.insets = new Insets(0, 0, 0, 140);
 		filterPanel.add(animeType, gbc);
 		gbc.insets = new Insets(0, 0, 0, 0);
+
 	}
 
-	void addNameSatusButtons() {
+	void addNameStatusButtons() {
 		// name & status row
 		// name is texfield and status is a dropdown
 		nameFilterLbl = new JLabel("Name: ");
@@ -198,12 +210,60 @@ public class ListPage extends Page {
 		statusFilterLbl = new JLabel("Status: ");
 		statusFilterLbl.setFont(Style.BASE_FONT);
 		statusFilterLbl.setForeground(Style.TEA_GREEN);
-		statusFilter = new JComboBox<String>(SHOW_STATUS_OPTIONS);
+		statusFilter = new JComboBox<String>(SHOW_STATUS_COMBO_OPTIONS);
 		statusFilter.setFont(Style.BASE_FONT);
 		statusFilter.setBackground(Style.TEA_GREEN);
 		statusFilter.setForeground(Style.BALTIC_BLUE);
 		statusFilter.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR));
 		statusFilter.setFocusable(false);
+
+		statusFilter.addActionListener(e -> {
+			// ensure seletecd index is not 0
+			if (statusFilter.getSelectedIndex() != 0) {
+				// get selected index to swap state of existence
+				int indexToMod = statusFilter.getSelectedIndex();
+				String nameOfEntry = statusFilter.getSelectedItem().toString().split(" ")[0];
+
+				// add/remove fom msl
+				if (selectedOptions.exists(nameOfEntry)) {
+					statusFilter.removeItemAt(indexToMod);
+					statusFilter.insertItemAt(nameOfEntry + " " + UNCHECKBOX_CHAR, indexToMod);
+
+					selectedOptions.removeWhen(nameOfEntry);
+				} else {
+					statusFilter.removeItemAt(indexToMod);
+					statusFilter.insertItemAt(nameOfEntry + " " + CHECKBOX_CHAR, indexToMod);
+
+					selectedOptions.add(nameOfEntry);
+				}
+
+				// if count is 5: All
+				// else is first letter of those selected (don't care about order)
+				String displaySelected = "None";
+				if (selectedOptions.count() == 5) {
+					displaySelected = "All";
+				} else if (selectedOptions.count() > 0) {
+					displaySelected = "";
+					// get first letter of all options currently selected
+					MoniagaStringList fLetters = new MoniagaStringList();
+					for (int i = 0; i < selectedOptions.count(); i++) {
+						fLetters.add(selectedOptions.getAt(i).charAt(0) + "");
+					}
+					for (int i = 0; i < fLetters.count(); i++) {
+						displaySelected += fLetters.getAt(i);
+						if (i < fLetters.count() - 1)
+							displaySelected += ", ";
+					}
+				}
+
+				// rename to identify current existence
+				statusFilter.removeItemAt(0);
+				statusFilter.insertItemAt(displaySelected, 0);
+
+				// set selected index 0
+				statusFilter.setSelectedIndex(0);
+			}
+		});
 
 		gbc.gridy = 4; // row 5
 		gbc.gridx = 0; // col 1
@@ -301,18 +361,24 @@ public class ListPage extends Page {
 		searchButton.setFocusable(false);
 		searchButton.addActionListener(e -> {
 			clearListTable(); // clears the table so ready for adding
-			// TODO: Implement db. also verify if selector for name and status are blank to
-			// not care
 			String nameToCheck = nameFilter.getText();
-			String statusToCheck = statusFilter.getSelectedItem().toString();
+			// TODO make work here
+			// refer to selectedOptions moniaga string list (has docs)
 			int minRatingToCheck = (int) minRating.getValue();
 			int maxRatingToCheck = (int) maxRating.getValue();
 			boolean canBeMovie = movieType.isSelected();
 			boolean canBeShow = showType.isSelected();
 			boolean canBeAnime = animeType.isSelected();
 
-			// then simply call addToListTable() where valid paramters are passed
-			// run that for each search result
+			// Gets all Media that Fits Filter
+			Media[] vaildResponse = ui.findMedia(canBeMovie, canBeShow, canBeAnime, true, true, true, true, true,
+					nameToCheck,
+					minRatingToCheck, maxRatingToCheck);
+			// Add the Values to the Table
+			for (Media media : vaildResponse) {
+				addToListTable(media);
+
+			}
 		});
 
 		gbc.gridy = 6; // row 7
@@ -330,8 +396,6 @@ public class ListPage extends Page {
 		refreshButton.addActionListener(e -> {
 			clearListTable();
 			addDefaultListToTable();
-
-			// TODO add confirmation prompt
 		});
 
 		gbc.gridy = 6; // row 7
@@ -373,6 +437,61 @@ public class ListPage extends Page {
 		listTable.getTableHeader().setForeground(Style.TEA_GREEN);
 		listTable.getTableHeader().setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR));
 		listTable.setRowHeight(POSTER_HEIGHT); // for poster height accounting
+
+		// column resizizing
+		listTable.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
+		TableColumnModel cM = listTable.getColumnModel();
+		cM.getColumn(0).setPreferredWidth(POSTER_WIDTH);
+		cM.getColumn(1).setPreferredWidth(500);
+		cM.getColumn(2).setPreferredWidth(90);
+		cM.getColumn(3).setPreferredWidth(50);
+		cM.getColumn(4).setPreferredWidth(50);
+		// cM.getColumn(5).setPreferredWidth(60);
+
+		// set table renderer for main objects
+		listTable.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+			@Override
+			public Component getTableCellRendererComponent(JTable t, Object val,
+					boolean isSelected, boolean hasFocus, int row, int col) {
+
+				super.getTableCellRendererComponent(t, val, isSelected, hasFocus, row, col);
+
+				setHorizontalAlignment(DefaultTableCellRenderer.CENTER);
+
+				setFont(Style.BASE_FONT);
+
+				setBackground(Style.EMERALD);
+				setForeground(Color.WHITE);
+
+				return this;
+			}
+		});
+
+		// set table renderer for imageicon
+		listTable.setDefaultRenderer(ImageIcon.class, new DefaultTableCellRenderer() {
+			@Override
+			public Component getTableCellRendererComponent(JTable t, Object val,
+					boolean isSelected, boolean hasFocus, int row, int col) {
+
+				super.getTableCellRendererComponent(t, val, isSelected, hasFocus, row, col);
+
+				setHorizontalAlignment(DefaultTableCellRenderer.CENTER);
+
+				if (val instanceof Icon) {
+					setIcon((ImageIcon)val);
+					setText("");
+				}
+
+				setBackground(Style.EMERALD);
+				setForeground(Color.WHITE);
+
+				return this;
+			}
+		});
+
+		// do header mods
+		listTable.getTableHeader().setFont(Style.HEADER_FONT);
+
 		tableScrollContainer = new JScrollPane(listTable);
 		tableScrollContainer.setBackground(Style.BALTIC_BLUE);
 		tableScrollContainer.setBorder(border);
@@ -388,17 +507,16 @@ public class ListPage extends Page {
 	}
 
 	public void addDefaultListToTable() {
-		// TODO Pull data from db and add herer
-		int test = 200;
-		for (int i = 0; i < test; i++) {
-			addToListTable(testMedia);
+		Media[] foundMedia = ui.findMedia(true, true, true, true, true, true, true, true, "", 0, 10);
+		for (Media media : foundMedia) {
+			addToListTable(media);
 		}
 	}
 
-	void addToListTable(Media obj) {
+	void addToListTable(Media media) {
 		Object[] toAddToTable = new Object[colNames.length];
 		// "Icon", "Name", "Status", "Rating", "Last EP", "Rewatch"
-		File posterFile = new File(obj.getPosterPath());
+		File posterFile = new File(media.getPosterPath());
 		if (posterFile.exists()) {
 			toAddToTable[0] = ui.resizeImg(new ImageIcon(posterFile.getPath()), POSTER_WIDTH, POSTER_HEIGHT);
 		} else {
@@ -406,16 +524,20 @@ public class ListPage extends Page {
 		}
 
 		// TODO verify all data gets pulled properly dependent on media
-		toAddToTable[1] = obj.getName();
-		toAddToTable[2] = obj.getStatus();
-		toAddToTable[3] = obj.getRating();
-		toAddToTable[4] = obj.getLastEpisode();
-		toAddToTable[5] = obj.getRewatched();
+		toAddToTable[1] = media.getName();
+		toAddToTable[2] = media.getStatus();
+		toAddToTable[3] = media.getRating();
+		toAddToTable[4] = media.getLastEpisode();
+		toAddToTable[5] = media.getRewatched();
 
 		listTableModel.addRow(toAddToTable);
 	}
 
 	void clearListTable() {
 		listTableModel.setRowCount(0);
+	}
+
+	void getSelectedItems() {
+
 	}
 }

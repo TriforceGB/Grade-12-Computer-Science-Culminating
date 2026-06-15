@@ -3,17 +3,25 @@ package UI;
 import java.awt.CardLayout;
 import java.awt.Container;
 import java.awt.Image;
-
+import java.io.File;
+import java.io.FileWriter;
+import java.nio.file.Files;
 import java.util.EventListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
+import com.google.gson.Gson;
+
+import API.API;
 import DB.DB;
+import DTO.LocalDB.Media;
 import DTO.LocalDB.User;
 import UI.Pages.*;
 
@@ -28,6 +36,9 @@ public class UI extends JFrame implements EventListener {
 	private static final int HEIGHT = 1080; // Height of the window
 	// Variables
 	private DB db; // reference to the database
+	private API api; // reference to the database
+	private Gson gson; // reference to the Gson library
+
 	private User currentUser; // Info about the Current Login User
 
 	// Panels
@@ -43,12 +54,15 @@ public class UI extends JFrame implements EventListener {
 	private MediaPage mediaPage;
 
 	private boolean loadedMediaPageOnce = false;
+
 	/**
 	 * This Create the UI and Display it for the User
 	 */
-	public UI(DB db) {
+	public UI(DB db, API api, Gson gson) {
 		// Taking in the Reference(s)
 		this.db = db;
+		this.api = api;
+		this.gson = gson;
 
 		// Settings
 		this.setTitle(Style.APP_TITLE); // Set the title of the window
@@ -132,24 +146,210 @@ public class UI extends JFrame implements EventListener {
 	/**
 	 * Is a Shell for the create User Method for DB
 	 *
-	 * @param username The username of the user to create (String)
-	 * @param password The password of the user to create (String)
-	 * @param isAdmin  Whether the user is an admin (boolean)
-	 * @return
+	 * @param newUser a User object that will be enter into the DB
+	 * @return if the Change was Made
 	 */
-	public boolean createUser(String username, String password, boolean isAdmin) {
-		boolean created = db.createUser(new User(username, password, isAdmin));
+	public boolean createUser(User newUser) {
+		boolean created = db.createUser(newUser);
 		if (created) {
 			this.switchPanel("login");
 		}
 		return created;
 	}
 
+	/**
+	 * Edit the Current User Username
+	 *
+	 * @param newUsername The New Username (String)
+	 * @return True if Changed on DB, False Otherwise
+	 */
+	public boolean editUsername(String newUsername) {
+		this.currentUser.setUsername(newUsername); // Change Username on the Object
+		return db.editUser(this.currentUser); // Change the Username on the DB
+	}
+
+	/**
+	 * Edit the Current User Password
+	 *
+	 * @param newPassword The New Password (String)
+	 * @return True if Changed on DB, False Otherwise
+	 */
+	public boolean editPassword(String newPassword) {
+		this.currentUser.setPassword(newPassword); // Change Username on the Object
+		return db.editUser(this.currentUser); // Change the Username on the DB
+	}
+
+	/**
+	 * Delete the Current User. Only works if your Not an Admin
+	 *
+	 * @return True if Changed on DB, False Otherwise
+	 */
+	public boolean deleteUser() {
+		// Check if User is Admin
+		if (this.currentUser.isAdmin()) {
+			JOptionPane.showMessageDialog(this,
+					"Cannot Delete a Admin User, Please Have Another Admin Remove Power Before Deletion", "Error",
+					JOptionPane.ERROR_MESSAGE);
+			return false;
+		} else {
+			return db.deleteUser(this.currentUser.getId());
+		}
+	}
+
+	/**
+	 * With the Given Object, Add to DB
+	 *
+	 * @param newMedia New Media from Search to add
+	 * @return True if added, False if not
+	 */
+	public boolean createMedia(Media newMedia) {
+		return db.createMedia(newMedia);
+	}
+
+	/**
+	 * Shell for Find Media
+	 *
+	 * @param isMovie   Can the Media a Movie (bool)
+	 * @param isTV      Can the Media a TV (bool)
+	 * @param isAnime   Can the Media a Anime (bool)
+	 * @param status    the Media status (int)
+	 * @param name      the Media name (String)
+	 * @param ratingMin the minimum rating (int)
+	 * @param ratingMax the maximum rating (int)
+	 * @return a List of Media that match the given filters
+	 */
+	public Media[] findMedia(boolean isMovie, boolean isTV, boolean isAnime, boolean isUndecided, boolean isDropped,
+			boolean isBackLog, boolean isWatching, Boolean isCompleted, String name,
+			int ratingMin, int ratingMax) {
+		return db.findMedia(this.currentUser.getId(), isMovie, isTV, isAnime, isUndecided, isDropped, isBackLog,
+				isWatching, isCompleted, name, ratingMin, ratingMax);
+	}
+
+	/**
+	 * Export All the Media in a DB onto a Json File
+	 *
+	 * @return true if the export was successful, false otherwise
+	 */
+	public Boolean exportMedia() {
+		Media[] media = db.exportMedia();
+		// Throw an error if media is null
+		if (media == null) {
+			return false;
+		}
+		// Create a New Json
+		String json = gson.toJson(media);
+		saveFile("Media_Export", json);
+		return true;
+	}
+
+	/**
+	 * Import Media From a Json onto the DB
+	 *
+	 * @return True if the import was successful, false otherwise
+	 */
+	public Boolean importMedia() {
+		String json = openFile();
+		Media[] mediaList = gson.fromJson(json, Media[].class);
+		// Throw an error if media is null
+		if (mediaList == null) {
+			return false;
+		}
+
+		for (Media media : mediaList) {
+			// TODO Make sure it Download Media while Importing?
+			// NOTE This might be done in the Media Creation
+			if (!db.createMedia(media)) {
+				System.err.println("Failed to create media: " + media.getName());
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * Export the Current User onto a Json File
+	 *
+	 * @return true if the export was successful, false otherwise
+	 */
+	public Boolean exportUser() {
+		Media[] media = db.exportUserRelation(this.currentUser.getId()); // Pull all Media and UserData Related to User
+		// Add Media to User
+		this.currentUser.setMediaRelation(media);
+		// Create a New Json
+		String json = gson.toJson(this.currentUser);
+		saveFile("User_Export", json);
+		return true;
+	}
+
+	public Boolean importUser() {
+		String json = openFile();
+		User newUser = gson.fromJson(json, User.class);
+		newUser.setAdmin(false); // Imported User are Not Admins by default
+		// Throw an error if user is null
+		if (newUser == null) {
+			return false;
+		}
+
+		// Add user to DB
+		if (!db.createUser(newUser)) {
+			return false;
+		}
+
+		// Add Media that Relate to User
+		for (Media media : newUser.getMediaRelation()) {
+			// TODO Make sure it Download Media while Importing?
+			// NOTE This might be done in the Media Creation
+			if (!db.createMedia(media)) {
+				System.err.println("Failed to create media: " + media.getName());
+			}
+			// Add UserDate to DB
+			if (!db.createUserData(newUser.getId(), media.getId(), media.getUserData())) {
+				System.err.println("Failed to create user media relation: " + media.getName());
+			}
+		}
+		return true;
+	}
+
+	// API Shells
+
+	/**
+	 * Just a Shell for the searchMovie Method in API
+	 *
+	 * @param query  The Query for the Show
+	 * @param amount The Number of Show to Return
+	 * @return A Media Array
+	 */
+	public Media[] searchMovie(String query, int amount) {
+		return this.api.searchMovie(query, amount);
+	}
+
+	/**
+	 * Just a Shell for the searchShow Method in API
+	 *
+	 * @param query  The Query for the Show
+	 * @param amount The Number of Show to Return
+	 * @return A Media Array
+	 */
+	public Media[] searchShow(String query, int amount) {
+		return this.api.searchShow(query, amount);
+	}
+
+	/**
+	 * Just a Shell for the searchAnime Method in API
+	 *
+	 * @param query  The Query for the Show
+	 * @param amount The Number of Show to Return
+	 * @return A Media Array
+	 */
+	public Media[] searchAnime(String query, int amount) {
+		return this.api.searchAnime(query, amount);
+	}
+
+	// Image and Other UI Methods
 	public ImageIcon resizeImg(ImageIcon original, int width, int height) {
 		Image ogImage = original.getImage();
 		Image resizedImage = ogImage.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-		ImageIcon newicon = new ImageIcon(resizedImage);
-		return newicon;
+		ImageIcon newIcon = new ImageIcon(resizedImage);
+		return newIcon;
 	}
 
 	public void addButtonImg(JButton button, ImageIcon image, int gap, int width, int height) {
@@ -198,5 +398,86 @@ public class UI extends JFrame implements EventListener {
 		result += "</html>";
 
 		return result; // return once finished
+	}
+
+	// File Import and Export
+	/**
+	 * Prop the User to Pick a Location for a File to Save
+	 *
+	 * @param title The title of the file to save
+	 * @param body  The body of the file to save
+	 */
+	public void saveFile(String title, String body) {
+		JFileChooser fileChooser = new JFileChooser();
+		fileChooser.setDialogTitle("Where Do You Want to Save?");
+
+		// Make Sure it Export as a JSON
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("JSON Files", "json");
+		fileChooser.setFileFilter(filter);
+		// Set Default File Name
+		fileChooser.setSelectedFile(new File(title + ".json"));
+
+		// Show Save Dialog
+		int result = fileChooser.showSaveDialog(this);
+		// If they Pick a Location
+		if (result == JFileChooser.APPROVE_OPTION) {
+			File file = fileChooser.getSelectedFile(); // Create a File at that Location
+
+			// Add .json extension if not present
+			if (!file.getName().endsWith(".json")) {
+				file = new File(file.getParent(), file.getName() + ".json");
+			}
+
+			// Write to the File
+			try (FileWriter writer = new FileWriter(file)) {
+				writer.write(body);
+
+				// Show Success Message
+				JOptionPane.showMessageDialog(this, "Successfully Saved File", "Success",
+						JOptionPane.INFORMATION_MESSAGE);
+
+			} catch (Exception e) {
+				// Show Error Message
+				JOptionPane.showMessageDialog(this, "Unable to Save File, Try again", "Error",
+						JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
+
+		}
+	}
+
+	/**
+	 * Opens a Pop up that will let the User Select a Json.
+	 *
+	 * @return Returns the Content of the File as String
+	 */
+	public String openFile() {
+		JFileChooser fileChooser = new JFileChooser();
+		fileChooser.setDialogTitle("Select a Json to Import");
+
+		// Make Sure it Export as a JSON
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("JSON Files", "json");
+		fileChooser.setFileFilter(filter);
+
+		// Show Open Dialog
+		int result = fileChooser.showOpenDialog(this);
+		// If they Pick a Location
+		if (result == JFileChooser.APPROVE_OPTION) {
+			File file = fileChooser.getSelectedFile(); // Create a File at that Location
+
+			// Read the File
+			try {
+				String output = Files.readString(file.toPath());
+				return output;
+
+			} catch (Exception e) {
+				// Show Error Message
+				JOptionPane.showMessageDialog(this, "Unable to Open File, Try again", "Error",
+						JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
+
+		}
+		return null;
 	}
 }

@@ -235,6 +235,36 @@ public class DB {
 	}
 
 	/**
+	 * A Method that finds all User in the DB and return them as an Array
+	 *
+	 * @return an Array of User Objects
+	 */
+	public User[] getAllUsers() {
+		try (Statement stmt = dbConnect.createStatement()) {
+			ResultSet rs = stmt.executeQuery(Query.ALL_USERS);
+			User[] UserList = new User[rs.getInt("count")];
+			int i = 0;
+			while (rs.next()) {
+				UserList[i] = new User(
+						rs.getInt("id"),
+						rs.getString("username"),
+						rs.getString("password"),
+						rs.getBoolean("isAdmin"),
+						rs.getString("created"),
+						rs.getString("lastLogin"));
+				i++;
+			}
+			return UserList;
+
+		} catch (Exception e) {
+			System.err.println("Exception While Finding All Users: ");
+			e.printStackTrace();
+			return null;
+		}
+
+	}
+
+	/**
 	 * Add a Media Object into the DB
 	 *
 	 * @param newMedia the Media to add (Media)
@@ -307,24 +337,32 @@ public class DB {
 	 * Return a List of Media that match the given filters
 	 *
 	 * @param userId    the User's id (int)
-	 * @param type      the Media type (int)
+	 * @param isMovie   Can the Media a Movie (bool)
+	 * @param isTV      Can the Media a TV (bool)
+	 * @param isAnime   Can the Media a Anime (bool)
 	 * @param status    the Media status (int)
 	 * @param name      the Media name (String)
 	 * @param ratingMin the minimum rating (int)
 	 * @param ratingMax the maximum rating (int)
 	 * @return a List of Media that match the given filters
 	 */
-	public Media[] findMedia(int userId, boolean isMovie, boolean isTV, Boolean isAnime, int status, String name,
+	public Media[] findMedia(int userId, boolean isMovie, boolean isTV, Boolean isAnime, boolean isUndecided,
+			boolean isDropped,
+			boolean isBackLog, boolean isWatching, Boolean isCompleted, String name,
 			int ratingMin, int ratingMax) {
 		try (PreparedStatement stmt = dbConnect.prepareStatement(Query.FIND_MEDIA)) {
-			stmt.setInt(1, userId);
+			stmt.setString(1, "%" + name + "%"); // Wild Card of both the left and right side of the name
 			stmt.setInt(2, (isMovie) ? 1 : 0);
 			stmt.setInt(3, (isTV) ? 2 : 0);
 			stmt.setInt(4, (isAnime) ? 3 : 0);
-			stmt.setInt(5, status);
-			stmt.setString(6, "%" + name + "%"); // Wild Card of both the left and right side of the name
-			stmt.setInt(7, ratingMin - 1); // -1 to include ratingMin in the range
-			stmt.setInt(8, ratingMax + 1); // +1 to include ratingMax in the range
+			stmt.setInt(5, userId);
+			stmt.setInt(6, (isUndecided) ? 0 : -1);
+			stmt.setInt(7, (isDropped) ? 1 : -1);
+			stmt.setInt(8, (isBackLog) ? 2 : -1);
+			stmt.setInt(9, (isWatching) ? 3 : -1);
+			stmt.setInt(10, (isCompleted) ? 4 : -1);
+			stmt.setInt(11, ratingMin);
+			stmt.setInt(12, ratingMax);
 			ResultSet rs = stmt.executeQuery();
 			if (rs.getInt("count") > 0) {
 				Media[] foundMedia = new Media[rs.getInt("count")];
@@ -336,6 +374,7 @@ public class DB {
 							rs.getInt("externalId"),
 							rs.getString("name"),
 							rs.getString("description"),
+							rs.getInt("episodeCount"),
 							rs.getString("posterPath"),
 							rs.getString("posterLink"),
 							rs.getInt("status"),
@@ -354,7 +393,7 @@ public class DB {
 			}
 
 		} catch (SQLException e) {
-			System.err.println("Exception while creating user:");
+			System.err.println("Exception while Finding Media:");
 			e.printStackTrace();
 			return null;
 		}
@@ -362,13 +401,14 @@ public class DB {
 
 	/**
 	 * This Export all Media Stored in the database into a Object that will be turn
-	 * into a Json by Gson
+	 * into a Json by Gson. It can also be used to Just make a list of all Media in
+	 * the DB
 	 *
 	 * @return Media[] array of all Media Stored in the database
 	 */
 	public Media[] exportMedia() {
-		try (PreparedStatement stmt = dbConnect.prepareStatement(Query.ALL_MEDIA)) {
-			ResultSet rs = stmt.executeQuery();
+		try (Statement stmt = dbConnect.createStatement()) {
+			ResultSet rs = stmt.executeQuery(Query.ALL_MEDIA);
 			if (rs.getInt("count") > 0) {
 				Media[] allMedia = new Media[rs.getInt("count")];
 				int i = 0;
@@ -379,6 +419,7 @@ public class DB {
 							rs.getInt("externalId"),
 							rs.getString("name"),
 							rs.getString("description"),
+							rs.getInt("episodeCount"),
 							rs.getString("posterPath"),
 							rs.getString("posterLink"));
 					i++;
@@ -492,6 +533,46 @@ public class DB {
 			System.err.println("Exception while deleting media:");
 			e.printStackTrace();
 			return false;
+		}
+	}
+
+	/**
+	 * Export all Media Related to a User
+	 *
+	 * @param userId the User's id (int)
+	 * @return an array of Media related to the User
+	 */
+	public Media[] exportUserRelation(int userId) {
+		try (PreparedStatement stmt = dbConnect.prepareStatement(Query.EXPORT_USER_RELATION)) {
+			stmt.setInt(1, userId);
+			ResultSet rs = stmt.executeQuery();
+
+			Media[] mediaArray = new Media[rs.getInt("count")];
+			int i = 0;
+			while (rs.next()) {
+				mediaArray[i] = new Media(
+						rs.getInt("id"),
+						rs.getInt("type"),
+						rs.getInt("externalId"),
+						rs.getString("name"),
+						rs.getString("description"),
+						rs.getInt("episodeCount"),
+						rs.getString("posterPath"),
+						rs.getString("posterLink"),
+						rs.getInt("status"),
+						rs.getString("startDate"),
+						rs.getString("finishDate"),
+						rs.getInt("rating"),
+						rs.getInt("lastEpisode"),
+						rs.getString("review"),
+						rs.getInt("rewatched"));
+				i++;
+			}
+			return mediaArray;
+		} catch (Exception e) {
+			System.err.println("Exception While Finding Related Info:");
+			e.printStackTrace();
+			return null;
 		}
 	}
 }

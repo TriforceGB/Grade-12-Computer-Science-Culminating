@@ -95,48 +95,106 @@ public class SettingsPage extends Page {
 		ui.addButtonImg(delUserButton, new ImageIcon("assets/UI/binicon.png"), 20, 45, 45);
 		ui.addButtonImg(adminButton, new ImageIcon("assets/UI/adminicon.png"), 20, 45, 45);
 
-		ImageIcon filal = ui.resizeImg(new ImageIcon("assets/UI/filal.png"), 45, 45);
+		ImageIcon filal = ui.resizeImg(new ImageIcon("assets/UI/filal.png"), 45, 45); // TODO REMOVE?
 
-		// TODO: Button Functionality
 		chngUserButton.addActionListener(e -> {
-			String changeduser = JOptionPane.showInputDialog("Enter new username"); // Prompt to change username
-			if (changeduser.isEmpty()) {
+			String changedUsername = JOptionPane.showInputDialog("Enter new username"); // Prompt to change username
+			// Check for Empty Username
+			if (changedUsername.isEmpty()) {
 				JOptionPane.showMessageDialog(this, "Cannot have an empty username.", "Error",
 						JOptionPane.ERROR_MESSAGE);
 				return;
 			}
-			// TODO Database changing code here
+			// Make the Change
+			else {
+				if (ui.editUsername(changedUsername)) {
+					// Change is Made
+					JOptionPane.showMessageDialog(this, "Successfully change Username.", "Success",
+							JOptionPane.INFORMATION_MESSAGE);
+				} else {
+					// Change wasn't made
+					JOptionPane.showMessageDialog(this, "Unable to change Username, Try again", "Error",
+							JOptionPane.ERROR_MESSAGE);
+				}
+			}
 		});
 		chngPassButton.addActionListener(e -> {
-			String changedpass = JOptionPane.showInputDialog("Enter new password"); // Prompt to change the password
-			if (changedpass == null) {
+			String changedPass = JOptionPane.showInputDialog("Enter new password"); // Prompt to change the password
+			if (changedPass == null) {
 				return;
 			}
 			// Prompt to confirm password
-			String chanagedpassconfirm = JOptionPane.showInputDialog("Re-enter password to confirm");
+			String changedPassConfirm = JOptionPane.showInputDialog("Re-enter password to confirm");
 			// checks to see if both entries match, if not then the user will have to retry
-			if (!changedpass.equals(chanagedpassconfirm)) {
+			if (!changedPass.equals(changedPassConfirm)) {
 				JOptionPane.showMessageDialog(this, "Passwords do not match.", "Error", JOptionPane.ERROR_MESSAGE);
 				return;
 			}
-			if (changedpass.isEmpty()) { // checks to see if password field was entered as empty
+			if (changedPass.isEmpty()) { // checks to see if password field was entered as empty
 				JOptionPane.showMessageDialog(this, "Cannot have an empty password.", "Error",
 						JOptionPane.ERROR_MESSAGE);
 				return;
+			} else {
+				if (ui.editPassword(changedPass)) {
+					// Change is Made
+					JOptionPane.showMessageDialog(this, "Successfully change Password.", "Success",
+							JOptionPane.INFORMATION_MESSAGE);
+				} else {
+					// Change wasn't made
+					JOptionPane.showMessageDialog(this, "Unable to change Password, Try again", "Error",
+							JOptionPane.ERROR_MESSAGE);
+				}
+
 			}
-			// Changing password code here
 		});
-		expUserButton.addActionListener(e -> ui.switchPanel("search")); // TODO
-		impUserButton.addActionListener(e -> ui.switchPanel("setting")); // TODO
-		expMediaButton.addActionListener(e -> ui.logout()); // TODO
-		impMediaButton.addActionListener(e -> ui.logout()); // TODO
+		expUserButton.addActionListener(e -> {
+			if (!ui.exportUser()) {
+				JOptionPane.showMessageDialog(this, "Unable to export User, Try again", "Error",
+						JOptionPane.ERROR_MESSAGE);
+			}
+		});
+		impUserButton.addActionListener(e -> {
+			if (ui.importUser()) {
+				// Change is Made
+				JOptionPane.showMessageDialog(this, "Successfully Imported Media", "Success",
+						JOptionPane.INFORMATION_MESSAGE);
+			} else {
+				// Change wasn't made
+				JOptionPane.showMessageDialog(this, "Unable to Import Media, Try again", "Error",
+						JOptionPane.ERROR_MESSAGE);
+			}
+		});
+		expMediaButton.addActionListener(e -> {
+			if (!ui.exportMedia()) {
+				JOptionPane.showMessageDialog(this, "Unable to export media, Try again", "Error",
+						JOptionPane.ERROR_MESSAGE);
+			}
+		});
+		impMediaButton.addActionListener(e -> {
+			if (ui.importMedia()) {
+				// Change is Made
+				JOptionPane.showMessageDialog(this, "Successfully Imported Media", "Success",
+						JOptionPane.INFORMATION_MESSAGE);
+			} else {
+				// Change wasn't made
+				JOptionPane.showMessageDialog(this, "Unable to Import Media, Try again", "Error",
+						JOptionPane.ERROR_MESSAGE);
+			}
+		});
 		delUserButton.addActionListener(e -> {
 			// Prompt to confirm account deletion
 			int confirm = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete your account?");
-			if (confirm == 1) {
-				// Check for admin code here (if admin wants to delete account but they're the
-				// only admin force them to appoint new admin)
-				// Delete code here
+			if (confirm == 0) {
+				if (ui.deleteUser()) {
+					// Change is Made
+					JOptionPane.showMessageDialog(this, "Successfully Delete User", "Success",
+							JOptionPane.INFORMATION_MESSAGE);
+					ui.logout();
+				} else {
+					// Change wasn't made
+					JOptionPane.showMessageDialog(this, "Unable to Delete user, Try again", "Error",
+							JOptionPane.ERROR_MESSAGE);
+				}
 			}
 
 		});
@@ -155,11 +213,12 @@ public class SettingsPage extends Page {
 		buttonPanel.add(adminButton); // TODO (make sure only admins can see this button)
 
 		buttonPanel.setBorder(BorderFactory.createEmptyBorder(300, 250, 300, 850));
-		// STILL NEED STAT PANEL
+		// TODO STILL NEED STAT PANEL
 
 		contentPanel.add(buttonPanel, BorderLayout.CENTER);
 		contentPanel.add(statPanel, BorderLayout.LINE_END);
 
 		this.add(contentPanel, BorderLayout.CENTER);
 	}
+
 }

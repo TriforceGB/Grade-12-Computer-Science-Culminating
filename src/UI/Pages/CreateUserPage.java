@@ -16,6 +16,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import DTO.LocalDB.User;
 import UI.Style;
 import UI.UI;
 
@@ -256,15 +257,12 @@ public class CreateUserPage extends Page {
 
 	void createUser() {
 		// Check if the password fields match
-		if (!new String(pwdField.getPassword()).equals(new String(pwdConfirmField.getPassword()))) { 
+		if (!new String(pwdField.getPassword()).equals(new String(pwdConfirmField.getPassword()))) {
 			JOptionPane.showMessageDialog(this, "Passwords do not match", "Error", JOptionPane.ERROR_MESSAGE);
 			// Clear Text Fields and set Color Red
 			pwdField.setText("");
 			pwdConfirmField.setText("");
-			// pwdField.setBackground(Color.RED);
-			// pwdConfirmField.setBackground(Color.RED);
 
-			// TODO what is going on here? I mean like above.
 			return;
 		}
 		// check if password box is blank
@@ -274,13 +272,12 @@ public class CreateUserPage extends Page {
 		}
 
 		// Try to Create New User
-		if (ui.createUser(usernameField.getText(), new String(pwdField.getPassword()), false)) {
+		if (ui.createUser(new User(usernameField.getText(), new String(pwdField.getPassword()), false))) {
 			// Clear Text Fields
 			usernameField.setText("");
 			pwdField.setText("");
 			pwdConfirmField.setText("");
 			// Set Color Normal
-			// TODO what is says above?
 			JOptionPane.showMessageDialog(this, "Successfully created new user.", "Success",
 					JOptionPane.INFORMATION_MESSAGE);
 
