@@ -9,6 +9,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.io.File;
+import java.util.concurrent.ThreadLocalRandom;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -21,13 +23,15 @@ import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 
+import DTO.LocalDB.Media;
+
 /**
  * The Media Page Class. Used to display the media for the user.
  */
 public class MediaPage extends Page {
 	private final int POSTER_WIDTH = 150;
 	private final int POSTER_HEIGHT = 225;
-	private final String POSTER_IMAGE_PATH = "assets/UI/filal.png";
+	private final String DEFAULT_POSTER_IMAGE_PATH = "assets/UI/filal.png";
 
 	private JPanel westSidePanel;
 	private GridBagConstraints gbc;
@@ -36,9 +40,9 @@ public class MediaPage extends Page {
 
 	private JLabel poster;
 	private JLabel startDateLabel;
-	private JLabel endDateLabel;
+	private JLabel finishDateLabel;
 	private JTextField startDateField;
-	private JTextField endDateField;
+	private JTextField finishDateField;
 
 	private JPanel infEastSidePanel;
 
@@ -69,6 +73,8 @@ public class MediaPage extends Page {
 
 	private final int CPERLINE_REVIEW_COMMENT = 80;
 	private final int MAXPASS_REVIEW_COMMENT = 5;
+
+	private String panelToSendBackTo;
 
 	/**
 	 * Create the Media Page
@@ -110,22 +116,22 @@ public class MediaPage extends Page {
 	void createEastDisplayComponents() {
 		poster = new JLabel();
 		poster.setPreferredSize(new Dimension(POSTER_WIDTH, POSTER_HEIGHT));
-		poster.setIcon(ui.resizeImg(new ImageIcon(POSTER_IMAGE_PATH), POSTER_WIDTH, POSTER_HEIGHT));
+		poster.setIcon(ui.resizeImg(new ImageIcon(DEFAULT_POSTER_IMAGE_PATH), POSTER_WIDTH, POSTER_HEIGHT));
 
 		startDateLabel = new JLabel("Start Date: ");
 		startDateLabel.setFont(Style.BASE_FONT);
 
-		endDateLabel = new JLabel("End Date: ");
-		endDateLabel.setFont(Style.BASE_FONT);
+		finishDateLabel = new JLabel("End Date: ");
+		finishDateLabel.setFont(Style.BASE_FONT);
 
 		startDateField = new JTextField(12);
 		startDateField.setText("YYYY-MM-DD");
 		startDateField.setFont(Style.BASE_FONT);
 		startDateField.setEditable(false);
-		endDateField = new JTextField(12);
-		endDateField.setText("YYYY-MM-DD");
-		endDateField.setFont(Style.BASE_FONT);
-		endDateField.setEditable(false);
+		finishDateField = new JTextField(12);
+		finishDateField.setText("YYYY-MM-DD");
+		finishDateField.setFont(Style.BASE_FONT);
+		finishDateField.setEditable(false);
 	}
 
 	void formatEastSideDisplayComponents() {
@@ -144,11 +150,11 @@ public class MediaPage extends Page {
 
 		gbc.gridy = 3;
 		gbc.insets = new Insets(0, 50, 0, 50);
-		westSidePanel.add(endDateLabel, gbc);
+		westSidePanel.add(finishDateLabel, gbc);
 
 		gbc.gridy = 4;
 		gbc.insets = new Insets(0, 50, 0, 50);
-		westSidePanel.add(endDateField, gbc);
+		westSidePanel.add(finishDateField, gbc);
 	}
 
 	void createMainInfDisplayComponents() {
@@ -258,12 +264,6 @@ public class MediaPage extends Page {
 		usrReviewsScrollPane = new JScrollPane(scrollContentPanel);
 		usrReviewsScrollPane.setPreferredSize(new Dimension(250, 0));
 		usrReviewsScrollPane.getVerticalScrollBar().setUnitIncrement(16);
-
-		// TODO load user reviews
-		int test = 100;
-		for (int i = 0; i < test; i++) {
-			scrollContentPanel.add(getReviewPanel());
-		}
 	}
 
 	void addSidePanelsToMain() {
@@ -281,8 +281,7 @@ public class MediaPage extends Page {
 		backButton.setFont(Style.BASE_FONT);
 		backButton.setPreferredSize(new Dimension(300, 50));
 		backButton.addActionListener(e -> {
-			// TODO verify what panel was last
-			ui.switchPanel("home");
+			ui.switchPanel(panelToSendBackTo);
 		});
 
 		gbc.gridy = 0; // constant
@@ -340,5 +339,32 @@ public class MediaPage extends Page {
 		result.add(usrRating, gbc2);
 
 		return result;
+	}
+
+	public void setupMediaPanel(Media obj, String panelName) {
+		panelToSendBackTo = panelName;
+
+		// then load data
+		File posterFile = new File(obj.getPosterPath());
+		if (posterFile.exists())
+			poster.setIcon(ui.resizeImg(new ImageIcon(obj.getPosterPath()), POSTER_WIDTH, POSTER_HEIGHT));
+		else
+			poster.setIcon(ui.resizeImg(new ImageIcon(DEFAULT_POSTER_IMAGE_PATH), POSTER_WIDTH, POSTER_HEIGHT));
+		startDateField.setText(obj.getStartDate());
+		finishDateField.setText(obj.getFinishDate());
+		titleLabel.setText(obj.getName());
+		int showTypeInt = obj.getType();
+		showType.setText("ZACH MAKE NOT STRING.");
+		descLabel.setText(ui.getHtmlFormatText(obj.getDescription(), CPERLINE_DESC, MAXPASS_DESC));
+		statusSelector.setSelectedIndex(obj.getStatus()); // but we love you for this one now. only for now
+		usrRatingSelector.setValue(obj.getRating());
+		rewatchesSelector.setValue(obj.getRewatched());
+		cEpSelector.setValue(obj.getLastEpisode());
+
+		// TODO load all existing usr reviews
+		int test = ThreadLocalRandom.current().nextInt(0, 5);
+		for (int i = 0; i < test; i++) {
+			scrollContentPanel.add(getReviewPanel());
+		}
 	}
 }

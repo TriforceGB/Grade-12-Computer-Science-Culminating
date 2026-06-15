@@ -118,6 +118,13 @@ public class UI extends JFrame implements EventListener {
 		}
 	}
 
+	public void openMediaPage(Media ref, String panelNameCalledFrom) {
+		// setup page
+		mediaPage.setupMediaPanel(ref, panelNameCalledFrom);
+		// then swap
+		switchPanel("media");
+	}
+
 	/**
 	 * This method logs in the user and sends them into the homepage if the account
 	 * exists
@@ -398,6 +405,16 @@ public class UI extends JFrame implements EventListener {
 		result += "</html>";
 
 		return result; // return once finished
+	}
+
+	public String getRawTextFromHtmlFormat(String fromHtml) {
+		String result = fromHtml;
+
+		result = result.replace("<br>", " ");
+		result = result.replace("<html>", "");
+		result = result.replace("</html>", "");
+
+		return result;
 	}
 
 	// File Import and Export
