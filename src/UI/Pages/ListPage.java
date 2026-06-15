@@ -410,10 +410,7 @@ public class ListPage extends Page {
 		filterPanel.add(searchButton, gbc);
 	}
 
-	/**
-	 * Does Nothing?
-	 * TODO REMOVE?
-	 */
+	// TODO prepare default search
 	void addRefreshButton() {
 		refreshButton = new JButton("Refresh");
 		refreshButton.setBackground(Style.LIGHT_GREEN);
