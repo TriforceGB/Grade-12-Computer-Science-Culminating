@@ -2,12 +2,16 @@ package UI.Pages;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.io.File;
+import java.io.FileWriter;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import DTO.LocalDB.User;
 import UI.Style;
@@ -150,7 +154,12 @@ public class SettingsPage extends Page {
 		});
 		expUserButton.addActionListener(e -> ui.switchPanel("search")); // TODO
 		impUserButton.addActionListener(e -> ui.switchPanel("setting")); // TODO
-		expMediaButton.addActionListener(e -> ui.logout()); // TODO
+		expMediaButton.addActionListener(e -> {
+			if (!ui.exportMedia()) {
+				JOptionPane.showMessageDialog(this, "Unable to export media, Try again", "Error",
+						JOptionPane.ERROR_MESSAGE);
+			}
+		});
 		impMediaButton.addActionListener(e -> ui.logout()); // TODO
 		delUserButton.addActionListener(e -> {
 			// Prompt to confirm account deletion
@@ -191,4 +200,5 @@ public class SettingsPage extends Page {
 
 		this.add(contentPanel, BorderLayout.CENTER);
 	}
+
 }

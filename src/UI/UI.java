@@ -3,16 +3,18 @@ package UI;
 import java.awt.CardLayout;
 import java.awt.Container;
 import java.awt.Image;
-
+import java.io.File;
+import java.io.FileWriter;
 import java.util.EventListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.google.gson.Gson;
 
@@ -219,7 +221,7 @@ public class UI extends JFrame implements EventListener {
 				isWatching, isCompleted, name, ratingMin, ratingMax);
 	}
 
-	public boolean exportMedia() {
+	public Boolean exportMedia() {
 		Media[] media = db.exportMedia();
 		// Throw an error if media is null
 		if (media == null) {
@@ -230,6 +232,7 @@ public class UI extends JFrame implements EventListener {
 		Gson gson = new Gson();
 		String json = gson.toJson(media);
 		System.out.println(json); // TODO Put this into a File
+		saveFile("Media_Export", json);
 		return true;
 
 	}
@@ -323,4 +326,51 @@ public class UI extends JFrame implements EventListener {
 
 		return result; // return once finished
 	}
+
+	// File Import and Export
+	/**
+	 * Prop the User to Pick a Location for a File to Save
+	 *
+	 * @param title The title of the file to save
+	 * @param body  The body of the file to save
+	 */
+	public void saveFile(String title, String body) {
+		JFileChooser fileChooser = new JFileChooser();
+		fileChooser.setDialogTitle("Where Do You Want to Save?");
+
+		// Make Sure it Export as a JSON
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("JSON Files", "json");
+		fileChooser.setFileFilter(filter);
+		// Set Default File Name
+		fileChooser.setSelectedFile(new File(title + ".json"));
+
+		// Show Save Dialog
+		int result = fileChooser.showSaveDialog(this);
+		// If they Pick a Location
+		if (result == JFileChooser.APPROVE_OPTION) {
+			File file = fileChooser.getSelectedFile(); // Create a File at that Location
+
+			// Add .json extension if not present
+			if (!file.getName().endsWith(".json")) {
+				file = new File(file.getParent(), file.getName() + ".json");
+			}
+
+			// Write to the File
+			try (FileWriter writer = new FileWriter(file)) {
+				writer.write(body);
+
+				// Show Success Message
+				JOptionPane.showMessageDialog(this, "Successfully Saved File", "Success",
+						JOptionPane.INFORMATION_MESSAGE);
+
+			} catch (Exception e) {
+				// Show Error Message
+				JOptionPane.showMessageDialog(this, "Unable to Save File, Try again", "Error",
+						JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
+
+		}
+	}
+
 }
