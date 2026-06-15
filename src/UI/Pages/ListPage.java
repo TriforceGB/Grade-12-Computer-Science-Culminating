@@ -70,8 +70,8 @@ public class ListPage extends Page {
 	private JComboBox<String> statusFilter;
 	private final char CHECKBOX_CHAR = '☒';
 	private final char UNCHECKBOX_CHAR = '☐';
-	private final String[] SHOW_STATUS_DEFAULT_OPTIONS = new String[] { "Undecided", "Backlog", "Watching", "Completed",
-			"Dropped" };
+	private final String[] SHOW_STATUS_DEFAULT_OPTIONS = new String[] { "Undecided", "Dropped", "Backlog", "Watching",
+			"Completed" };
 	private final String[] SHOW_STATUS_COMBO_OPTIONS = new String[] { "All", "Undecided " + CHECKBOX_CHAR,
 			"Backlog " + CHECKBOX_CHAR, "Watching " + CHECKBOX_CHAR,
 			"Completed " + CHECKBOX_CHAR, "Dropped " + CHECKBOX_CHAR }; // space seperated checkbox representations
@@ -361,8 +361,33 @@ public class ListPage extends Page {
 		searchButton.addActionListener(e -> {
 			clearListTable(); // clears the table so ready for adding
 			String nameToCheck = nameFilter.getText();
-			// TODO make work here
 
+			// Fix Until we Fix the Box
+			boolean isUndecided = false;
+			boolean isDropped = false;
+			boolean isBacklog = false;
+			boolean isWatched = false;
+			boolean isCompleted = false;
+			for (int i = 0; i < selectedOptions.count(); i++) {
+				char c = selectedOptions.getAt(i).toLowerCase().charAt(0);
+				switch (c) {
+					case 'u':
+						isUndecided = true;
+						break;
+					case 'd':
+						isDropped = true;
+						break;
+					case 'b':
+						isBacklog = true;
+						break;
+					case 'w':
+						isWatched = true;
+						break;
+					case 'c':
+						isCompleted = true;
+						break;
+				}
+			}
 			// refer to selectedOptions moniaga string list (has docs)
 			int minRatingToCheck = (int) minRating.getValue();
 			int maxRatingToCheck = (int) maxRating.getValue();
@@ -371,13 +396,13 @@ public class ListPage extends Page {
 			boolean canBeAnime = animeType.isSelected();
 
 			// Gets all Media that Fits Filter
-			Media[] vaildResponse = ui.findMedia(canBeMovie, canBeShow, canBeAnime, true, true, true, true, true,
+			Media[] vaildResponse = ui.findMedia(canBeMovie, canBeShow, canBeAnime, isUndecided, isDropped, isBacklog,
+					isWatched, isCompleted,
 					nameToCheck,
 					minRatingToCheck, maxRatingToCheck);
 			// Add the Values to the Table
 			for (Media media : vaildResponse) {
 				addToListTable(media);
-
 			}
 		});
 
@@ -386,6 +411,10 @@ public class ListPage extends Page {
 		filterPanel.add(searchButton, gbc);
 	}
 
+	/**
+	 * Does Nothing?
+	 * TODO REMOVE?
+	 */
 	void addRefreshButton() {
 		refreshButton = new JButton("Refresh");
 		refreshButton.setBackground(Style.LIGHT_GREEN);
