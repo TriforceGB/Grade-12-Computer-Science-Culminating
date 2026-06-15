@@ -95,7 +95,7 @@ public class SettingsPage extends Page {
 		ui.addButtonImg(delUserButton, new ImageIcon("assets/UI/binicon.png"), 20, 45, 45);
 		ui.addButtonImg(adminButton, new ImageIcon("assets/UI/adminicon.png"), 20, 45, 45);
 
-		ImageIcon filal = ui.resizeImg(new ImageIcon("assets/UI/filal.png"), 45, 45);
+		ImageIcon filal = ui.resizeImg(new ImageIcon("assets/UI/filal.png"), 45, 45); // TODO REMOVE?
 
 		chngUserButton.addActionListener(e -> {
 			String changedUsername = JOptionPane.showInputDialog("Enter new username"); // Prompt to change username
@@ -147,8 +147,23 @@ public class SettingsPage extends Page {
 
 			}
 		});
-		expUserButton.addActionListener(e -> ui.switchPanel("search")); // TODO
-		impUserButton.addActionListener(e -> ui.switchPanel("setting")); // TODO
+		expUserButton.addActionListener(e -> {
+			if (!ui.exportUser()) {
+				JOptionPane.showMessageDialog(this, "Unable to export User, Try again", "Error",
+						JOptionPane.ERROR_MESSAGE);
+			}
+		});
+		impUserButton.addActionListener(e -> {
+			if (ui.importUser()) {
+				// Change is Made
+				JOptionPane.showMessageDialog(this, "Successfully Imported Media", "Success",
+						JOptionPane.INFORMATION_MESSAGE);
+			} else {
+				// Change wasn't made
+				JOptionPane.showMessageDialog(this, "Unable to Import Media, Try again", "Error",
+						JOptionPane.ERROR_MESSAGE);
+			}
+		});
 		expMediaButton.addActionListener(e -> {
 			if (!ui.exportMedia()) {
 				JOptionPane.showMessageDialog(this, "Unable to export media, Try again", "Error",

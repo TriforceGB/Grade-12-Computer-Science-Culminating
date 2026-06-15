@@ -267,4 +267,8 @@ public class Media {
 		return userData.rewatched;
 	}
 
+	public UserData getUserData() {
+		return userData;
+	}
+
 }

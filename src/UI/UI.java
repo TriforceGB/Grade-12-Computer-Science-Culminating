@@ -225,6 +225,11 @@ public class UI extends JFrame implements EventListener {
 				isWatching, isCompleted, name, ratingMin, ratingMax);
 	}
 
+	/**
+	 * Export All the Media in a DB onto a Json File
+	 *
+	 * @return true if the export was successful, false otherwise
+	 */
 	public Boolean exportMedia() {
 		Media[] media = db.exportMedia();
 		// Throw an error if media is null
@@ -235,9 +240,13 @@ public class UI extends JFrame implements EventListener {
 		String json = gson.toJson(media);
 		saveFile("Media_Export", json);
 		return true;
-
 	}
 
+	/**
+	 * Import Media From a Json onto the DB
+	 *
+	 * @return True if the import was successful, false otherwise
+	 */
 	public Boolean importMedia() {
 		String json = openFile();
 		Media[] mediaList = gson.fromJson(json, Media[].class);
@@ -247,12 +256,56 @@ public class UI extends JFrame implements EventListener {
 		}
 
 		for (Media media : mediaList) {
+			// TODO Make sure it Download Media while Importing?
+			// NOTE This might be done in the Media Creation
 			if (!db.createMedia(media)) {
 				System.err.println("Failed to create media: " + media.getName());
 			}
 		}
 		return true;
+	}
 
+	/**
+	 * Export the Current User onto a Json File
+	 *
+	 * @return true if the export was successful, false otherwise
+	 */
+	public Boolean exportUser() {
+		Media[] media = db.exportUserRelation(this.currentUser.getId()); // Pull all Media and UserData Related to User
+		// Add Media to User
+		this.currentUser.setMediaRelation(media);
+		// Create a New Json
+		String json = gson.toJson(this.currentUser);
+		saveFile("User_Export", json);
+		return true;
+	}
+
+	public Boolean importUser() {
+		String json = openFile();
+		User newUser = gson.fromJson(json, User.class);
+		// Throw an error if user is null
+		if (newUser == null) {
+			return false;
+		}
+
+		// Add user to DB
+		if (!db.createUser(newUser)) {
+			return false;
+		}
+
+		// Add Media that Relate to User
+		for (Media media : newUser.getMediaRelation()) {
+			// TODO Make sure it Download Media while Importing?
+			// NOTE This might be done in the Media Creation
+			if (!db.createMedia(media)) {
+				System.err.println("Failed to create media: " + media.getName());
+			}
+			// Add UserDate to DB
+			if (!db.createUserData(newUser.getId(), media.getId(), media.getUserData())) {
+				System.err.println("Failed to create user media relation: " + media.getName());
+			}
+		}
+		return true;
 	}
 
 	// API Shells

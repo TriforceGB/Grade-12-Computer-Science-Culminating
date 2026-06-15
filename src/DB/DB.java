@@ -535,4 +535,44 @@ public class DB {
 			return false;
 		}
 	}
+
+	/**
+	 * Export all Media Related to a User
+	 *
+	 * @param userId the User's id (int)
+	 * @return an array of Media related to the User
+	 */
+	public Media[] exportUserRelation(int userId) {
+		try (PreparedStatement stmt = dbConnect.prepareStatement(Query.EXPORT_USER_RELATION)) {
+			stmt.setInt(1, userId);
+			ResultSet rs = stmt.executeQuery();
+
+			Media[] mediaArray = new Media[rs.getInt("count")];
+			int i = 0;
+			while (rs.next()) {
+				mediaArray[i] = new Media(
+						rs.getInt("id"),
+						rs.getInt("type"),
+						rs.getInt("externalId"),
+						rs.getString("name"),
+						rs.getString("description"),
+						rs.getInt("episodeCount"),
+						rs.getString("posterPath"),
+						rs.getString("posterLink"),
+						rs.getInt("status"),
+						rs.getString("startDate"),
+						rs.getString("finishDate"),
+						rs.getInt("rating"),
+						rs.getInt("lastEpisode"),
+						rs.getString("review"),
+						rs.getInt("rewatched"));
+				i++;
+			}
+			return mediaArray;
+		} catch (Exception e) {
+			System.err.println("Exception While Finding Related Info:");
+			e.printStackTrace();
+			return null;
+		}
+	}
 }

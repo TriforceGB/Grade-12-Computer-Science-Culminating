@@ -12,6 +12,10 @@ public class User {
 	private String created;
 	private String lastLogin;
 
+	// Extra
+	private Media[] mediaRelation; // Stores all Media that is connected to User (Ie they have a relationship with
+									// it because of UserData)
+
 	/**
 	 * Create the User Object
 	 *
@@ -94,4 +98,11 @@ public class User {
 		this.lastLogin = lastLogin;
 	}
 
+	public Media[] getMediaRelation() {
+		return mediaRelation;
+	}
+
+	public void setMediaRelation(Media[] mediaRelation) {
+		this.mediaRelation = mediaRelation;
+	}
 }
