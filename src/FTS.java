@@ -26,7 +26,5 @@ public class FTS {
 		db = new DB(DB_PATH);
 		api = new API(TVDB_API_KEY, gson);
 		ui = new UI(db, api, gson);
-
-		MoniagaStringList msl = new MoniagaStringList();
 	}
 }
