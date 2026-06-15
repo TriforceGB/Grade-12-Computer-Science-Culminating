@@ -1,6 +1,8 @@
 package UI.Pages;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -9,6 +11,7 @@ import java.awt.Insets;
 import java.io.File;
 
 import javax.swing.BorderFactory;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -21,7 +24,10 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.Border;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableColumnModel;
 
 import DTO.LocalDB.Media;
 import UI.Style;
@@ -81,8 +87,8 @@ public class ListPage extends Page {
 	private JButton refreshButton;
 
 	private final String PATH_FOR_DEFAULT_IMAGE = "assets/UI/filal.png";
-	private final int POSTER_WIDTH = 33;
-	private final int POSTER_HEIGHT = 50;
+	private final int POSTER_WIDTH = 100;
+	private final int POSTER_HEIGHT = 150;
 
 	private final Border border = BorderFactory.createLineBorder(Style.BORDER_COLOR, 4, true); // true allows for
 																								// rounded
@@ -429,6 +435,61 @@ public class ListPage extends Page {
 		listTable.getTableHeader().setForeground(Style.TEA_GREEN);
 		listTable.getTableHeader().setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR));
 		listTable.setRowHeight(POSTER_HEIGHT); // for poster height accounting
+
+		// column resizizing
+		listTable.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
+		TableColumnModel cM = listTable.getColumnModel();
+		cM.getColumn(0).setPreferredWidth(POSTER_WIDTH);
+		cM.getColumn(1).setPreferredWidth(500);
+		cM.getColumn(2).setPreferredWidth(90);
+		cM.getColumn(3).setPreferredWidth(50);
+		cM.getColumn(4).setPreferredWidth(50);
+		// cM.getColumn(5).setPreferredWidth(60);
+
+		// set table renderer for main objects
+		listTable.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+			@Override
+			public Component getTableCellRendererComponent(JTable t, Object val,
+					boolean isSelected, boolean hasFocus, int row, int col) {
+
+				super.getTableCellRendererComponent(t, val, isSelected, hasFocus, row, col);
+
+				setHorizontalAlignment(DefaultTableCellRenderer.CENTER);
+
+				setFont(Style.BASE_FONT);
+
+				setBackground(Style.EMERALD);
+				setForeground(Color.WHITE);
+
+				return this;
+			}
+		});
+
+		// set table renderer for imageicon
+		listTable.setDefaultRenderer(ImageIcon.class, new DefaultTableCellRenderer() {
+			@Override
+			public Component getTableCellRendererComponent(JTable t, Object val,
+					boolean isSelected, boolean hasFocus, int row, int col) {
+
+				super.getTableCellRendererComponent(t, val, isSelected, hasFocus, row, col);
+
+				setHorizontalAlignment(DefaultTableCellRenderer.CENTER);
+
+				if (val instanceof Icon) {
+					setIcon((ImageIcon)val);
+					setText("");
+				}
+
+				setBackground(Style.EMERALD);
+				setForeground(Color.WHITE);
+
+				return this;
+			}
+		});
+
+		// do header mods
+		listTable.getTableHeader().setFont(Style.HEADER_FONT);
+
 		tableScrollContainer = new JScrollPane(listTable);
 		tableScrollContainer.setBackground(Style.BALTIC_BLUE);
 		tableScrollContainer.setBorder(border);
