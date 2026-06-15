@@ -211,8 +211,8 @@ public class LoginPage extends Page {
 		loginButton.setFont(Style.BASE_FONT);
 		loginButton.setBackground(Style.LIGHT_GREEN);
 		loginButton.setForeground(Style.BALTIC_BLUE);
-		ImageIcon loginicon = ui.resizeImg(new ImageIcon("assets/UI/loginicon.png"), 30, 30);
-		loginButton.setIcon(loginicon);
+		ImageIcon loginIcon = ui.resizeImg(new ImageIcon("assets/UI/loginicon.png"), 30, 30);
+		loginButton.setIcon(loginIcon);
 		loginButton.setHorizontalAlignment(JLabel.RIGHT);
 		loginButton.setHorizontalAlignment(SwingConstants.CENTER);
 		loginButton.setVerticalAlignment(SwingConstants.CENTER);

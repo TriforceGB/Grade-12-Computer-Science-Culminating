@@ -156,11 +156,11 @@ public class SettingsPage extends Page {
 		impUserButton.addActionListener(e -> {
 			if (ui.importUser()) {
 				// Change is Made
-				JOptionPane.showMessageDialog(this, "Successfully Imported Media", "Success",
+				JOptionPane.showMessageDialog(this, "Successfully Imported User", "Success",
 						JOptionPane.INFORMATION_MESSAGE);
 			} else {
 				// Change wasn't made
-				JOptionPane.showMessageDialog(this, "Unable to Import Media, Try again", "Error",
+				JOptionPane.showMessageDialog(this, "Unable to Import User, Try again", "Error",
 						JOptionPane.ERROR_MESSAGE);
 			}
 		});

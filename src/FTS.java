@@ -1,12 +1,8 @@
 import UI.UI;
-import Util.MoniagaStringList;
 import DB.DB;
+import API.API;
 
 import com.google.gson.Gson;
-
-import API.API;
-import DB.DB;
-import UI.UI;
 
 public class FTS {
 	// Settings
@@ -20,11 +16,10 @@ public class FTS {
 	private static API api;
 	private static Gson gson;
 
-
 	public static void main(String[] args) {
 		gson = new Gson();
-		db = new DB(DB_PATH);
 		api = new API(TVDB_API_KEY, gson);
+		db = new DB(DB_PATH);
 		ui = new UI(db, api, gson);
 	}
 }
