@@ -3,6 +3,17 @@ public class MoniagaStringList {
     private String[] items;
     private int count;
 
+    public MoniagaStringList() {
+        items = new String[0];
+        count = 0;
+    }
+
+    public MoniagaStringList(String[] startVals) {
+        for (int i = 0; i < startVals.length; i++) {
+            add(startVals[i]);
+        }
+    }
+
     public int count() {
         return count;
     }

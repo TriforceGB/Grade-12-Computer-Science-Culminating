@@ -1,4 +1,5 @@
 import UI.UI;
+import Util.MoniagaStringList;
 import DB.DB;
 
 import com.google.gson.Gson;
@@ -25,5 +26,7 @@ public class FTS {
 		db = new DB(DB_PATH);
 		api = new API(TVDB_API_KEY, gson);
 		ui = new UI(db, api, gson);
+
+		MoniagaStringList msl = new MoniagaStringList();
 	}
 }
