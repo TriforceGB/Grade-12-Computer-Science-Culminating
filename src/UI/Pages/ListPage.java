@@ -362,6 +362,7 @@ public class ListPage extends Page {
 			clearListTable(); // clears the table so ready for adding
 			String nameToCheck = nameFilter.getText();
 			// TODO make work here
+
 			// refer to selectedOptions moniaga string list (has docs)
 			int minRatingToCheck = (int) minRating.getValue();
 			int maxRatingToCheck = (int) maxRating.getValue();
@@ -436,15 +437,15 @@ public class ListPage extends Page {
 		listTable.getTableHeader().setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR));
 		listTable.setRowHeight(POSTER_HEIGHT); // for poster height accounting
 
-		// column resizizing
-		listTable.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
+		// column resizing
+		listTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 		TableColumnModel cM = listTable.getColumnModel();
 		cM.getColumn(0).setPreferredWidth(POSTER_WIDTH);
-		cM.getColumn(1).setPreferredWidth(500);
+		cM.getColumn(1).setPreferredWidth(450);
 		cM.getColumn(2).setPreferredWidth(90);
 		cM.getColumn(3).setPreferredWidth(50);
 		cM.getColumn(4).setPreferredWidth(50);
-		// cM.getColumn(5).setPreferredWidth(60);
+		cM.getColumn(5).setPreferredWidth(50);
 
 		// set table renderer for main objects
 		listTable.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
@@ -476,7 +477,7 @@ public class ListPage extends Page {
 				setHorizontalAlignment(DefaultTableCellRenderer.CENTER);
 
 				if (val instanceof Icon) {
-					setIcon((ImageIcon)val);
+					setIcon((ImageIcon) val);
 					setText("");
 				}
 
