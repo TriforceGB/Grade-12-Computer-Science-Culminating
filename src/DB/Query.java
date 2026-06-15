@@ -163,4 +163,14 @@ class Query {
 				JOIN UserData AS ud ON m.id = ud.mediaId
 				WHERE ud.userId = ?
 			""";
+	public static final String ALL_USER_REVIEW = """
+			SELECT
+				u.username,
+				ud.review,
+				ud.rating,
+				COUNT(*) OVER() AS count
+			FROM "UserData" AS ud
+			JOIN "User" AS u ON ud.userId = u.id
+			WHERE ud.mediaId = ?
+			""";
 }
