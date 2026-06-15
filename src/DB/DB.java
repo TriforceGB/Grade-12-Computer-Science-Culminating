@@ -400,6 +400,41 @@ public class DB {
 	}
 
 	/**
+	 * Find a Single Media to Return with Updated Values
+	 *
+	 * @param name
+	 * @param type
+	 * @param externalID
+	 * @return The Media that Matches the Variables
+	 */
+	public Media locateMedia(String name, int type, int externalID) {
+		try (PreparedStatement stmt = dbConnect.prepareStatement(Query.LOCATE_MEDIA)) {
+			stmt.setString(1, name);
+			stmt.setInt(2, type);
+			stmt.setInt(3, externalID);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				return new Media(
+						rs.getInt("id"),
+						rs.getInt("type"),
+						rs.getInt("externalId"),
+						rs.getString("name"),
+						rs.getString("description"),
+						rs.getInt("episodeCount"),
+						rs.getString("posterPath"),
+						rs.getString("posterLink"));
+			} else {
+				System.err.println("Can't Locate that Media");
+				return null;
+			}
+		} catch (SQLException e) {
+			System.err.println("Can't Locate that Media");
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	/**
 	 * This Export all Media Stored in the database into a Object that will be turn
 	 * into a Json by Gson. It can also be used to Just make a list of all Media in
 	 * the DB

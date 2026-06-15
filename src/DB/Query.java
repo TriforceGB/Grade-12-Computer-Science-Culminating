@@ -131,6 +131,15 @@ class Query {
 					count(*) OVER() AS count
 				FROM Media AS m
 			""";
+	public static final String LOCATE_MEDIA = """
+				SELECT
+					m.*
+				FROM Media AS m
+				WHERE
+					m.name = ? AND
+					m.type = ? AND
+					m.externalId = ?
+			""";
 	// User Data Query
 	// Create Edit Delete
 	public static final String CREATE_USERDATA = """

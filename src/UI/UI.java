@@ -23,6 +23,7 @@ import API.API;
 import DB.DB;
 import DTO.LocalDB.Media;
 import DTO.LocalDB.User;
+import DTO.LocalDB.Media.UserData;
 import UI.Pages.*;
 
 /**
@@ -281,6 +282,12 @@ public class UI extends JFrame implements EventListener {
 		return true;
 	}
 
+	/**
+	 * Taken in a Json and Create a user Base off that. Import all the show they
+	 * have Userdata connected too
+	 *
+	 * @return If the User was Imported
+	 */
 	public Boolean importUser() {
 		String json = openFile();
 		User newUser = gson.fromJson(json, User.class);
@@ -296,13 +303,22 @@ public class UI extends JFrame implements EventListener {
 			return false;
 		}
 
+		// Recreate the User with for the new ID
+		Media[] mediaRelation = newUser.getMediaRelation();
+		newUser = db.login(newUser.getUsername(), newUser.getPassword());
+
 		// Add Media that Relate to User
-		for (Media media : newUser.getMediaRelation()) {
+		for (Media media : mediaRelation) {
 			if (!db.createMedia(media) || !api.downloadImage(media)) {
 				System.err.println("Failed to create media: " + media.getName());
 			}
+
+			// Recreate the media with the new ID
+			UserData userData = media.getUserData();
+			media = db.locateMedia(media.getName(), media.getType(), media.getExternalId());
+
 			// Add UserDate to DB
-			if (!db.createUserData(newUser.getId(), media.getId(), media.getUserData())) {
+			if (!db.createUserData(newUser.getId(), media.getId(), userData)) {
 				System.err.println("Failed to create user media relation: " + media.getName());
 			}
 		}
