@@ -256,11 +256,6 @@ public class ListPage extends Page {
 
 				// set selected index 0
 				statusFilter.setSelectedIndex(0);
-
-				for (int i = 0; i < selectedOptions.count(); i++) {
-					System.out.println(selectedOptions.getAt(i));
-				}
-				System.out.println();
 			}
 		});
 
