@@ -60,7 +60,7 @@ public class ListPage extends Page {
 	private JLabel statusFilterLbl;
 
 	private JComboBox<String> statusFilter;
-	private final String[] SHOW_STATUS_OPTIONS = new String[] { "", "Undecided", "Backlog", "Watching", "Completed",
+	private final String[] SHOW_STATUS_OPTIONS = new String[] { "Undecided", "Backlog", "Watching", "Completed",
 			"Dropped" };
 
 	private JLabel minRatingLbl;
@@ -123,8 +123,7 @@ public class ListPage extends Page {
 		// add content panel to main panel
 		this.add(contentPanel);
 	}
-
-	// TODO Have them On by Default
+	
 	void addTypeCheckboxes() {
 		// three checkboxes in three different rows (type) (all require a label
 		// attached)
@@ -133,18 +132,21 @@ public class ListPage extends Page {
 		movieTypeLbl.setFont(Style.BASE_FONT);
 		movieTypeLbl.setForeground(Style.TEA_GREEN); // set the font color of the password label
 		movieType = new JCheckBox();
+		movieType.setSelected(true);
 		movieType.setBackground(Style.BALTIC_BLUE);
 
 		showTypeLbl = new JLabel("TV Show: ");
 		showTypeLbl.setFont(Style.BASE_FONT);
 		showTypeLbl.setForeground(Style.TEA_GREEN);
 		showType = new JCheckBox();
+		showType.setSelected(true);
 		showType.setBackground(Style.BALTIC_BLUE);
 
 		animeTypeLbl = new JLabel("Anime: ");
 		animeTypeLbl.setFont(Style.BASE_FONT);
 		animeTypeLbl.setForeground(Style.TEA_GREEN);
 		animeType = new JCheckBox();
+		animeType.setSelected(true);
 		animeType.setBackground(Style.BALTIC_BLUE);
 
 		gbc.gridx = 0; // col 1
@@ -298,6 +300,7 @@ public class ListPage extends Page {
 		searchButton.addActionListener(e -> {
 			clearListTable(); // clears the table so ready for adding
 			String nameToCheck = nameFilter.getText();
+			// TODO make select more than one
 			int statusToCheck = statusFilter.getSelectedIndex(); // NOTE Need to Let User Select More then One
 			int minRatingToCheck = (int) minRating.getValue();
 			int maxRatingToCheck = (int) maxRating.getValue();
