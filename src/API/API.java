@@ -22,11 +22,13 @@ public class API {
 	private Gson gson; // Reference to the Gson library
 	private AniList aniList; // Reference to the AniList API
 	private TheTVDB theTVDB; // Reference to the TheTVDB API
+	private ImageDownloader imageDownloader; // Reference to the ImageDownloader
 
 	public API(String tvdb_api_key, Gson gson) {
 		this.gson = gson;
 		this.aniList = new AniList(this.CLIENT, this.gson);
 		this.theTVDB = new TheTVDB(this.CLIENT, this.gson, tvdb_api_key);
+		this.imageDownloader = new ImageDownloader(this.CLIENT);
 	}
 
 	/**
@@ -78,5 +80,9 @@ public class API {
 			returnMedia[i] = new Media(foundAnime[i]);
 		}
 		return returnMedia; // Return Info as Media
+	}
+
+	public boolean downloadImage(Media media) {
+		return imageDownloader.downloadImage(media.getPosterLink(), media.getPosterPath());
 	}
 }

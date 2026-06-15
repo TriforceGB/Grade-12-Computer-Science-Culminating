@@ -18,8 +18,8 @@ public class FTS {
 
 	public static void main(String[] args) {
 		gson = new Gson();
-		db = new DB(DB_PATH);
 		api = new API(TVDB_API_KEY, gson);
+		db = new DB(DB_PATH);
 		ui = new UI(db, api, gson);
 	}
 }

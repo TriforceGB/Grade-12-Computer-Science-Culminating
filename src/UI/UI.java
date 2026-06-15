@@ -203,7 +203,9 @@ public class UI extends JFrame implements EventListener {
 	 * @return True if added, False if not
 	 */
 	public boolean createMedia(Media newMedia) {
-		return db.createMedia(newMedia);
+		boolean dbResult = db.createMedia(newMedia);
+		boolean apiResult = api.downloadImage(newMedia);
+		return dbResult && apiResult;
 	}
 
 	/**
