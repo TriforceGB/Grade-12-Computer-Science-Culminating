@@ -9,10 +9,14 @@ import java.awt.GridLayout;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -35,8 +39,8 @@ public class AdminUserPage extends Page {
 	JButton editBtn;
 	JButton delBtn;
 
-	private final Border BORDER = BorderFactory.createLineBorder(Style.BORDER_COLOR, 4, true); // true allows for
-																								// rounded
+	protected final Border BORDER = BorderFactory.createLineBorder(Style.BORDER_COLOR, 4, true); // true allows for
+																									// rounded
 
 	public AdminUserPage(UI ui) {
 		super(ui);
@@ -60,20 +64,20 @@ public class AdminUserPage extends Page {
 		this.add(contentPanel, BorderLayout.CENTER);
 	}
 
-	void createContentPanel() {
+	private void createContentPanel() {
 		contentPanel = new JPanel(new BorderLayout());
 	}
 
-	void createTableTitleLbl() {
+	private void createTableTitleLbl() {
 		tableTitleLbl = new JLabel("User DB");
 		tableTitleLbl.setFont(Style.HEADER_FONT);
 	}
 
-	void addTableTitleLbl() {
+	private void addTableTitleLbl() {
 		contentPanel.add(tableTitleLbl, BorderLayout.NORTH);
 	}
 
-	void createTable() {
+	private void createTable() {
 		tableModel = new DefaultTableModel(colNames, 0) {
 			@Override
 			public boolean isCellEditable(int row, int column) {
@@ -111,40 +115,123 @@ public class AdminUserPage extends Page {
 		tableScrollPane.getViewport().setBackground(PageColor);
 	}
 
-	void addTable() {
+	private void addTable() {
 		contentPanel.add(tableScrollPane, BorderLayout.CENTER);
 	}
 
-	void createBtnPanel() {
+	private void createBtnPanel() {
 		btnPanel = new JPanel(new GridLayout(1, 2, 10, 0));
 	}
 
-	void createEditBtn() {
+	private void createEditBtn() {
 		editBtn = new JButton("Edit");
 		editBtn.setFont(Style.BASE_FONT);
+		editBtn.addActionListener(e -> editRow());
 	}
 
-	void addEditBtn() {
+	private void editRow() {
+		// { "Id", "Username", "Password", "Is Admin", "Date Created", "Last Login" };
+		// TODO get selected row and only create if valid
+		if (userTable.getSelectedRow() != -1) {
+			JDialog editWindow = new JDialog();
+			editWindow.setTitle("Edit User Data");
+			editWindow.setSize(new Dimension(800, 600));
+			editWindow.setResizable(false);
+			editWindow.setLayout(new GridLayout(7, 2, 20, 20));
+
+			JLabel idLbl = new JLabel("Id: ");
+			idLbl.setFont(Style.BASE_FONT);
+			editWindow.add(idLbl);
+
+			JTextField idEdit = new JTextField(18);
+			idEdit.setFont(Style.BASE_FONT);
+			editWindow.add(idEdit);
+
+			JLabel usrLbl = new JLabel("Username: ");
+			usrLbl.setFont(Style.BASE_FONT);
+			editWindow.add(usrLbl);
+
+			JTextField usrEdit = new JTextField(18);
+			usrEdit.setFont(Style.BASE_FONT);
+			editWindow.add(usrEdit);
+
+			JLabel pwdLbl = new JLabel("Password: ");
+			pwdLbl.setFont(Style.BASE_FONT);
+			editWindow.add(pwdLbl);
+
+			JTextField pwdEdit = new JTextField(18);
+			pwdEdit.setFont(Style.BASE_FONT);
+			editWindow.add(pwdEdit);
+
+			JLabel isAdminLbl = new JLabel("Is Admin: ");
+			isAdminLbl.setFont(Style.BASE_FONT);
+			editWindow.add(isAdminLbl);
+
+			JComboBox<String> isAdminEdit = new JComboBox<String>(new String[] { "true", "false" });
+			isAdminEdit.setFont(Style.BASE_FONT);
+			editWindow.add(isAdminEdit);
+
+			JLabel dateCLbl = new JLabel("Date Created: ");
+			dateCLbl.setFont(Style.BASE_FONT);
+			editWindow.add(dateCLbl);
+
+			JTextField dateCEdit = new JTextField(18);
+			dateCEdit.setFont(Style.BASE_FONT);
+			editWindow.add(dateCEdit);
+
+			JLabel dateLLbl = new JLabel("Last Login: ");
+			dateLLbl.setFont(Style.BASE_FONT);
+			editWindow.add(dateLLbl);
+
+			JTextField dateLEdit = new JTextField(18);
+			dateLEdit.setFont(Style.BASE_FONT);
+			editWindow.add(dateLEdit);
+
+			JButton cancelButton = new JButton("Cancel");
+			cancelButton.setFont(Style.BASE_FONT);
+			cancelButton.addActionListener(e -> {
+				editWindow.dispose();
+			});
+			editWindow.add(cancelButton);
+
+			JButton okButton = new JButton("Ok");
+			okButton.setFont(Style.BASE_FONT);
+			okButton.addActionListener(e -> {
+				// TODO edit and update real variables
+
+				editWindow.dispose();
+			});
+			editWindow.add(okButton);
+
+			editWindow.setVisible(true);
+		} else {
+			JOptionPane.showMessageDialog(this,
+					"No row selected. Please select a row of a show you would like to open.", "Warning",
+					JOptionPane.WARNING_MESSAGE);
+		}
+	}
+
+	private void addEditBtn() {
 		btnPanel.add(editBtn);
 	}
 
-	void createDelBtn() {
+	private void createDelBtn() {
 		delBtn = new JButton("Del");
 		delBtn.setFont(Style.BASE_FONT);
 	}
 
-	void addDelBtn() {	
+	private void addDelBtn() {
 		btnPanel.add(delBtn);
 	}
 
-	void addBtnPanel() {
+	private void addBtnPanel() {
 		contentPanel.add(btnPanel, BorderLayout.SOUTH);
 	}
 
 	public void loadData() {
 		for (int i = 0; i < 50; i++) {
 			// { "Id", "Username", "Password", "Is Admin", "Date Created", "Last Login" };
-			Object[] data = new Object[] {"42", "Zach", "ZachIsGreat", "true", "07/07/1991", "09/08/2000"};
+			Object[] data = new Object[] { "42", "Zach", "ZachIsGreat", "true", "07/07/1991", "09/08/2000" };
 			tableModel.addRow(data);
 		}
 	}
