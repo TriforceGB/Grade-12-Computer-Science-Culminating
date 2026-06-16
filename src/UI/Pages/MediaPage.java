@@ -3,24 +3,79 @@ package UI.Pages;
 import UI.Style;
 import UI.UI;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.io.File;
+import java.util.concurrent.ThreadLocalRandom;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
 
+import DTO.LocalDB.Media;
 
 /**
  * The Media Page Class. Used to display the media for the user.
  */
 public class MediaPage extends Page {
+	private final int POSTER_WIDTH = 150;
+	private final int POSTER_HEIGHT = 225;
+	private final String DEFAULT_POSTER_IMAGE_PATH = "assets/UI/filal.png";
+
+	private JPanel westSidePanel;
+	private GridBagConstraints gbc;
+	private JPanel eastSidePanel;
+	private JPanel southEastSidePanel;
+
+	private JLabel poster;
+	private JLabel startDateLabel;
+	private JLabel finishDateLabel;
+	private JTextField startDateField;
+	private JTextField finishDateField;
+
+	private JPanel infEastSidePanel;
+
+	private JLabel titleLabel;
+	private JLabel showType;
+	private JLabel descLabel;
+	private final int CPERLINE_DESC = 40;
+	private final int MAXPASS_DESC = 5;
+	private JLabel statusLabel;
+	private final String[] TYPES = new String[] { "Undecided", "Dropped", "Backlog", "Watching", "Completed" };
+	private JComboBox<String> statusSelector;
+	private JLabel usrRatingLabel;
+	private JSpinner usrRatingSelector;
+	private JLabel rewatchLabel;
+	private JSpinner rewatchesSelector;
+	private JLabel cEpLabel;
+	private JSpinner cEpSelector;
+	private SpinnerNumberModel cEpSpinnerModel;
+
+	private JPanel usrReviewsSidePanel;
+	private JLabel usrReviewsTitleLabel;
+	private JPanel scrollContentPanel;
+	private JScrollPane usrReviewsScrollPane;
+
+	private JButton backButton;
+	private JButton saveButton;
+	private JButton addEditReviewButton;
+
+	private final int CPERLINE_REVIEW_COMMENT = 80;
+	private final int MAXPASS_REVIEW_COMMENT = 5;
+
+	private String panelToSendBackTo;
+
 	/**
 	 * Create the Media Page
 	 *
@@ -29,39 +84,57 @@ public class MediaPage extends Page {
 	 *
 	 */
 
-	private final int POSTER_WIDTH = 150;
-	private final int POSTER_HEIGHT = 225;
-	private final String POSTER_IMAGE_PATH = "assets/UI/filal.png";
-
-	// TODO refactor to functions and have public function to modify vals
-
 	public MediaPage(UI ui) {
 		super(ui); // Uses the basic page layout and background color
-		JPanel westSidePanel = new JPanel(new GridBagLayout()); 
-		GridBagConstraints gbc = new GridBagConstraints();
-		JPanel eastSidePanel = new JPanel(new BorderLayout());
-		JPanel southEastSidePanel = new JPanel(new GridBagLayout());
 
-		JLabel poster = new JLabel();
+		createPagePanels();
+
+		createEastDisplayComponents();
+		formatEastSideDisplayComponents();
+
+		createMainInfDisplayComponents();
+		formatMainInfDisplayComponents();
+
+		createFormatUsrReviewsSidePanel();
+
+		addSidePanelsToMain();
+
+		addButtonsToSouth();
+
+		this.add(westSidePanel, BorderLayout.WEST);
+		this.add(eastSidePanel, BorderLayout.CENTER);
+		this.add(southEastSidePanel, BorderLayout.SOUTH);
+	}
+
+	void createPagePanels() {
+		westSidePanel = new JPanel(new GridBagLayout());
+		gbc = new GridBagConstraints();
+		eastSidePanel = new JPanel(new BorderLayout());
+		southEastSidePanel = new JPanel(new GridBagLayout());
+	}
+
+	void createEastDisplayComponents() {
+		poster = new JLabel();
 		poster.setPreferredSize(new Dimension(POSTER_WIDTH, POSTER_HEIGHT));
-		poster.setIcon(ui.resizeImg(new ImageIcon(POSTER_IMAGE_PATH), POSTER_WIDTH, POSTER_HEIGHT));
+		poster.setIcon(ui.resizeImg(new ImageIcon(DEFAULT_POSTER_IMAGE_PATH), POSTER_WIDTH, POSTER_HEIGHT));
 
-		JLabel startDateLabel = new JLabel("Start Date: ");
+		startDateLabel = new JLabel("Start Date: ");
 		startDateLabel.setFont(Style.BASE_FONT);
 
-		JLabel endDateLabel = new JLabel("End Date: ");
-		endDateLabel.setFont(Style.BASE_FONT);
+		finishDateLabel = new JLabel("End Date: ");
+		finishDateLabel.setFont(Style.BASE_FONT);
 
-
-		JTextField startDateField = new JTextField(12);
+		startDateField = new JTextField(12);
 		startDateField.setText("YYYY-MM-DD");
 		startDateField.setFont(Style.BASE_FONT);
 		startDateField.setEditable(false);
-		JTextField endDateField = new JTextField(12);
-		endDateField.setText("YYYY-MM-DD");
-		endDateField.setFont(Style.BASE_FONT);
-		endDateField.setEditable(false);
+		finishDateField = new JTextField(12);
+		finishDateField.setText("YYYY-MM-DD");
+		finishDateField.setFont(Style.BASE_FONT);
+		finishDateField.setEditable(false);
+	}
 
+	void formatEastSideDisplayComponents() {
 		gbc.gridy = 0;
 		gbc.gridx = 0; // constant
 		gbc.insets = new Insets(50, 50, 30, 50);
@@ -77,138 +150,138 @@ public class MediaPage extends Page {
 
 		gbc.gridy = 3;
 		gbc.insets = new Insets(0, 50, 0, 50);
-		westSidePanel.add(endDateLabel, gbc);
+		westSidePanel.add(finishDateLabel, gbc);
 
 		gbc.gridy = 4;
 		gbc.insets = new Insets(0, 50, 0, 50);
-		westSidePanel.add(endDateField, gbc);
-		
+		westSidePanel.add(finishDateField, gbc);
+	}
 
-		JPanel infEastSidePanel = new JPanel(new GridBagLayout());
+	void createMainInfDisplayComponents() {
+		infEastSidePanel = new JPanel(new GridBagLayout());
 		gbc = new GridBagConstraints(); // refresh components
 
-
-		JLabel titleLabel = new JLabel("Testing Title");
+		titleLabel = new JLabel("Blank Insert Placeholder Title");
 		titleLabel.setFont(Style.TITLE_FONT);
 
+		showType = new JLabel("Blank Type");
+		showType.setFont(Style.BASE_FONT);
+
+		descLabel = new JLabel(ui.getHtmlFormatText(
+				"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc faucibus urna justo, ac egestas nibh malesuada sed. Cras sit amet mi aliquet, accumsan quam a, hendrerit libero. Nullam aliquet augue et arcu facilisis, quis fermentum est pellentesque. Vivamus sodales, eros sit amet aliquet placerat, felis metus hendrerit ex, a molestie nunc tortor ut erat. Ut placerat laoreet erat, auctor pulvinar urna aliquam at. Mauris varius nisi eget faucibus blandit. Duis at ornare libero. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean imperdiet elementum neque fermentum sagittis. Suspendisse potenti. Maecenas cursus pellentesque blandit. Nulla quis erat massa. Donec a sapien.",
+				CPERLINE_DESC, MAXPASS_DESC));
+		descLabel.setFont(Style.SMALL_DESC_FONT);
+
+		statusLabel = new JLabel("Status");
+		statusLabel.setFont(Style.BASE_FONT);
+
+		statusSelector = new JComboBox<String>(TYPES);
+		statusSelector.setFont(Style.BASE_FONT);
+
+		usrRatingLabel = new JLabel("Your Rating: ");
+		usrRatingLabel.setFont(Style.BASE_FONT);
+
+		usrRatingSelector = new JSpinner(new SpinnerNumberModel(0, 0, 10, 1));
+		usrRatingSelector.setFont(Style.BASE_FONT);
+
+		rewatchLabel = new JLabel("Rewatch: ");
+		rewatchLabel.setFont(Style.BASE_FONT);
+
+		rewatchesSelector = new JSpinner(new SpinnerNumberModel(0, 0, Integer.MAX_VALUE, 1));
+		rewatchesSelector.setFont(Style.BASE_FONT);
+
+		cEpLabel = new JLabel("Current Episode: ");
+		cEpLabel.setFont(Style.BASE_FONT);
+
+		cEpSpinnerModel = new SpinnerNumberModel(0, 0, 0, 0);
+		cEpSelector = new JSpinner(cEpSpinnerModel);
+		cEpSelector.setFont(Style.BASE_FONT);
+	}
+
+	void formatMainInfDisplayComponents() {
 		gbc.gridy = 0;
 		gbc.gridx = 0;
 		gbc.insets = new Insets(20, 40, 0, 0);
-		infEastSidePanel.add(titleLabel,gbc);
-
-		JLabel showType = new JLabel("Some type");
-		showType.setFont(Style.BASE_FONT);
+		infEastSidePanel.add(titleLabel, gbc);
 
 		gbc.gridy = 0;
 		gbc.gridx = 1;
 		gbc.insets = new Insets(20, 20, 0, 0);
-		infEastSidePanel.add(showType,gbc);
-
-		JLabel descLabel = new JLabel("This is a long description of events....");
-		descLabel.setFont(Style.BASE_FONT);
+		infEastSidePanel.add(showType, gbc);
 
 		gbc.gridy = 1;
 		gbc.gridx = 0;
 		gbc.insets = new Insets(10, 40, 80, 0);
-		infEastSidePanel.add(descLabel,gbc);
-
-		JLabel statusLabel = new JLabel("Status");
-		statusLabel.setFont(Style.BASE_FONT);
+		infEastSidePanel.add(descLabel, gbc);
 
 		gbc.gridy = 2;
 		gbc.gridx = 0;
 		gbc.insets = new Insets(0, 40, 10, 0);
-		infEastSidePanel.add(statusLabel,gbc);
-
-		JTextField statusField = new JTextField(10);
-		statusField.setFont(Style.BASE_FONT);
-		statusField.setEditable(false);
+		infEastSidePanel.add(statusLabel, gbc);
 
 		gbc.gridy = 3;
 		gbc.gridx = 0;
 		gbc.insets = new Insets(0, 40, 10, 0);
-		infEastSidePanel.add(statusField,gbc);
-
-		JLabel usrRatingLabel = new JLabel("Your Rating: ");
-		usrRatingLabel.setFont(Style.BASE_FONT);
+		infEastSidePanel.add(statusSelector, gbc);
 
 		gbc.gridy = 2;
 		gbc.gridx = 1;
 		gbc.insets = new Insets(0, 0, 10, 0);
-		infEastSidePanel.add(usrRatingLabel,gbc);
-
-		JTextField usrRatingField = new JTextField(10);
-		usrRatingField.setFont(Style.BASE_FONT);
-		usrRatingField.setEditable(false);
+		infEastSidePanel.add(usrRatingLabel, gbc);
 
 		gbc.gridy = 3;
 		gbc.gridx = 1;
 		gbc.insets = new Insets(0, 20, 10, 0);
-		infEastSidePanel.add(usrRatingField,gbc);
-
-		JLabel rewatchLabel = new JLabel("Rewatch: ");
-		rewatchLabel.setFont(Style.BASE_FONT);
+		infEastSidePanel.add(usrRatingSelector, gbc);
 
 		gbc.gridy = 2;
 		gbc.gridx = 2;
 		gbc.insets = new Insets(0, 20, 10, 0);
-		infEastSidePanel.add(rewatchLabel,gbc);
-
-		JTextField rewatchField = new JTextField(10);
-		rewatchField.setFont(Style.BASE_FONT);
-		rewatchField.setEditable(false);
+		infEastSidePanel.add(rewatchLabel, gbc);
 
 		gbc.gridy = 3;
 		gbc.gridx = 2;
 		gbc.insets = new Insets(0, 0, 10, 0);
-		infEastSidePanel.add(rewatchField,gbc);
-
-		JLabel cEpLabel = new JLabel("Current Episode: ");
-		cEpLabel.setFont(Style.BASE_FONT);
+		infEastSidePanel.add(rewatchesSelector, gbc);
 
 		gbc.gridy = 4;
 		gbc.gridx = 0;
 		gbc.insets = new Insets(0, 40, 10, 0);
-		infEastSidePanel.add(cEpLabel,gbc);
-
-		JTextField cEpField = new JTextField(10);
-		cEpField.setFont(Style.BASE_FONT);
-		cEpField.setEditable(false);
+		infEastSidePanel.add(cEpLabel, gbc);
 
 		gbc.gridy = 5;
 		gbc.gridx = 0;
 		gbc.insets = new Insets(0, 40, 10, 0);
-		infEastSidePanel.add(cEpField,gbc);
+		infEastSidePanel.add(cEpSelector, gbc);
+	}
 
-		JPanel usrReviewsSidePanel = new JPanel(new BorderLayout());
+	void createFormatUsrReviewsSidePanel() {
+		usrReviewsSidePanel = new JPanel(new BorderLayout());
 
-		JLabel usrReviewsTitleLabel = new JLabel("User Reviews: ");
+		usrReviewsTitleLabel = new JLabel("User Reviews: ");
 		usrReviewsTitleLabel.setFont(Style.BASE_FONT);
-		JPanel scrollContentPanel = new JPanel(new GridLayout(0, 1, 0, 10));
-		JScrollPane usrReviewsScrollPane = new JScrollPane(scrollContentPanel);
+		scrollContentPanel = new JPanel(new GridLayout(0, 1, 0, 10));
+		usrReviewsScrollPane = new JScrollPane(scrollContentPanel);
 		usrReviewsScrollPane.setPreferredSize(new Dimension(250, 0));
 		usrReviewsScrollPane.getVerticalScrollBar().setUnitIncrement(16);
+	}
 
-		// TODO load user reviews
-		int test = 100;
-		for (int i = 0; i < test; i++) {
-			scrollContentPanel.add(getReviewPanel());
-		}
-
+	void addSidePanelsToMain() {
 		usrReviewsSidePanel.add(usrReviewsTitleLabel, BorderLayout.NORTH);
 		usrReviewsSidePanel.add(usrReviewsScrollPane, BorderLayout.CENTER);
 
 		eastSidePanel.add(infEastSidePanel, BorderLayout.WEST);
 		eastSidePanel.add(usrReviewsSidePanel, BorderLayout.CENTER);
+	}
 
+	void addButtonsToSouth() {
 		gbc = new GridBagConstraints();
 
-		JButton backButton = new JButton("Back");
+		backButton = new JButton("Back");
 		backButton.setFont(Style.BASE_FONT);
 		backButton.setPreferredSize(new Dimension(300, 50));
 		backButton.addActionListener(e -> {
-			// TODO verify what panel was last
-			ui.switchPanel("home");
+			ui.switchPanel(panelToSendBackTo);
 		});
 
 		gbc.gridy = 0; // constant
@@ -217,7 +290,7 @@ public class MediaPage extends Page {
 
 		southEastSidePanel.add(backButton, gbc);
 
-		JButton saveButton = new JButton("Save");
+		saveButton = new JButton("Save");
 		saveButton.setPreferredSize(new Dimension(300, 50));
 		saveButton.setFont(Style.BASE_FONT);
 
@@ -226,7 +299,7 @@ public class MediaPage extends Page {
 
 		southEastSidePanel.add(saveButton, gbc);
 
-		JButton addEditReviewButton = new JButton("Add/Edit Review");
+		addEditReviewButton = new JButton("Add/Edit Review");
 		addEditReviewButton.setPreferredSize(new Dimension(300, 50));
 		addEditReviewButton.setFont(Style.BASE_FONT);
 
@@ -234,24 +307,22 @@ public class MediaPage extends Page {
 		gbc.insets = new Insets(0, 0, 0, 0);
 
 		southEastSidePanel.add(addEditReviewButton, gbc);
-
-		this.add(westSidePanel, BorderLayout.WEST);
-		this.add(eastSidePanel,BorderLayout.CENTER);
-		this.add(southEastSidePanel, BorderLayout.SOUTH);
 	}
 
 	JPanel getReviewPanel() {
 		JPanel result = new JPanel(new GridBagLayout());
+		result.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3, true));
 		GridBagConstraints gbc2 = new GridBagConstraints();
 
 		String name = "Bilal Faruqi";
 		JLabel usrName = new JLabel(name);
 
-		int rating = 8;
-		JLabel usrRating = new JLabel(String.valueOf(rating));
+		String comment = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam vitae est molestie, volutpat augue eu, eleifend lacus. Cras sollicitudin eu lorem eget facilisis. Praesent risus felis, facilisis vel turpis eu, ornare vehicula ex. Quisque varius sollicitudin nisl, nec vehicula erat.";
+		JLabel usrComment = new JLabel(ui.getHtmlFormatText(comment, CPERLINE_REVIEW_COMMENT, MAXPASS_REVIEW_COMMENT));
+		usrComment.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1, true));
 
-		String comment = "This show has too many bad boys to be a good show...";
-		JLabel usrComment = new JLabel(comment);
+		int rating = 8;
+		JLabel usrRating = new JLabel(rating + "/10");
 
 		gbc2.gridy = 0;
 		gbc2.gridx = 0;
@@ -259,12 +330,41 @@ public class MediaPage extends Page {
 
 		gbc2.gridy = 1;
 		gbc2.gridx = 0;
+		gbc2.insets = new Insets(5, 0, 0, 20);
 		result.add(usrComment, gbc2);
 
 		gbc2.gridy = 1;
 		gbc2.gridx = 1;
+		gbc2.insets = new Insets(5, 0, 0, 0);
 		result.add(usrRating, gbc2);
 
 		return result;
+	}
+
+	public void setupMediaPanel(Media obj, String panelName) {
+		panelToSendBackTo = panelName;
+
+		// then load data
+		File posterFile = new File(obj.getPosterPath());
+		if (posterFile.exists())
+			poster.setIcon(ui.resizeImg(new ImageIcon(obj.getPosterPath()), POSTER_WIDTH, POSTER_HEIGHT));
+		else
+			poster.setIcon(ui.resizeImg(new ImageIcon(DEFAULT_POSTER_IMAGE_PATH), POSTER_WIDTH, POSTER_HEIGHT));
+		startDateField.setText(obj.getStartDate());
+		finishDateField.setText(obj.getFinishDate());
+		titleLabel.setText(obj.getName());
+		int showTypeInt = obj.getType();
+		showType.setText("ZACH MAKE NOT STRING.");
+		descLabel.setText(ui.getHtmlFormatText(obj.getDescription(), CPERLINE_DESC, MAXPASS_DESC));
+		statusSelector.setSelectedIndex(obj.getStatus()); // but we love you for this one now. only for now
+		usrRatingSelector.setValue(obj.getRating());
+		rewatchesSelector.setValue(obj.getRewatched());
+		cEpSelector.setValue(obj.getLastEpisode());
+
+		// TODO load all existing usr reviews
+		int test = ThreadLocalRandom.current().nextInt(0, 5);
+		for (int i = 0; i < test; i++) {
+			scrollContentPanel.add(getReviewPanel());
+		}
 	}
 }

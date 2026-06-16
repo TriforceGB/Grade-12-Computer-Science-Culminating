@@ -128,6 +128,8 @@ public class SearchPage extends Page {
 		searchField.setForeground(Style.BALTIC_BLUE);
 		searchField.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR));
 
+		searchField.addActionListener(e -> runSearch());
+
 		gbc.gridy = 0; // only one row
 		gbc.gridx = 1; // col 2
 
@@ -185,9 +187,13 @@ public class SearchPage extends Page {
 		// padding for 20px right to match offset from searchField
 		gbc.insets = new Insets(0, 0, 10, 20);
 
-		searchBtn.addActionListener(e -> procureSearches(10, searchField.getText(), searchTypeBox.getSelectedIndex()));
+		searchBtn.addActionListener(e -> runSearch());
 
 		searchPanel.add(searchBtn, gbc);
+	}
+
+	void runSearch() {
+		procureSearches(10, searchField.getText(), searchTypeBox.getSelectedIndex());
 	}
 
 	void addListScrollContainer() {

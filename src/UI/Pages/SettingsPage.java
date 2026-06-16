@@ -198,7 +198,7 @@ public class SettingsPage extends Page {
 			}
 
 		});
-		adminButton.addActionListener(e -> ui.logout()); // TODO
+		adminButton.addActionListener(e -> ui.logout());
 
 		// Stat Panel
 		// TODO: Michael pls do this
@@ -210,10 +210,10 @@ public class SettingsPage extends Page {
 		buttonPanel.add(expMediaButton);
 		buttonPanel.add(impMediaButton);
 		buttonPanel.add(delUserButton);
-		buttonPanel.add(adminButton); // TODO (make sure only admins can see this button)
+		// TODO get if user is admin
+		buttonPanel.add(adminButton); 
 
 		buttonPanel.setBorder(BorderFactory.createEmptyBorder(300, 250, 300, 850));
-		// TODO STILL NEED STAT PANEL
 
 		contentPanel.add(buttonPanel, BorderLayout.CENTER);
 		contentPanel.add(statPanel, BorderLayout.LINE_END);

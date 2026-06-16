@@ -17,6 +17,7 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
@@ -84,6 +85,7 @@ public class ListPage extends Page {
 
 	private JButton searchButton;
 	private JButton refreshButton;
+	private JButton openButton;
 
 	private final String PATH_FOR_DEFAULT_IMAGE = "assets/UI/filal.png";
 	private final int POSTER_WIDTH = 100;
@@ -92,6 +94,9 @@ public class ListPage extends Page {
 	private final Border border = BorderFactory.createLineBorder(Style.BORDER_COLOR, 4, true); // true allows for
 																								// rounded
 
+	private final int CPERLINE_TITLE = 38;
+	private final int MAXPASS = 5;
+	
 	/**
 	 * Create the List Page
 	 *
@@ -111,6 +116,7 @@ public class ListPage extends Page {
 		addRatingSelectorButtons();
 		addSearchButton();
 		addRefreshButton();
+		addOpenButton();
 
 		createListPanel();
 
@@ -411,10 +417,7 @@ public class ListPage extends Page {
 		filterPanel.add(searchButton, gbc);
 	}
 
-	/**
-	 * Does Nothing?
-	 * TODO REMOVE?
-	 */
+	// TODO prepare default search
 	void addRefreshButton() {
 		refreshButton = new JButton("Refresh");
 		refreshButton.setBackground(Style.LIGHT_GREEN);
@@ -430,6 +433,32 @@ public class ListPage extends Page {
 		gbc.gridy = 6; // row 7
 		gbc.gridx = 1; // col 2
 		filterPanel.add(refreshButton, gbc);
+	}
+
+	void addOpenButton() {
+		openButton = new JButton("Open Button");
+		openButton.setBackground(Style.LIGHT_GREEN);
+		openButton.setForeground(Style.BALTIC_BLUE);
+		openButton.setFont(Style.BASE_FONT);
+		ui.addButtonImg(openButton, new ImageIcon("assets/UI/exporticon.png"), 20, 30, 30);
+		openButton.addActionListener(e -> {
+			int row = listTable.getSelectedRow();
+
+			if (row != -1) {
+				int column = 1; // target name column
+				String nameOfShow = ui.getRawTextFromHtmlFormat(listTable.getValueAt(row, column).toString());
+				// TODO ensure name of show is correct due to hmtl format. ensure it matches db
+				// TODO get media obj by search name
+				Media show = new Media(42, 69, 42069, nameOfShow, "Wow so cool of description", 19, "/give/me/your/money", "I/didnt/ask");
+				ui.openMediaPage(show, "list");
+			} else { // no row selected
+				JOptionPane.showMessageDialog(this, "No row selected. Please select a row of a show you would like to open.", "Warning", JOptionPane.WARNING_MESSAGE);
+			}
+		});
+
+		gbc.gridy = 6; // row 7
+		gbc.gridx = 2; // col 3
+		filterPanel.add(openButton, gbc);
 	}
 
 	void createListPanel() {
@@ -552,8 +581,7 @@ public class ListPage extends Page {
 			toAddToTable[0] = ui.resizeImg(new ImageIcon(PATH_FOR_DEFAULT_IMAGE), POSTER_WIDTH, POSTER_HEIGHT);
 		}
 
-		// TODO verify all data gets pulled properly dependent on media
-		toAddToTable[1] = media.getName();
+		toAddToTable[1] = ui.getHtmlFormatText(media.getName(), CPERLINE_TITLE, MAXPASS);
 		toAddToTable[2] = media.getStatus();
 		toAddToTable[3] = media.getRating();
 		toAddToTable[4] = media.getLastEpisode();
@@ -564,9 +592,5 @@ public class ListPage extends Page {
 
 	void clearListTable() {
 		listTableModel.setRowCount(0);
-	}
-
-	void getSelectedItems() {
-
 	}
 }
