@@ -122,6 +122,8 @@ public class SearchPage extends Page {
 		searchField = new JTextField(20);
 		searchField.setFont(Style.BASE_FONT);
 
+		searchField.addActionListener(e -> runSearch());
+
 		gbc.gridy = 0; // only one row
 		gbc.gridx = 1; // col 2
 
@@ -154,9 +156,13 @@ public class SearchPage extends Page {
 		// padding for 20px right to match offset from searchField
 		gbc.insets = new Insets(0, 0, 10, 20);
 
-		searchBtn.addActionListener(e -> procureSearches(10, searchField.getText(), searchTypeBox.getSelectedIndex()));
+		searchBtn.addActionListener(e -> runSearch());
 
 		searchPanel.add(searchBtn, gbc);
+	}
+
+	void runSearch() {
+		procureSearches(10, searchField.getText(), searchTypeBox.getSelectedIndex());
 	}
 
 	void addListScrollContainer() {

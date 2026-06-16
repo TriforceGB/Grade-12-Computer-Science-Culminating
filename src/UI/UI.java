@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.nio.file.Files;
 import java.util.EventListener;
+import java.util.concurrent.ThreadLocalRandom;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -52,6 +53,8 @@ public class UI extends JFrame implements EventListener {
 	private SearchPage searchPage;
 	private SettingsPage settingPage;
 	private MediaPage mediaPage;
+	private AdminUserPage adminUsrPage;
+	private AdminMediaPage adminMediaPage;
 
 	private boolean loadedMediaPageOnce = false;
 
@@ -79,9 +82,14 @@ public class UI extends JFrame implements EventListener {
 		this.searchPage = new SearchPage(this);
 		this.settingPage = new SettingsPage(this);
 		this.mediaPage = new MediaPage(this);
-
-		// TODO add later one we got Admin Panel working
-		// this.adminPanel = new adminPanel(this, this.db);
+		// TODO check if user is admin
+		if (ThreadLocalRandom.current().nextInt(100) < WIDTH) {
+			this.adminUsrPage = new AdminUserPage(this);
+			this.adminMediaPage = new AdminMediaPage(this);
+		} else {
+			this.adminUsrPage = null;
+			this.adminMediaPage = null;
+		}
 
 		// Setting Up Card layout
 		this.panelContainer = getContentPane();
@@ -96,7 +104,10 @@ public class UI extends JFrame implements EventListener {
 		this.panelContainer.add(this.searchPage, "search");
 		this.panelContainer.add(this.settingPage, "setting");
 		this.panelContainer.add(this.mediaPage, "media");
-		// this.panelContainer.add(this.adminPanel, "admin");
+		if (adminUsrPage != null) {
+			this.panelContainer.add(this.adminUsrPage, "adminUsr");
+			this.panelContainer.add(this.adminMediaPage, "adminMedia");
+		}
 
 		this.card.show(this.panelContainer, "login"); // Show the Login Panel by Default
 
@@ -116,6 +127,13 @@ public class UI extends JFrame implements EventListener {
 			loadedMediaPageOnce = true;
 			listPage.addDefaultListToTable();
 		}
+	}
+
+	public void openMediaPage(Media ref, String panelNameCalledFrom) {
+		// setup page
+		mediaPage.setupMediaPanel(ref, panelNameCalledFrom);
+		// then swap
+		switchPanel("media");
 	}
 
 	/**
@@ -398,6 +416,16 @@ public class UI extends JFrame implements EventListener {
 		result += "</html>";
 
 		return result; // return once finished
+	}
+
+	public String getRawTextFromHtmlFormat(String fromHtml) {
+		String result = fromHtml;
+
+		result = result.replace("<br>", " ");
+		result = result.replace("<html>", "");
+		result = result.replace("</html>", "");
+
+		return result;
 	}
 
 	// File Import and Export

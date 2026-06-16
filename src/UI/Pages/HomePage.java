@@ -10,6 +10,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 
+import DTO.LocalDB.Media;
+
 /**
  * The Home Page Class. Used to Create the Main Page of the UI.
  * This will display some basic information about the user and their media.
@@ -59,28 +61,15 @@ public class HomePage extends Page {
 		blbuttonpanel.setBackground(this.PageColor);
 		blbuttonpanel.setLayout(new GridLayout(0, cols, hgap, 20));
 
+		// TODO make not test objs for all 
 		for (int i = 1; i <= 25; i++) {
 			JButton Test = new JButton(String.valueOf(i));
 			blbuttonpanel.add(Test);
 			Test.addActionListener(e -> {
-
-				ui.switchPanel("media");
-
-
+				Media show = new Media(42, 69, 42069, "A REALLY COOL SHOW!!!!!", "Wow so cool of description. Maybe I can make it a little longer though. I like long descriptions.", 19, "/give/me/your/money", "I/didnt/ask");
+				ui.openMediaPage(show, "home");
 			});
 		}
-
-		
-
-
-		/*
-				for (int i = 1; i <= 25; i++) {
-
-			blbuttonpanel.add(new JButton(String.valueOf(i)));
-
-		}
-		
-		*/
 
 		JScrollPane blScrollPane = new JScrollPane(blbuttonpanel);
 		blScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -106,6 +95,8 @@ public class HomePage extends Page {
 		JPanel crbuttonpanel = new JPanel();
 		crbuttonpanel.setBackground(this.PageColor);
 		crbuttonpanel.setLayout(new GridLayout(0, cols, hgap, 20));
+
+		// TODO make not test obj
 		for (int i = 1; i <= 25; i++) {
 			crbuttonpanel.add(new JButton(String.valueOf(i)));
 		}
@@ -134,6 +125,8 @@ public class HomePage extends Page {
 		JPanel finbuttonpanel = new JPanel();
 		finbuttonpanel.setBackground(this.PageColor);
 		finbuttonpanel.setLayout(new GridLayout(0, cols, hgap, 20));
+
+		// TODO make not test obj
 		for (int i = 1; i <= 25; i++) {
 			finbuttonpanel.add(new JButton(String.valueOf(i)));
 		}
