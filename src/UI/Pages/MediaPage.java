@@ -10,7 +10,6 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.io.File;
-import java.util.concurrent.ThreadLocalRandom;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -80,7 +79,7 @@ public class MediaPage extends Page {
 	 * Create the Media Page
 	 *
 	 * @param ui The UI object that this page belongs to
-	 * 
+	 *
 	 *
 	 */
 
@@ -309,20 +308,19 @@ public class MediaPage extends Page {
 		southEastSidePanel.add(addEditReviewButton, gbc);
 	}
 
-	JPanel getReviewPanel() {
+	JPanel getReviewPanel(String[] review) {
 		JPanel result = new JPanel(new GridBagLayout());
 		result.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3, true));
 		GridBagConstraints gbc2 = new GridBagConstraints();
 
-		String name = "Bilal Faruqi";
+		String name = review[0];
 		JLabel usrName = new JLabel(name);
 
-		String comment = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam vitae est molestie, volutpat augue eu, eleifend lacus. Cras sollicitudin eu lorem eget facilisis. Praesent risus felis, facilisis vel turpis eu, ornare vehicula ex. Quisque varius sollicitudin nisl, nec vehicula erat.";
+		String comment = review[1];
 		JLabel usrComment = new JLabel(ui.getHtmlFormatText(comment, CPERLINE_REVIEW_COMMENT, MAXPASS_REVIEW_COMMENT));
 		usrComment.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1, true));
 
-		int rating = 8;
-		JLabel usrRating = new JLabel(rating + "/10");
+		JLabel usrRating = new JLabel(review[2] + "/10");
 
 		gbc2.gridy = 0;
 		gbc2.gridx = 0;
@@ -361,10 +359,9 @@ public class MediaPage extends Page {
 		rewatchesSelector.setValue(obj.getRewatched());
 		cEpSelector.setValue(obj.getLastEpisode());
 
-		// TODO load all existing usr reviews
-		int test = ThreadLocalRandom.current().nextInt(0, 5);
-		for (int i = 0; i < test; i++) {
-			scrollContentPanel.add(getReviewPanel());
+		String[][] reviews = ui.pullReview(obj.getId());
+		for (int i = 0; i < reviews.length; i++) {
+			scrollContentPanel.add(getReviewPanel(reviews[i]));
 		}
 	}
 }

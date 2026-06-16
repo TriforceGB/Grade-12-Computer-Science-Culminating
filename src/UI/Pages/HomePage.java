@@ -19,9 +19,9 @@ import DTO.LocalDB.Media;
 public class HomePage extends Page {
 	// Variables
 	private JPanel contentPanel;
-	private JPanel backlogpanel = new JPanel();
-	private JPanel currentpanel = new JPanel();
-	private JPanel finishpanel = new JPanel();
+	private JPanel backlogPanel = new JPanel();
+	private JPanel currentPanel = new JPanel();
+	private JPanel finishPanel = new JPanel();
 	private int hgap = 20;
 	private int cols = 3;
 
@@ -34,11 +34,7 @@ public class HomePage extends Page {
 		super(ui); // Uses the basic page layout and background color
 
 		panelLayout();
-		backlogPanel();
-		currentWatchingPanel();
-		finishPanel();
 
-		this.add(contentPanel, BorderLayout.CENTER);
 	}
 
 	/**
@@ -54,21 +50,26 @@ public class HomePage extends Page {
 	 * Create the Backlog Panel Widget for the User
 	 */
 	private void backlogPanel() {
-		backlogpanel.setLayout(new BorderLayout());
-		backlogpanel.setBackground(this.PageColor);
+		backlogPanel.setLayout(new BorderLayout());
+		backlogPanel.setBackground(this.PageColor);
 
 		JPanel blbuttonpanel = new JPanel();
 		blbuttonpanel.setBackground(this.PageColor);
 		blbuttonpanel.setLayout(new GridLayout(0, cols, hgap, 20));
 
-		// TODO make not test objs for all 
-		for (int i = 1; i <= 25; i++) {
-			JButton Test = new JButton(String.valueOf(i));
-			blbuttonpanel.add(Test);
-			Test.addActionListener(e -> {
-				Media show = new Media(42, 69, 42069, "A REALLY COOL SHOW!!!!!", "Wow so cool of description. Maybe I can make it a little longer though. I like long descriptions.", 19, "/give/me/your/money", "I/didnt/ask");
-				ui.openMediaPage(show, "home");
-			});
+		// Pull Backlogged Media
+		Media[] backloggedMedia = ui.findMedia(true, true, true, false, false, true, false, false, "", 0, 10);
+		if (backloggedMedia != null) {
+			for (int i = 0; i < backloggedMedia.length; i++) {
+				JButton backloggedButton = new JButton(String.valueOf(i));
+				blbuttonpanel.add(backloggedButton);
+				Media displayMedia = backloggedMedia[i];
+				backloggedButton.addActionListener(e -> {
+					ui.openMediaPage(displayMedia, "home");
+				});
+			}
+		} else {
+			System.err.println("No Backlogged Media");
 		}
 
 		JScrollPane blScrollPane = new JScrollPane(blbuttonpanel);
@@ -78,27 +79,38 @@ public class HomePage extends Page {
 		bllabel.setForeground(Style.TEA_GREEN);
 		bllabel.setFont(Style.BASE_FONT);
 
-		backlogpanel.add(bllabel, BorderLayout.PAGE_START);
-		backlogpanel.add(blbuttonpanel, BorderLayout.CENTER);
+		backlogPanel.add(bllabel, BorderLayout.PAGE_START);
+		backlogPanel.add(blbuttonpanel, BorderLayout.CENTER);
 
+		backlogPanel.revalidate();
+		backlogPanel.repaint();
 		// Add the backlog panel to the content panel
-		contentPanel.add(backlogpanel);
+		contentPanel.add(backlogPanel);
 	}
 
 	/**
 	 * Create the Current Watching Panel Widget for the User
 	 */
 	private void currentWatchingPanel() {
-		currentpanel.setLayout(new BorderLayout());
-		currentpanel.setBackground(this.PageColor);
+		currentPanel.setLayout(new BorderLayout());
+		currentPanel.setBackground(this.PageColor);
 
 		JPanel crbuttonpanel = new JPanel();
 		crbuttonpanel.setBackground(this.PageColor);
 		crbuttonpanel.setLayout(new GridLayout(0, cols, hgap, 20));
 
-		// TODO make not test obj
-		for (int i = 1; i <= 25; i++) {
-			crbuttonpanel.add(new JButton(String.valueOf(i)));
+		Media[] currentWatchMedia = ui.findMedia(true, true, true, false, false, false, true, false, "", 0, 10);
+		if (currentWatchMedia != null) {
+			for (int i = 0; i < currentWatchMedia.length; i++) {
+				JButton currentWatchingButton = new JButton(String.valueOf(i));
+				crbuttonpanel.add(currentWatchingButton);
+				Media displayMedia = currentWatchMedia[i];
+				currentWatchingButton.addActionListener(e -> {
+					ui.openMediaPage(displayMedia, "home");
+				});
+			}
+		} else {
+			System.err.println("No Watching Media");
 		}
 
 		JScrollPane crScrollPane = new JScrollPane(crbuttonpanel);
@@ -108,27 +120,38 @@ public class HomePage extends Page {
 		crlabel.setFont(Style.BASE_FONT);
 		crlabel.setForeground(Style.TEA_GREEN);
 
-		currentpanel.add(crlabel, BorderLayout.PAGE_START);
-		currentpanel.add(crbuttonpanel, BorderLayout.CENTER);
+		currentPanel.add(crlabel, BorderLayout.PAGE_START);
+		currentPanel.add(crbuttonpanel, BorderLayout.CENTER);
 
+		currentPanel.revalidate();
+		currentPanel.repaint();
 		// Add the current panel to the content panel
-		contentPanel.add(currentpanel);
+		contentPanel.add(currentPanel);
 	}
 
 	/**
 	 * Create the Finish Panel Widget for the User
 	 */
 	private void finishPanel() {
-		finishpanel.setLayout(new BorderLayout());
-		finishpanel.setBackground(this.PageColor);
+		finishPanel.setLayout(new BorderLayout());
+		finishPanel.setBackground(this.PageColor);
 
 		JPanel finbuttonpanel = new JPanel();
 		finbuttonpanel.setBackground(this.PageColor);
 		finbuttonpanel.setLayout(new GridLayout(0, cols, hgap, 20));
 
-		// TODO make not test obj
-		for (int i = 1; i <= 25; i++) {
-			finbuttonpanel.add(new JButton(String.valueOf(i)));
+		Media[] CompletedMedia = ui.findMedia(true, true, true, false, false, false, false, true, "", 0, 10);
+		if (CompletedMedia != null) {
+			for (int i = 0; i < CompletedMedia.length; i++) {
+				JButton completeMediaButton = new JButton(String.valueOf(i));
+				finbuttonpanel.add(completeMediaButton);
+				Media displayMedia = CompletedMedia[i];
+				completeMediaButton.addActionListener(e -> {
+					ui.openMediaPage(displayMedia, "home");
+				});
+			}
+		} else {
+			System.err.println("No Completed Media");
 		}
 
 		JScrollPane finScrollPane = new JScrollPane(finbuttonpanel);
@@ -138,10 +161,25 @@ public class HomePage extends Page {
 		finlabel.setFont(Style.BASE_FONT);
 		finlabel.setForeground(Style.TEA_GREEN);
 
-		finishpanel.add(finlabel, BorderLayout.PAGE_START);
-		finishpanel.add(finbuttonpanel, BorderLayout.CENTER);
+		finishPanel.add(finlabel, BorderLayout.PAGE_START);
+		finishPanel.add(finbuttonpanel, BorderLayout.CENTER);
 
+		finishPanel.revalidate();
+		finishPanel.repaint();
 		// Add the finish panel to the content panel
-		contentPanel.add(finishpanel);
+		contentPanel.add(finishPanel);
+	}
+
+	public void createWidgets() {
+		contentPanel.removeAll();
+		backlogPanel();
+		currentWatchingPanel();
+		finishPanel();
+		this.contentPanel.revalidate();
+		this.contentPanel.repaint();
+		this.add(contentPanel, BorderLayout.CENTER);
+		// Refresh the UI
+		this.revalidate();
+		this.repaint();
 	}
 }

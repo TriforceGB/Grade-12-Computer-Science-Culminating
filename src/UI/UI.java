@@ -349,11 +349,10 @@ public class UI extends JFrame implements EventListener {
 		return true;
 	}
 
-	/**
-	 * Handle the Logic for if to Edit or Create or Remove Status
-	 *
-	 * @return If the Status was Edited
-	 */
+	public String[][] pullReview(int mediaId) {
+		String[][] reviews = db.UserReview(mediaId);
+		return reviews;
+	}
 
 	/**
 	 * Finds the Media and return it from the DB. Useful for Getting its ID
@@ -366,6 +365,13 @@ public class UI extends JFrame implements EventListener {
 		return locatedMedia;
 	}
 
+	/**
+	 * Handle the Logic for if to Edit or Create or Remove Status
+	 *
+	 * @param newStatus The new status to set
+	 * @param refMedia  The Media to edit
+	 * @return If the Status was Edited
+	 */
 	public boolean editStatus(int newStatus, Media refMedia) {
 		boolean change = false;
 		String startDate = null;
@@ -596,5 +602,12 @@ public class UI extends JFrame implements EventListener {
 
 	public void setAdmin(boolean admin) {
 		this.settingPage.setAdmin(admin);
+	}
+
+	/**
+	 * Create the Homepage After the User Logs-in
+	 */
+	public void createHomePage() {
+		this.homePage.createWidgets();
 	}
 }
