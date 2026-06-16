@@ -53,7 +53,8 @@ public class UI extends JFrame implements EventListener {
 	private SearchPage searchPage;
 	private SettingsPage settingPage;
 	private MediaPage mediaPage;
-	private AdminPage adminPage;
+	private AdminUserPage adminUsrPage;
+	private AdminMediaPage adminMediaPage;
 
 	private boolean loadedMediaPageOnce = false;
 
@@ -82,10 +83,13 @@ public class UI extends JFrame implements EventListener {
 		this.settingPage = new SettingsPage(this);
 		this.mediaPage = new MediaPage(this);
 		// TODO check if user is admin
-		if (ThreadLocalRandom.current().nextInt(100) < WIDTH)
-			this.adminPage = new AdminPage(this);
-		else
-			this.adminPage = null;
+		if (ThreadLocalRandom.current().nextInt(100) < WIDTH) {
+			this.adminUsrPage = new AdminUserPage(this);
+			this.adminMediaPage = new AdminMediaPage(this);
+		} else {
+			this.adminUsrPage = null;
+			this.adminMediaPage = null;
+		}
 
 		// Setting Up Card layout
 		this.panelContainer = getContentPane();
@@ -100,8 +104,10 @@ public class UI extends JFrame implements EventListener {
 		this.panelContainer.add(this.searchPage, "search");
 		this.panelContainer.add(this.settingPage, "setting");
 		this.panelContainer.add(this.mediaPage, "media");
-		if (adminPage != null)
-			this.panelContainer.add(this.adminPage, "admin");
+		if (adminUsrPage != null) {
+			this.panelContainer.add(this.adminUsrPage, "adminUsr");
+			this.panelContainer.add(this.adminMediaPage, "adminMedia");
+		}
 
 		this.card.show(this.panelContainer, "login"); // Show the Login Panel by Default
 

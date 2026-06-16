@@ -18,8 +18,8 @@ import UI.UI;
  * Admin page base for Admin Settings.
  * Other pages in the admin settings will use this as a base.
  */
-public class AdminPage extends Page {
-	public AdminPage(UI ui) {
+public class AdminUserPage extends Page {
+	public AdminUserPage(UI ui) {
 		super(ui);
 	}
 
@@ -88,9 +88,8 @@ public class AdminPage extends Page {
 		exitBtn.setFocusable(false);
 
 		// Action listener
-		// TODO Get pages
-		userDbBtn.addActionListener(e -> ui.switchPanel(""));
-		mediaDbBtn.addActionListener(e -> ui.switchPanel(""));
+		userDbBtn.addActionListener(e -> ui.switchPanel("adminUsr"));
+		mediaDbBtn.addActionListener(e -> ui.switchPanel("adminMedia"));
 		backBtn.addActionListener(e -> ui.switchPanel("settings"));
 		exitBtn.addActionListener(e -> ui.logout());
 
