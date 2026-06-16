@@ -300,13 +300,16 @@ public class SearchPage extends Page {
 				showStatus.setFont(Style.BASE_FONT);
 				showStatus.setFocusable(false);
 
+				// re create the Media Object with ID
+				Media locatedMedia = ui.locateMedia(givenMedia);
 				// on picking new option
 				showStatus.addActionListener(event -> {
 					// TODO Knowing existing search data and current user data, find the show again,
 					// and change user information based on:
 					int showStatusToUpdate = showStatus.getSelectedIndex();
 					System.out.println(showStatusToUpdate);
-					System.out.println(givenMedia.getStatus());
+					System.out.println(locatedMedia.getStatus());
+					ui.editStatus(showStatusToUpdate, locatedMedia);
 				});
 
 				gbc2.gridy = 0;
