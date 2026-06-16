@@ -22,6 +22,7 @@ import javax.swing.border.Border;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
+import DTO.LocalDB.User;
 import UI.Style;
 import UI.UI;
 
@@ -90,7 +91,7 @@ public class AdminUserPage extends Page {
 		userTable.getTableHeader().setBackground(Style.TROPICAL_TEAL);
 		userTable.getTableHeader().setForeground(Style.TEA_GREEN);
 		userTable.getTableHeader().setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR));
-		userTable.setRowHeight(24);
+		userTable.setRowHeight(30);
 
 		userTable.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
 			@Override
@@ -229,9 +230,11 @@ public class AdminUserPage extends Page {
 	}
 
 	public void loadData() {
-		for (int i = 0; i < 50; i++) {
+		User[] users = ui.pullUsers();
+		for (User user : users) {
 			// { "Id", "Username", "Password", "Is Admin", "Date Created", "Last Login" };
-			Object[] data = new Object[] { "42", "Zach", "ZachIsGreat", "true", "07/07/1991", "09/08/2000" };
+			Object[] data = new Object[] { user.getId(), user.getUsername(), user.getPassword(), user.getIsAdmin(),
+					user.getCreated(), user.getLastLogin() };
 			tableModel.addRow(data);
 		}
 	}

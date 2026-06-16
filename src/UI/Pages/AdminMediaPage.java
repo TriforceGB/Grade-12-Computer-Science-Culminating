@@ -20,6 +20,7 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
+import DTO.LocalDB.Media;
 import UI.Style;
 import UI.UI;
 
@@ -89,7 +90,7 @@ public class AdminMediaPage extends AdminUserPage {
 		userTable.getTableHeader().setBackground(Style.TROPICAL_TEAL);
 		userTable.getTableHeader().setForeground(Style.TEA_GREEN);
 		userTable.getTableHeader().setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR));
-		userTable.setRowHeight(24);
+		userTable.setRowHeight(30);
 
 		userTable.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
 			@Override
@@ -229,9 +230,12 @@ public class AdminMediaPage extends AdminUserPage {
 
 	@Override
 	public void loadData() {
-		for (int i = 0; i < 50; i++) {
+		Media[] media = ui.pullMedia();
+		for (Media m : media) {
 			// { "Id", "Type", "Name", "Ep. Count", "PosterPath", "PosterLink" };
-			Object[] data = new Object[] { "42", "Movie", "RIP Zach", "12", "/dev/sda1", "www.spongebob.com" };
+			Object[] data = new Object[] { m.getId(), ui.getStatusString(m.getType()), m.getName(), m.getEpisodeCount(),
+					m.getPosterPath(),
+					m.getPosterLink() };
 			tableModel.addRow(data);
 		}
 	}

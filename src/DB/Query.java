@@ -87,7 +87,9 @@ class Query {
 			""";
 	// Finds all Users
 	public static final String ALL_USERS = """
-			SELECT *
+			SELECT
+			*,
+			COUNT(*) OVER() AS count
 			FROM "User"
 			""";
 

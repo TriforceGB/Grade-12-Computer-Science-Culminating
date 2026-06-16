@@ -219,6 +219,24 @@ public class UI extends JFrame implements EventListener {
 	}
 
 	/**
+	 * Pulls all Users from the DB
+	 *
+	 * @return An array of all Users
+	 */
+	public User[] pullUsers() {
+		return db.getAllUsers();
+	}
+
+	/**
+	 * Pulls all Media from DB
+	 *
+	 * @return An array of all Media
+	 */
+	public Media[] pullMedia() {
+		return db.exportMedia();
+	}
+
+	/**
 	 * With the Given Object, Add to DB
 	 *
 	 * @param newMedia New Media from Search to add
@@ -350,6 +368,13 @@ public class UI extends JFrame implements EventListener {
 		return true;
 	}
 
+	/**
+	 * Gets Review for a Media
+	 *
+	 * @param mediaId The ID of the Media to get reviews for
+	 * @return A 2D array of reviews, where each row is a review and each column is
+	 *         a review field
+	 */
 	public String[][] pullReview(int mediaId) {
 		String[][] reviews = db.UserReview(mediaId);
 		return reviews;
