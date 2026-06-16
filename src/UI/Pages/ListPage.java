@@ -96,7 +96,7 @@ public class ListPage extends Page {
 
 	private final int CPERLINE_TITLE = 38;
 	private final int MAXPASS = 5;
-	
+
 	/**
 	 * Create the List Page
 	 *
@@ -149,7 +149,7 @@ public class ListPage extends Page {
 		// note row comments are not accurate (psa gridy = 0 -> row 1)
 		movieTypeLbl = new JLabel("Movie: ");
 		movieTypeLbl.setFont(Style.BASE_FONT);
-		movieTypeLbl.setForeground(Style.TEA_GREEN); // set the font color of the password label
+		movieTypeLbl.setForeground(Style.TEA_GREEN);
 		movieType = new JCheckBox();
 		movieType.setSelected(true);
 		movieType.setBackground(Style.BALTIC_BLUE);
@@ -201,7 +201,7 @@ public class ListPage extends Page {
 
 	void addNameStatusButtons() {
 		// name & status row
-		// name is texfield and status is a dropdown
+		// name is textfield and status is a dropdown
 		nameFilterLbl = new JLabel("Name: ");
 		nameFilterLbl.setFont(Style.BASE_FONT);
 		nameFilterLbl.setForeground(Style.TEA_GREEN);
@@ -363,6 +363,7 @@ public class ListPage extends Page {
 		searchButton.setForeground(Style.BALTIC_BLUE);
 		searchButton.setFont(Style.BASE_FONT);
 		ui.addButtonImg(searchButton, new ImageIcon("assets/UI/searchicon.png"), 20, 30, 30);
+		searchButton.setFocusable(false);
 		searchButton.addActionListener(e -> {
 			clearListTable(); // clears the table so ready for adding
 			String nameToCheck = nameFilter.getText();
@@ -423,6 +424,7 @@ public class ListPage extends Page {
 		refreshButton.setForeground(Style.BALTIC_BLUE);
 		refreshButton.setFont(Style.BASE_FONT);
 		ui.addButtonImg(refreshButton, new ImageIcon("assets/UI/changeicon.png"), 20, 30, 30);
+		refreshButton.setFocusable(false);
 		refreshButton.addActionListener(e -> {
 			clearListTable();
 			addDefaultListToTable();
@@ -447,10 +449,13 @@ public class ListPage extends Page {
 				String nameOfShow = ui.getRawTextFromHtmlFormat(listTable.getValueAt(row, column).toString());
 				// TODO ensure name of show is correct due to hmtl format. ensure it matches db
 				// TODO get media obj by search name
-				Media show = new Media(42, 69, 42069, nameOfShow, "Wow so cool of description", 19, "/give/me/your/money", "I/didnt/ask");
+				Media show = new Media(42, 69, 42069, nameOfShow, "Wow so cool of description", 19,
+						"/give/me/your/money", "I/didnt/ask");
 				ui.openMediaPage(show, "list");
 			} else { // no row selected
-				JOptionPane.showMessageDialog(this, "No row selected. Please select a row of a show you would like to open.", "Warning", JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(this,
+						"No row selected. Please select a row of a show you would like to open.", "Warning",
+						JOptionPane.WARNING_MESSAGE);
 			}
 		});
 
@@ -580,7 +585,26 @@ public class ListPage extends Page {
 		}
 
 		toAddToTable[1] = ui.getHtmlFormatText(media.getName(), CPERLINE_TITLE, MAXPASS);
-		toAddToTable[2] = media.getStatus();
+		switch (media.getStatus()) {
+			case 0:
+				toAddToTable[2] = "Undecided";
+				break;
+			case 1:
+				toAddToTable[2] = "Dropped";
+				break;
+			case 2:
+				toAddToTable[2] = "Backlog";
+				break;
+			case 3:
+				toAddToTable[2] = "isWatching";
+				break;
+			case 4:
+				toAddToTable[2] = "Completed";
+				break;
+			default:
+				toAddToTable[2] = "Unknown";
+				break;
+		}
 		toAddToTable[3] = media.getRating();
 		toAddToTable[4] = media.getLastEpisode();
 		toAddToTable[5] = media.getRewatched();

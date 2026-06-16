@@ -10,4 +10,5 @@ public class AdminMediaPage extends AdminUserPage {
 	public AdminMediaPage(UI ui) {
 		super(ui);
 	}
+	// TODO Rewrite header for the Admin Panel
 }

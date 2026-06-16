@@ -131,6 +131,15 @@ class Query {
 					count(*) OVER() AS count
 				FROM Media AS m
 			""";
+	public static final String LOCATE_MEDIA = """
+				SELECT
+					m.*
+				FROM Media AS m
+				WHERE
+					m.name = ? AND
+					m.type = ? AND
+					m.externalId = ?
+			""";
 	// User Data Query
 	// Create Edit Delete
 	public static final String CREATE_USERDATA = """
@@ -139,7 +148,7 @@ class Query {
 			""";
 	public static final String EDIT_USERDATA = """
 			UPDATE "UserData"
-			SET "status" = ?, "startDate" = ?, "finishDate" = ?, "rating" = ?, "lastEpisode" = ?, "review" = ?, "rewatched" = ?
+			SET "status" = ?, "startDate" = COALESCE(?, "startDate"), "finishDate" = COALESCE(?, "finishDate"), "rating" = ?, "lastEpisode" = ?, "review" = ?, "rewatched" = ?
 			WHERE "userId" = ? AND "mediaID" = ?
 			""";
 	public static final String DELETE_USERDATA = """
@@ -162,5 +171,15 @@ class Query {
 				FROM Media AS m
 				JOIN UserData AS ud ON m.id = ud.mediaId
 				WHERE ud.userId = ?
+			""";
+	public static final String ALL_USER_REVIEW = """
+			SELECT
+				u.username,
+				ud.review,
+				ud.rating,
+				COUNT(*) OVER() AS count
+			FROM "UserData" AS ud
+			JOIN "User" AS u ON ud.userId = u.id
+			WHERE ud.mediaId = ?
 			""";
 }

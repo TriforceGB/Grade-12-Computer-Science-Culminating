@@ -400,6 +400,41 @@ public class DB {
 	}
 
 	/**
+	 * Find a Single Media to Return with Updated Values
+	 *
+	 * @param name
+	 * @param type
+	 * @param externalID
+	 * @return The Media that Matches the Variables
+	 */
+	public Media locateMedia(String name, int type, int externalID) {
+		try (PreparedStatement stmt = dbConnect.prepareStatement(Query.LOCATE_MEDIA)) {
+			stmt.setString(1, name);
+			stmt.setInt(2, type);
+			stmt.setInt(3, externalID);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				return new Media(
+						rs.getInt("id"),
+						rs.getInt("type"),
+						rs.getInt("externalId"),
+						rs.getString("name"),
+						rs.getString("description"),
+						rs.getInt("episodeCount"),
+						rs.getString("posterPath"),
+						rs.getString("posterLink"));
+			} else {
+				System.err.println("Can't Locate that Media");
+				return null;
+			}
+		} catch (SQLException e) {
+			System.err.println("Can't Locate that Media");
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	/**
 	 * This Export all Media Stored in the database into a Object that will be turn
 	 * into a Json by Gson. It can also be used to Just make a list of all Media in
 	 * the DB
@@ -543,6 +578,7 @@ public class DB {
 	 * @return an array of Media related to the User
 	 */
 	public Media[] exportUserRelation(int userId) {
+
 		try (PreparedStatement stmt = dbConnect.prepareStatement(Query.EXPORT_USER_RELATION)) {
 			stmt.setInt(1, userId);
 			ResultSet rs = stmt.executeQuery();
@@ -574,5 +610,32 @@ public class DB {
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	/**
+	 * Finds all the Review from Users for a Given Meida
+	 *
+	 * @param mediaId the Id of the Media
+	 * @return a 2D array of Review data (username, review, rating)
+	 */
+	public String[][] UserReview(int mediaId) {
+		try (PreparedStatement stmt = dbConnect.prepareStatement(Query.ALL_USER_REVIEW)) {
+			stmt.setInt(1, mediaId);
+			ResultSet rs = stmt.executeQuery();
+			String[][] reviewArray = new String[rs.getInt("count")][3];
+			int i = 0;
+			while (rs.next()) {
+				reviewArray[i][0] = rs.getString("username");
+				reviewArray[i][1] = rs.getString("review");
+				reviewArray[i][2] = rs.getString("rating");
+				i++;
+			}
+			return reviewArray;
+		} catch (Exception e) {
+			System.err.println("Exception While Finding User Review:");
+			e.printStackTrace();
+			return null;
+		}
+
 	}
 }
