@@ -1,5 +1,7 @@
 package UI.Pages;
 
+import javax.swing.JLabel;
+
 import UI.UI;
 
 /**
@@ -9,5 +11,7 @@ import UI.UI;
 public class AdminMediaPage extends AdminUserPage {
 	public AdminMediaPage(UI ui) {
 		super(ui);
+
+		this.add(new JLabel("Media page"));
 	}
 }

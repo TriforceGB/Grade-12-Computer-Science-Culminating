@@ -21,6 +21,8 @@ import UI.UI;
 public class AdminUserPage extends Page {
 	public AdminUserPage(UI ui) {
 		super(ui);
+
+		
 	}
 
 	@Override
@@ -90,7 +92,7 @@ public class AdminUserPage extends Page {
 		// Action listener
 		userDbBtn.addActionListener(e -> ui.switchPanel("adminUsr"));
 		mediaDbBtn.addActionListener(e -> ui.switchPanel("adminMedia"));
-		backBtn.addActionListener(e -> ui.switchPanel("settings"));
+		backBtn.addActionListener(e -> ui.switchPanel("setting"));
 		exitBtn.addActionListener(e -> ui.logout());
 
 		header.add(userDbBtn);

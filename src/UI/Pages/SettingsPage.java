@@ -198,7 +198,7 @@ public class SettingsPage extends Page {
 			}
 
 		});
-		adminButton.addActionListener(e -> ui.logout());
+		adminButton.addActionListener(e -> ui.switchPanel("adminUsr"));
 
 		// Stat Panel
 		// TODO: Michael pls do this
