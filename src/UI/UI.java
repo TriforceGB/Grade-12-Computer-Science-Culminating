@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.nio.file.Files;
 import java.util.EventListener;
+import java.util.concurrent.ThreadLocalRandom;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -52,6 +53,7 @@ public class UI extends JFrame implements EventListener {
 	private SearchPage searchPage;
 	private SettingsPage settingPage;
 	private MediaPage mediaPage;
+	private AdminPage adminPage;
 
 	private boolean loadedMediaPageOnce = false;
 
@@ -79,9 +81,11 @@ public class UI extends JFrame implements EventListener {
 		this.searchPage = new SearchPage(this);
 		this.settingPage = new SettingsPage(this);
 		this.mediaPage = new MediaPage(this);
-
-		// TODO add later one we got Admin Panel working
-		// this.adminPanel = new adminPanel(this, this.db);
+		// TODO check if user is admin
+		if (ThreadLocalRandom.current().nextInt(100) < WIDTH)
+			this.adminPage = new AdminPage(this);
+		else
+			this.adminPage = null;
 
 		// Setting Up Card layout
 		this.panelContainer = getContentPane();
@@ -96,7 +100,8 @@ public class UI extends JFrame implements EventListener {
 		this.panelContainer.add(this.searchPage, "search");
 		this.panelContainer.add(this.settingPage, "setting");
 		this.panelContainer.add(this.mediaPage, "media");
-		// this.panelContainer.add(this.adminPanel, "admin");
+		if (adminPage != null)
+			this.panelContainer.add(this.adminPage, "admin");
 
 		this.card.show(this.panelContainer, "login"); // Show the Login Panel by Default
 
