@@ -124,7 +124,7 @@ class Query {
 					m.type IN (?, ?, ?) AND
 					COALESCE(ud.status, 0) IN (?, ?, ?, ?, ?) AND
 					COALESCE(ud.rating, 0) BETWEEN ? AND ?
-				ORDER BY ud.status DESC NULLS LAST;
+				ORDER BY ud.status DESC NULLS LAST, ud.rating DESC NULLS LAST, m.name;
 
 			""";
 	public static final String ALL_MEDIA = """
