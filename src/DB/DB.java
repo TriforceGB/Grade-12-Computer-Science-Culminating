@@ -422,7 +422,14 @@ public class DB {
 						rs.getString("description"),
 						rs.getInt("episodeCount"),
 						rs.getString("posterPath"),
-						rs.getString("posterLink"));
+						rs.getString("posterLink"),
+						rs.getInt("status"),
+						rs.getString("startDate"),
+						rs.getString("finishDate"),
+						rs.getInt("rating"),
+						rs.getInt("lastEpisode"),
+						rs.getString("review"),
+						rs.getInt("rewatched"));
 			} else {
 				System.err.println("Can't Locate that Media");
 				return null;

@@ -46,6 +46,7 @@ public class ListPage extends Page {
 	private JPanel listPanel;
 	private JTable listTable;
 	private JScrollPane tableScrollContainer;
+	private Media[] Response;
 
 	private final String[] colNames = { "Icon", "Name", "Status", "Rating", "Last EP", "Rewatch" };
 	private DefaultTableModel listTableModel;
@@ -402,12 +403,12 @@ public class ListPage extends Page {
 			boolean canBeAnime = animeType.isSelected();
 
 			// Gets all Media that Fits Filter
-			Media[] vaildResponse = ui.findMedia(canBeMovie, canBeShow, canBeAnime, isUndecided, isDropped, isBacklog,
+			Response = ui.findMedia(canBeMovie, canBeShow, canBeAnime, isUndecided, isDropped, isBacklog,
 					isWatched, isCompleted,
 					nameToCheck,
 					minRatingToCheck, maxRatingToCheck);
 			// Add the Values to the Table
-			for (Media media : vaildResponse) {
+			for (Media media : Response) {
 				addToListTable(media);
 			}
 		});
@@ -445,12 +446,8 @@ public class ListPage extends Page {
 			int row = listTable.getSelectedRow();
 
 			if (row != -1) {
-				int column = 1; // target name column
-				String nameOfShow = ui.getRawTextFromHtmlFormat(listTable.getValueAt(row, column).toString());
-				// TODO ensure name of show is correct due to hmtl format. ensure it matches db
-				// TODO get media obj by search name
-				Media show = new Media(42, 69, 42069, nameOfShow, "Wow so cool of description", 19,
-						"/give/me/your/money", "I/didnt/ask");
+				Media show = this.Response[row]; // Gets Show User has Selected
+
 				ui.openMediaPage(show, "list");
 			} else { // no row selected
 				JOptionPane.showMessageDialog(this,
@@ -568,8 +565,8 @@ public class ListPage extends Page {
 	}
 
 	public void addDefaultListToTable() {
-		Media[] foundMedia = ui.findMedia(true, true, true, true, true, true, true, true, "", 0, 10);
-		for (Media media : foundMedia) {
+		this.Response = ui.findMedia(true, true, true, true, true, true, true, true, "", 0, 10);
+		for (Media media : this.Response) {
 			addToListTable(media);
 		}
 	}
@@ -585,26 +582,7 @@ public class ListPage extends Page {
 		}
 
 		toAddToTable[1] = ui.getHtmlFormatText(media.getName(), CPERLINE_TITLE, MAXPASS);
-		switch (media.getStatus()) {
-			case 0:
-				toAddToTable[2] = "Undecided";
-				break;
-			case 1:
-				toAddToTable[2] = "Dropped";
-				break;
-			case 2:
-				toAddToTable[2] = "Backlog";
-				break;
-			case 3:
-				toAddToTable[2] = "isWatching";
-				break;
-			case 4:
-				toAddToTable[2] = "Completed";
-				break;
-			default:
-				toAddToTable[2] = "Unknown";
-				break;
-		}
+		toAddToTable[2] = ui.getStatusString(media.getStatus());
 		toAddToTable[3] = media.getRating();
 		toAddToTable[4] = media.getLastEpisode();
 		toAddToTable[5] = media.getRewatched();

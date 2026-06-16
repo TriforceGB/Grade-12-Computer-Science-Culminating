@@ -248,6 +248,7 @@ public class LoginPage extends Page {
 			usernameField.setText("");
 			passwordField.setText("");
 			ui.setAdmin(ui.isAdmin());
+			ui.createHomePage();
 
 		} else { // If User is not found
 			/*

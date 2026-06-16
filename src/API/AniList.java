@@ -32,7 +32,8 @@ class AniList {
 						}
 					}
 				}
-			}""";
+			}
+			""";
 
 	// Variables
 	private HttpClient client; // Reference to the HttpClient used to connect to the API
