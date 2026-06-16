@@ -10,12 +10,14 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.io.File;
+import java.time.LocalDate;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
@@ -23,6 +25,7 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 
 import DTO.LocalDB.Media;
+import DTO.LocalDB.Media.UserData;
 
 /**
  * The Media Page Class. Used to display the media for the user.
@@ -31,6 +34,9 @@ public class MediaPage extends Page {
 	private final int POSTER_WIDTH = 150;
 	private final int POSTER_HEIGHT = 225;
 	private final String DEFAULT_POSTER_IMAGE_PATH = "assets/UI/filal.png";
+
+	// Variables
+	Media media; // Media that is being displayed
 
 	private JPanel westSidePanel;
 	private GridBagConstraints gbc;
@@ -177,6 +183,12 @@ public class MediaPage extends Page {
 		statusSelector = new JComboBox<String>(TYPES);
 		statusSelector.setFont(Style.BASE_FONT);
 
+		// When you Change the Status, Update UI
+		statusSelector.addActionListener(e -> {
+			int newStatus = statusSelector.getSelectedIndex();
+			editStatus(newStatus, media);
+		});
+
 		usrRatingLabel = new JLabel("Your Rating: ");
 		usrRatingLabel.setFont(Style.BASE_FONT);
 
@@ -293,6 +305,17 @@ public class MediaPage extends Page {
 		saveButton.setPreferredSize(new Dimension(300, 50));
 		saveButton.setFont(Style.BASE_FONT);
 
+		saveButton.addActionListener(e -> {
+			if (updateUserData()) {
+				JOptionPane.showMessageDialog(this, "Successfully Saved!", "Success",
+						JOptionPane.INFORMATION_MESSAGE);
+				media = ui.locateMedia(media);
+			} else {
+				JOptionPane.showMessageDialog(this, "Failed to Save!", "Error",
+						JOptionPane.ERROR_MESSAGE);
+			}
+		});
+
 		gbc.gridx = 1;
 		gbc.insets = new Insets(0, 0, 0, 20);
 
@@ -340,6 +363,7 @@ public class MediaPage extends Page {
 	}
 
 	public void setupMediaPanel(Media obj, String panelName) {
+		media = obj; // Stores it for the Rest of the UI to Use
 		panelToSendBackTo = panelName;
 
 		// then load data
@@ -357,11 +381,56 @@ public class MediaPage extends Page {
 		statusSelector.setSelectedIndex(obj.getStatus()); // but we love you for this one now. only for now
 		usrRatingSelector.setValue(obj.getRating());
 		rewatchesSelector.setValue(obj.getRewatched());
-		cEpSelector.setValue(obj.getLastEpisode());
+		cEpSelector.setModel(new SpinnerNumberModel(obj.getLastEpisode(), 0, obj.getEpisodeCount(), 1));
 
+		scrollContentPanel.removeAll();
 		String[][] reviews = ui.pullReview(obj.getId());
 		for (int i = 0; i < reviews.length; i++) {
-			scrollContentPanel.add(getReviewPanel(reviews[i]));
+			if (reviews[i][1] != null) {
+				scrollContentPanel.add(getReviewPanel(reviews[i]));
+			}
+		}
+	}
+
+	/**
+	 * Handle the Logic for if to Edit or Create or Remove Status
+	 *
+	 * @param newStatus The new status to set
+	 * @param refMedia  The Media to edit
+	 * @return If the Status was Edited
+	 */
+	private void editStatus(int newStatus, Media refMedia) {
+		if (newStatus == 3) { // Watching == Set Start Date
+			startDateField.setText(LocalDate.now().toString());
+		} else if (newStatus == 4) { // Finished == Set Finish Date
+			finishDateField.setText(LocalDate.now().toString());
+			cEpSelector.setValue(refMedia.getEpisodeCount());
+		}
+	}
+
+	/**
+	 * Runs when the save button is pressed. Give all the Values the User has
+	 * created
+	 *
+	 * @return If adding it worked
+	 */
+	private boolean updateUserData() {
+		UserData newUserData = new UserData(statusSelector.getSelectedIndex(), startDateField.getText(),
+				finishDateField.getText(), (Integer) usrRatingSelector.getValue(), (Integer) cEpSelector.getValue(),
+				null,
+				(Integer) rewatchesSelector.getValue());
+		if (media.getStatus() == 0) { // Create the User Data
+			return ui.createUserData(media.getId(), newUserData);
+		} else if (newUserData.getStatus() == 0) {
+			int confirm = JOptionPane.showConfirmDialog(this,
+					"Are you sure you want to set as Undecided? this will Remove all Info you have entered (Start Date, Rating, Review etc)");
+			if (confirm == JOptionPane.YES_OPTION) {
+				return ui.deleteUserData(media.getId());
+			} else {
+				return false;
+			}
+		} else {
+			return ui.editUserData(media.getId(), newUserData);
 		}
 	}
 }

@@ -83,13 +83,8 @@ public class UI extends JFrame implements EventListener {
 		this.searchPage = new SearchPage(this);
 		this.settingPage = new SettingsPage(this);
 		this.mediaPage = new MediaPage(this);
-		if (isAdmin()) {
-			this.adminUsrPage = new AdminUserPage(this);
-			this.adminMediaPage = new AdminMediaPage(this);
-		} else {
-			this.adminUsrPage = null;
-			this.adminMediaPage = null;
-		}
+		this.adminUsrPage = new AdminUserPage(this);
+		this.adminMediaPage = new AdminMediaPage(this); // Gets Show User has Selected
 
 		// Setting Up Card layout
 		this.panelContainer = getContentPane();
@@ -363,6 +358,18 @@ public class UI extends JFrame implements EventListener {
 		return locatedMedia;
 	}
 
+	public boolean createUserData(int mediaId, UserData userData) {
+		return db.createUserData(this.currentUser.getId(), mediaId, userData);
+	}
+
+	public boolean editUserData(int mediaId, UserData userData) {
+		return db.editUserData(this.currentUser.getId(), mediaId, userData);
+	}
+
+	public boolean deleteUserData(int mediaId) {
+		return db.deleteUserData(this.currentUser.getId(), mediaId);
+	}
+
 	/**
 	 * Handle the Logic for if to Edit or Create or Remove Status
 	 *
@@ -379,14 +386,13 @@ public class UI extends JFrame implements EventListener {
 			change = true;
 		} else if (refMedia.getStatus() == 0 && newStatus != 0) { // Create New Status
 			// Add Start Date and Finish Date
+			startDate = "yyyy-mm-dd";
+			finishDate = "yyyy-mm-dd";
 			if (newStatus == 3) { // Watching == Set Start Date
 				startDate = LocalDate.now().toString();
 			} else if (newStatus == 4) { // Finished == Set Finish Date
 				finishDate = LocalDate.now().toString();
 				episodeCount = refMedia.getEpisodeCount();
-			} else {
-				startDate = "yyyy-mm-dd";
-				finishDate = "yyyy-mm-dd";
 			}
 			change = db.createUserData(this.currentUser.getId(), refMedia.getId(),
 					new UserData(newStatus, startDate, finishDate, 0, episodeCount, "", 0));
@@ -397,9 +403,6 @@ public class UI extends JFrame implements EventListener {
 			} else if (newStatus == 4) { // Finished == Set Finish Date
 				finishDate = LocalDate.now().toString();
 				episodeCount = refMedia.getEpisodeCount();
-			} else {
-				startDate = "yyyy-mm-dd";
-				finishDate = "yyyy-mm-dd";
 			}
 			change = db.editUserData(this.currentUser.getId(), refMedia.getId(),
 					new UserData(newStatus, startDate, finishDate, 0, episodeCount, "", 0));
@@ -608,7 +611,7 @@ public class UI extends JFrame implements EventListener {
 	public void createHomePage() {
 		this.homePage.createWidgets();
 	}
-	
+
 	public String getMovieTypeFromInt(int movieType) {
 		switch (movieType) {
 			case 1:
@@ -619,6 +622,23 @@ public class UI extends JFrame implements EventListener {
 				return "Anime";
 			default:
 				return "N/A";
+		}
+	}
+
+	public String getStatusString(int status) {
+		switch (status) {
+			case 0:
+				return "Undecided";
+			case 1:
+				return "Dropped";
+			case 2:
+				return "Backlog";
+			case 3:
+				return "Watching";
+			case 4:
+				return "Completed";
+			default:
+				return "Unknown";
 		}
 	}
 }

@@ -446,9 +446,7 @@ public class ListPage extends Page {
 			int row = listTable.getSelectedRow();
 
 			if (row != -1) {
-				int column = 1; // target name column
-				String nameOfShow = ui.getRawTextFromHtmlFormat(listTable.getValueAt(row, column).toString());
-				Media show = this.Response[row];
+				Media show = this.Response[row]; // Gets Show User has Selected
 
 				ui.openMediaPage(show, "list");
 			} else { // no row selected
@@ -584,26 +582,7 @@ public class ListPage extends Page {
 		}
 
 		toAddToTable[1] = ui.getHtmlFormatText(media.getName(), CPERLINE_TITLE, MAXPASS);
-		switch (media.getStatus()) {
-			case 0:
-				toAddToTable[2] = "Undecided";
-				break;
-			case 1:
-				toAddToTable[2] = "Dropped";
-				break;
-			case 2:
-				toAddToTable[2] = "Backlog";
-				break;
-			case 3:
-				toAddToTable[2] = "isWatching";
-				break;
-			case 4:
-				toAddToTable[2] = "Completed";
-				break;
-			default:
-				toAddToTable[2] = "Unknown";
-				break;
-		}
+		toAddToTable[2] = ui.getStatusString(media.getStatus());
 		toAddToTable[3] = media.getRating();
 		toAddToTable[4] = media.getLastEpisode();
 		toAddToTable[5] = media.getRewatched();

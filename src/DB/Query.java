@@ -110,8 +110,8 @@ class Query {
 				SELECT
 					m.*,
 					ud.status,
-					ud.startDate,
-					ud.finishDate,
+					COALESCE(ud.startDate, 'yyyy-mm-dd') as startDate,
+					COALESCE(ud.finishDate, 'yyyy-mm-dd') as finishDate,
 					ud.rating,
 					ud.lastEpisode,
 					ud.review,
@@ -124,6 +124,8 @@ class Query {
 					m.type IN (?, ?, ?) AND
 					COALESCE(ud.status, 0) IN (?, ?, ?, ?, ?) AND
 					COALESCE(ud.rating, 0) BETWEEN ? AND ?
+				ORDER BY ud.status DESC NULLS LAST;
+
 			""";
 	public static final String ALL_MEDIA = """
 				SELECT
@@ -133,8 +135,17 @@ class Query {
 			""";
 	public static final String LOCATE_MEDIA = """
 				SELECT
-					m.*
+					m.*,
+					ud.status,
+					COALESCE(ud.startDate, 'yyyy-mm-dd') as startDate,
+					COALESCE(ud.finishDate, 'yyyy-mm-dd') as finishDate,
+					ud.rating,
+					ud.lastEpisode,
+					ud.review,
+					ud.rewatched,
+					count(*) OVER() AS count
 				FROM Media AS m
+				LEFT JOIN "UserData" AS ud ON m.id = ud.mediaId
 				WHERE
 					m.name = ? AND
 					m.type = ? AND
@@ -148,7 +159,7 @@ class Query {
 			""";
 	public static final String EDIT_USERDATA = """
 			UPDATE "UserData"
-			SET "status" = ?, "startDate" = COALESCE(?, "startDate"), "finishDate" = COALESCE(?, "finishDate"), "rating" = ?, "lastEpisode" = ?, "review" = ?, "rewatched" = ?
+			SET "status" = ?, "startDate" = COALESCE(?, "startDate"), "finishDate" = COALESCE(?, "finishDate"), "rating" = ?, "lastEpisode" = ?, "review" = COALESCE(?, "review"), "rewatched" = ?
 			WHERE "userId" = ? AND "mediaID" = ?
 			""";
 	public static final String DELETE_USERDATA = """
