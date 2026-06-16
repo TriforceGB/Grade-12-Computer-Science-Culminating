@@ -149,7 +149,7 @@ public class ListPage extends Page {
 		// note row comments are not accurate (psa gridy = 0 -> row 1)
 		movieTypeLbl = new JLabel("Movie: ");
 		movieTypeLbl.setFont(Style.BASE_FONT);
-		movieTypeLbl.setForeground(Style.TEA_GREEN); // set the font color of the password label
+		movieTypeLbl.setForeground(Style.TEA_GREEN);
 		movieType = new JCheckBox();
 		movieType.setSelected(true);
 		movieType.setBackground(Style.BALTIC_BLUE);

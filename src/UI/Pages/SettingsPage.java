@@ -1,13 +1,21 @@
 package UI.Pages;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 
+import javax.sound.sampled.Line;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.border.LineBorder;
+import javax.swing.plaf.basic.BasicScrollBarUI;
 
 import UI.Style;
 import UI.UI;
@@ -21,6 +29,15 @@ public class SettingsPage extends Page {
 	 *
 	 * @param ui The UI object that this page belongs to
 	 */
+
+	private boolean isAdmin = false;
+
+	JButton adminButton;
+	public void setAdmin(boolean admin) {
+		isAdmin = admin;
+		adminButton.setVisible(admin);
+	}
+	
 	public SettingsPage(UI ui) {
 		super(ui); // Uses the basic page layout and background color
 
@@ -46,7 +63,7 @@ public class SettingsPage extends Page {
 		JButton expMediaButton = new JButton("Export Media");
 		JButton impMediaButton = new JButton("Import Media");
 		JButton delUserButton = new JButton("Delete User");
-		JButton adminButton = new JButton("Admin Panel");
+		adminButton = new JButton("Admin Panel");
 		chngUserButton.setFocusable(false);
 		chngPassButton.setFocusable(false);
 		expUserButton.setFocusable(false);
@@ -200,9 +217,7 @@ public class SettingsPage extends Page {
 		});
 		adminButton.addActionListener(e -> ui.logout());
 
-		// Stat Panel
-		// TODO: Michael pls do this
-
+		// buttonPanel.setPreferredSize(new Dimension(600, 400));
 		buttonPanel.add(chngUserButton);
 		buttonPanel.add(chngPassButton);
 		buttonPanel.add(expUserButton);
@@ -210,11 +225,55 @@ public class SettingsPage extends Page {
 		buttonPanel.add(expMediaButton);
 		buttonPanel.add(impMediaButton);
 		buttonPanel.add(delUserButton);
+<<<<<<< HEAD
 		// TODO get if user is admin
 		buttonPanel.add(adminButton); 
 
 		buttonPanel.setBorder(BorderFactory.createEmptyBorder(300, 250, 300, 850));
+=======
+		buttonPanel.add(adminButton); // TODO (make sure only admins can see this button)
+		adminButton.setVisible(isAdmin);
 
+		buttonPanel.setBorder(BorderFactory.createEmptyBorder(300, 100, 300, 100));
+		// Stat Panel
+		statPanel.setLayout(new BorderLayout());
+		JLabel statLabel = new JLabel("User Stats");
+		statLabel.setFont(Style.BASE_FONT_BIG);
+		statLabel.setHorizontalAlignment(JLabel.CENTER);
+		statLabel.setPreferredSize(new Dimension(400, 50));
+		statLabel.setBackground(Style.BALTIC_BLUE);
+		statLabel.setForeground(Style.TEA_GREEN);
+		JTextArea statistics = new JTextArea();
+		statistics.setFont(Style.BASE_FONT_BIGGER);
+		statistics.setEditable(false);
+		statistics.setPreferredSize(new Dimension(500, 600));
+		statistics.setBackground(Style.BORDER_COLOR);
+		statistics.setForeground(Style.TEA_GREEN);
+		statistics.setBorder(new LineBorder(Color.black));
+>>>>>>> origin/Ryan's-Branch
+
+		statistics.append("stat 1 \n");
+		statistics.append("stat 2 \n");
+		statistics.append("stat 3 \n");
+		statistics.append("stat 4 \n");
+		statistics.append("stat 5 \n");
+
+
+		JScrollPane statScrollPane = new JScrollPane(statistics);
+		statScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        statScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		statScrollPane.setBorder(new LineBorder(Color.BLACK));
+		statScrollPane.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
+			@Override
+			protected void configureScrollBarColors() {
+				this.thumbColor = Style.BORDER_COLOR;
+				this.trackColor = Style.TEA_GREEN;
+			}
+		} );
+		
+		statPanel.setBorder(BorderFactory.createEmptyBorder(100, 0, 100, 100));
+		statPanel.add(statLabel, BorderLayout.PAGE_START);
+		statPanel.add(statScrollPane, BorderLayout.CENTER);
 		contentPanel.add(buttonPanel, BorderLayout.CENTER);
 		contentPanel.add(statPanel, BorderLayout.LINE_END);
 
