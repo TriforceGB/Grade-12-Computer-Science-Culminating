@@ -6,6 +6,7 @@ import java.awt.Image;
 import java.io.File;
 import java.io.FileWriter;
 import java.nio.file.Files;
+import java.time.LocalDate;
 import java.util.EventListener;
 
 import javax.swing.ImageIcon;
@@ -309,7 +310,7 @@ public class UI extends JFrame implements EventListener {
 	 *
 	 * @return If the User was Imported
 	 */
-	public Boolean importUser() {
+	public boolean importUser() {
 		String json = openFile();
 		User newUser;
 
@@ -347,6 +348,64 @@ public class UI extends JFrame implements EventListener {
 			}
 		}
 		return true;
+	}
+
+	/**
+	 * Handle the Logic for if to Edit or Create or Remove Status
+	 *
+	 * @return If the Status was Edited
+	 */
+
+	/**
+	 * Finds the Media and return it from the DB. Useful for Getting its ID
+	 *
+	 * @param refMedia The Media to locate
+	 * @return The located Media, or null if not found
+	 */
+	public Media locateMedia(Media refMedia) {
+		Media locatedMedia = db.locateMedia(refMedia.getName(), refMedia.getType(), refMedia.getExternalId());
+		return locatedMedia;
+	}
+
+	public boolean editStatus(int newStatus, Media refMedia) {
+		boolean change = false;
+		String startDate = null;
+		String finishDate = null;
+		int episodeCount = 0;
+		if (refMedia.getStatus() == 0 && newStatus == 0) { // No Change Needed
+			change = true;
+		} else if (refMedia.getStatus() == 0 && newStatus != 0) { // Create New Status
+			// Add Start Date and Finish Date
+			if (newStatus == 3) { // Watching == Set Start Date
+				startDate = LocalDate.now().toString();
+			} else if (newStatus == 4) { // Finished == Set Finish Date
+				finishDate = LocalDate.now().toString();
+				episodeCount = refMedia.getEpisodeCount();
+			} else {
+				startDate = "yyyy-mm-dd";
+				finishDate = "yyyy-mm-dd";
+			}
+			change = db.createUserData(this.currentUser.getId(), refMedia.getId(),
+					new UserData(newStatus, startDate, finishDate, 0, episodeCount, "", 0));
+		} else if (refMedia.getStatus() != 0 && newStatus != 0) { // Update Existing Status
+			// Add Start Date and Finish Date
+			if (newStatus == 3) { // Watching == Set Start Date
+				startDate = LocalDate.now().toString();
+			} else if (newStatus == 4) { // Finished == Set Finish Date
+				finishDate = LocalDate.now().toString();
+				episodeCount = refMedia.getEpisodeCount();
+			} else {
+				startDate = "yyyy-mm-dd";
+				finishDate = "yyyy-mm-dd";
+			}
+			change = db.editUserData(this.currentUser.getId(), refMedia.getId(),
+					new UserData(newStatus, startDate, finishDate, 0, episodeCount, "", 0));
+		} else if (refMedia.getStatus() != 0 && newStatus == 0) { // No Change Needed
+			change = db.deleteUserData(this.currentUser.getId(), refMedia.getId());
+		}
+
+		refMedia.setStatus(newStatus);
+		return change;
 	}
 
 	// API Shells

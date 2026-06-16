@@ -148,7 +148,7 @@ class Query {
 			""";
 	public static final String EDIT_USERDATA = """
 			UPDATE "UserData"
-			SET "status" = ?, "startDate" = ?, "finishDate" = ?, "rating" = ?, "lastEpisode" = ?, "review" = ?, "rewatched" = ?
+			SET "status" = ?, "startDate" = COALESCE(?, "startDate"), "finishDate" = COALESCE(?, "finishDate"), "rating" = ?, "lastEpisode" = ?, "review" = ?, "rewatched" = ?
 			WHERE "userId" = ? AND "mediaID" = ?
 			""";
 	public static final String DELETE_USERDATA = """

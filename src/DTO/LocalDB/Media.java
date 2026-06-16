@@ -182,28 +182,56 @@ public class Media {
 			return status;
 		}
 
+		public void setStatus(int status) {
+			this.status = status;
+		}
+
 		public String getStartDate() {
 			return startDate;
+		}
+
+		public void setStartDate(String startDate) {
+			this.startDate = startDate;
 		}
 
 		public String getFinishDate() {
 			return finishDate;
 		}
 
+		public void setFinishDate(String finishDate) {
+			this.finishDate = finishDate;
+		}
+
 		public int getRating() {
 			return rating;
+		}
+
+		public void setRating(int rating) {
+			this.rating = rating;
 		}
 
 		public int getLastEpisode() {
 			return lastEpisode;
 		}
 
+		public void setLastEpisode(int lastEpisode) {
+			this.lastEpisode = lastEpisode;
+		}
+
 		public String getReview() {
 			return review;
 		}
 
+		public void setReview(String review) {
+			this.review = review;
+		}
+
 		public int getRewatched() {
 			return rewatched;
+		}
+
+		public void setRewatched(int rewatched) {
+			this.rewatched = rewatched;
 		}
 
 	}
@@ -213,64 +241,127 @@ public class Media {
 		return id;
 	}
 
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	public int getType() {
 		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
 	}
 
 	public int getExternalId() {
 		return externalId;
 	}
 
+	public void setExternalId(int externalId) {
+		this.externalId = externalId;
+	}
+
 	public String getName() {
 		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getDescription() {
 		return description;
 	}
 
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 	public int getEpisodeCount() {
 		return episodeCount;
+	}
+
+	public void setEpisodeCount(int episodeCount) {
+		this.episodeCount = episodeCount;
 	}
 
 	public String getPosterPath() {
 		return posterPath;
 	}
 
+	public void setPosterPath(String posterPath) {
+		this.posterPath = posterPath;
+	}
+
 	public String getPosterLink() {
 		return posterLink;
 	}
 
-	public int getStatus() {
-		return userData.status;
-	}
-
-	public String getStartDate() {
-		return userData.startDate;
-	}
-
-	public String getFinishDate() {
-		return userData.finishDate;
-	}
-
-	public int getRating() {
-		return userData.rating;
-	}
-
-	public int getLastEpisode() {
-		return userData.lastEpisode;
-	}
-
-	public String getReview() {
-		return userData.review;
-	}
-
-	public int getRewatched() {
-		return userData.rewatched;
+	public void setPosterLink(String posterLink) {
+		this.posterLink = posterLink;
 	}
 
 	public UserData getUserData() {
 		return userData;
 	}
 
+	public void setUserData(UserData userData) {
+		this.userData = userData;
+	}
+
+	public int getStatus() {
+		return userData.status;
+	}
+
+	public void setStatus(int status) {
+		this.userData.status = status;
+	}
+
+	public String getStartDate() {
+		return userData.startDate;
+	}
+
+	public void setStartDate(String startDate) {
+		this.userData.startDate = startDate;
+	}
+
+	public String getFinishDate() {
+		return userData.finishDate;
+	}
+
+	public void setFinishDate(String finishDate) {
+		this.userData.finishDate = finishDate;
+	}
+
+	public int getRating() {
+		return userData.rating;
+	}
+
+	public void setRating(int rating) {
+		this.userData.rating = rating;
+	}
+
+	public int getLastEpisode() {
+		return userData.lastEpisode;
+	}
+
+	public void setLastEpisode(int lastEpisode) {
+		this.userData.lastEpisode = lastEpisode;
+	}
+
+	public String getReview() {
+		return userData.review;
+	}
+
+	public void setReview(String review) {
+		this.userData.review = review;
+	}
+
+	public int getRewatched() {
+		return userData.rewatched;
+	}
+
+	public void setRewatched(int rewatched) {
+		this.userData.rewatched = rewatched;
+	}
 }
