@@ -91,7 +91,7 @@ public class ListPage extends Page {
 	private final int POSTER_WIDTH = 100;
 	private final int POSTER_HEIGHT = 150;
 
-	private final Border border = BorderFactory.createLineBorder(Style.BORDER_COLOR, 4, true); // true allows for
+	private final Border BORDER = BorderFactory.createLineBorder(Style.BORDER_COLOR, 4, true); // true allows for
 																								// rounded
 
 	private final int CPERLINE_TITLE = 38;
@@ -130,7 +130,7 @@ public class ListPage extends Page {
 		filterPanel.setLayout(new GridBagLayout());
 		gbc = new GridBagConstraints();
 		// set rounded borders
-		filterPanel.setBorder(border);
+		filterPanel.setBorder(BORDER);
 		// then simply lock the width
 		filterPanel.setSize(new Dimension(150, 0));
 	}
@@ -555,7 +555,7 @@ public class ListPage extends Page {
 
 		tableScrollContainer = new JScrollPane(listTable);
 		tableScrollContainer.setBackground(Style.BALTIC_BLUE);
-		tableScrollContainer.setBorder(border);
+		tableScrollContainer.setBorder(BORDER);
 		tableScrollContainer.getViewport().setBackground(PageColor);
 		tableScrollContainer.setMaximumSize(new Dimension(Short.MAX_VALUE, 500));
 

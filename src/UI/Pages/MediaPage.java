@@ -354,7 +354,7 @@ public class MediaPage extends Page {
 		finishDateField.setText(obj.getFinishDate());
 		titleLabel.setText(obj.getName());
 		int showTypeInt = obj.getType();
-		showType.setText("ZACH MAKE NOT STRING.");
+		showType.setText(ui.getMovieTypeFromInt(showTypeInt));
 		descLabel.setText(ui.getHtmlFormatText(obj.getDescription(), CPERLINE_DESC, MAXPASS_DESC));
 		statusSelector.setSelectedIndex(obj.getStatus()); // but we love you for this one now. only for now
 		usrRatingSelector.setValue(obj.getRating());
