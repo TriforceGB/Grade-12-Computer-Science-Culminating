@@ -509,4 +509,12 @@ public class UI extends JFrame implements EventListener {
 		return null;
 	}
 
+	public boolean isAdmin() {
+		System.out.println(this.currentUser.isAdmin());
+		return this.currentUser.isAdmin();
+	}
+
+	public void setAdmin(boolean admin) {
+		this.settingPage.setAdmin(admin);
+	}
 }
