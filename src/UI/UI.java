@@ -58,6 +58,8 @@ public class UI extends JFrame implements EventListener {
 	private AdminMediaPage adminMediaPage;
 
 	private boolean loadedMediaPageOnce = false;
+	private boolean loadedAdminUserPage = false;
+	private boolean loadedAdminMediaPage = false;
 
 	/**
 	 * This Create the UI and Display it for the User
@@ -99,10 +101,8 @@ public class UI extends JFrame implements EventListener {
 		this.panelContainer.add(this.searchPage, "search");
 		this.panelContainer.add(this.settingPage, "setting");
 		this.panelContainer.add(this.mediaPage, "media");
-		if (adminUsrPage != null) {
-			this.panelContainer.add(this.adminUsrPage, "adminUsr");
-			this.panelContainer.add(this.adminMediaPage, "adminMedia");
-		}
+		this.panelContainer.add(this.adminUsrPage, "adminUsr");
+		this.panelContainer.add(this.adminMediaPage, "adminMedia");
 
 		this.card.show(this.panelContainer, "login"); // Show the Login Panel by Default
 
@@ -121,6 +121,14 @@ public class UI extends JFrame implements EventListener {
 		if (panelName.equals("list") && !loadedMediaPageOnce) {
 			loadedMediaPageOnce = true;
 			listPage.addDefaultListToTable();
+		}
+		if (panelName.equals("adminUsr") && !loadedAdminUserPage) {
+			loadedAdminUserPage = true;
+			adminUsrPage.loadData();
+		}
+		if (panelName.equals("adminMedia") && !loadedAdminMediaPage) {
+			loadedAdminMediaPage = true;
+			adminMediaPage.loadData();
 		}
 	}
 
