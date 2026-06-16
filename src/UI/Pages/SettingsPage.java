@@ -223,11 +223,7 @@ public class SettingsPage extends Page {
 		buttonPanel.add(expMediaButton);
 		buttonPanel.add(impMediaButton);
 		buttonPanel.add(delUserButton);
-<<<<<<< HEAD
 		buttonPanel.add(adminButton);
-=======
-		buttonPanel.add(adminButton); // TODO (make sure only admins can see this button)
->>>>>>> origin/Zach's-Branch
 		adminButton.setVisible(isAdmin);
 
 		buttonPanel.setBorder(BorderFactory.createEmptyBorder(300, 100, 300, 100));
