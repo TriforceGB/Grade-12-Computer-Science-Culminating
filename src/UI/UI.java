@@ -536,4 +536,17 @@ public class UI extends JFrame implements EventListener {
 	public void setAdmin(boolean admin) {
 		this.settingPage.setAdmin(admin);
 	}
+
+	public String getMovieTypeFromInt(int movieType) {
+		switch (movieType) {
+			case 1:
+				return "Movie";
+			case 2:
+				return "TV Show";
+			case 3:
+				return "Anime";
+			default:
+				return "N/A";
+		}
+	}
 }
