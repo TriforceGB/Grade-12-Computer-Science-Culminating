@@ -23,6 +23,7 @@ import API.API;
 import DB.DB;
 import DTO.LocalDB.Media;
 import DTO.LocalDB.User;
+import DTO.LocalDB.Media.UserData;
 import UI.Pages.*;
 
 /**
@@ -268,10 +269,12 @@ public class UI extends JFrame implements EventListener {
 	 */
 	public boolean importMedia() {
 		String json = openFile();
-		Media[] mediaList = gson.fromJson(json, Media[].class);
-		// Throw an error if media is null
-		if (mediaList == null) {
-			return false;
+		Media[] mediaList;
+		try {
+			mediaList = gson.fromJson(json, Media[].class);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false; // Throw an error if media is null
 		}
 
 		for (Media media : mediaList) {
@@ -297,11 +300,20 @@ public class UI extends JFrame implements EventListener {
 		return true;
 	}
 
+	/**
+	 * Taken in a Json and Create a user Base off that. Import all the show they
+	 * have Userdata connected too
+	 *
+	 * @return If the User was Imported
+	 */
 	public Boolean importUser() {
 		String json = openFile();
-		User newUser = gson.fromJson(json, User.class);
-		// Throw an error if user is null
-		if (newUser == null) {
+		User newUser;
+
+		try {
+			newUser = gson.fromJson(json, User.class);
+		} catch (Exception e) {
+			e.printStackTrace(); // Throw Error if Not a Valid User
 			return false;
 		}
 
@@ -312,13 +324,22 @@ public class UI extends JFrame implements EventListener {
 			return false;
 		}
 
+		// Recreate the User with for the new ID
+		Media[] mediaRelation = newUser.getMediaRelation();
+		newUser = db.login(newUser.getUsername(), newUser.getPassword());
+
 		// Add Media that Relate to User
-		for (Media media : newUser.getMediaRelation()) {
+		for (Media media : mediaRelation) {
 			if (!db.createMedia(media) || !api.downloadImage(media)) {
 				System.err.println("Failed to create media: " + media.getName());
 			}
+
+			// Recreate the media with the new ID
+			UserData userData = media.getUserData();
+			media = db.locateMedia(media.getName(), media.getType(), media.getExternalId());
+
 			// Add UserDate to DB
-			if (!db.createUserData(newUser.getId(), media.getId(), media.getUserData())) {
+			if (!db.createUserData(newUser.getId(), media.getId(), userData)) {
 				System.err.println("Failed to create user media relation: " + media.getName());
 			}
 		}

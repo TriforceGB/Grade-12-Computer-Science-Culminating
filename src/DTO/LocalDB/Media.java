@@ -116,6 +116,7 @@ public class Media {
 		this.externalId = response.getId();
 		this.posterPath = "assets/Images/Anime/" + response.getId() + ".png";
 		this.posterLink = response.getImageUrl();
+		this.userData = new UserData(0, "", "", 0, 0, "", 0);
 	}
 
 	/**
@@ -136,6 +137,7 @@ public class Media {
 			this.posterPath = "assets/Images/Shows/" + response.getId() + ".jpg";
 		}
 		this.posterLink = response.getImageUrl();
+		this.userData = new UserData(0, "", "", 0, 0, "", 0);
 	}
 
 	/**
