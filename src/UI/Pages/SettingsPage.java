@@ -33,11 +33,12 @@ public class SettingsPage extends Page {
 	private boolean isAdmin = false;
 
 	JButton adminButton;
+
 	public void setAdmin(boolean admin) {
 		isAdmin = admin;
 		adminButton.setVisible(admin);
 	}
-	
+
 	public SettingsPage(UI ui) {
 		super(ui); // Uses the basic page layout and background color
 
@@ -225,12 +226,6 @@ public class SettingsPage extends Page {
 		buttonPanel.add(expMediaButton);
 		buttonPanel.add(impMediaButton);
 		buttonPanel.add(delUserButton);
-<<<<<<< HEAD
-		// TODO get if user is admin
-		buttonPanel.add(adminButton); 
-
-		buttonPanel.setBorder(BorderFactory.createEmptyBorder(300, 250, 300, 850));
-=======
 		buttonPanel.add(adminButton); // TODO (make sure only admins can see this button)
 		adminButton.setVisible(isAdmin);
 
@@ -250,7 +245,6 @@ public class SettingsPage extends Page {
 		statistics.setBackground(Style.BORDER_COLOR);
 		statistics.setForeground(Style.TEA_GREEN);
 		statistics.setBorder(new LineBorder(Color.black));
->>>>>>> origin/Ryan's-Branch
 
 		statistics.append("stat 1 \n");
 		statistics.append("stat 2 \n");
@@ -258,10 +252,9 @@ public class SettingsPage extends Page {
 		statistics.append("stat 4 \n");
 		statistics.append("stat 5 \n");
 
-
 		JScrollPane statScrollPane = new JScrollPane(statistics);
 		statScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        statScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		statScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		statScrollPane.setBorder(new LineBorder(Color.BLACK));
 		statScrollPane.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
 			@Override
@@ -269,8 +262,8 @@ public class SettingsPage extends Page {
 				this.thumbColor = Style.BORDER_COLOR;
 				this.trackColor = Style.TEA_GREEN;
 			}
-		} );
-		
+		});
+
 		statPanel.setBorder(BorderFactory.createEmptyBorder(100, 0, 100, 100));
 		statPanel.add(statLabel, BorderLayout.PAGE_START);
 		statPanel.add(statScrollPane, BorderLayout.CENTER);

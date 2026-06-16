@@ -153,20 +153,17 @@ public class SearchPage extends Page {
 		// only padding on bottom for spacing
 		gbc.insets = new Insets(0, 0, 10, 0);
 
-		searchTypeBox.addActionListener(e ->{
+		searchTypeBox.addActionListener(e -> {
 			String showtype = searchTypeBox.getSelectedItem().toString();
 			if (showtype.equals("Movie")) {
 				ui.addButtonImg(searchBtn, new ImageIcon("assets/UI/moviesearchicon.png"), 20, 30, 30);
-				}
-				else if (showtype.equals("TV Show")) {
-					ui.addButtonImg(searchBtn, new ImageIcon("assets/UI/tvsearchicon.png"), 20, 30, 30);
-				}
-				else if (showtype.equals("Anime")) {
-					ui.addButtonImg(searchBtn, new ImageIcon("assets/UI/animesearchicon.png"), 20, 30, 30);
-				}
-				else {
-					ui.addButtonImg(searchBtn, new ImageIcon("assets/UI/searchicon.png"), 20, 30, 30);
-				}
+			} else if (showtype.equals("TV Show")) {
+				ui.addButtonImg(searchBtn, new ImageIcon("assets/UI/tvsearchicon.png"), 20, 30, 30);
+			} else if (showtype.equals("Anime")) {
+				ui.addButtonImg(searchBtn, new ImageIcon("assets/UI/animesearchicon.png"), 20, 30, 30);
+			} else {
+				ui.addButtonImg(searchBtn, new ImageIcon("assets/UI/searchicon.png"), 20, 30, 30);
+			}
 
 		});
 		searchPanel.add(searchTypeBox, gbc);
@@ -220,7 +217,7 @@ public class SearchPage extends Page {
 				this.thumbColor = Style.BORDER_COLOR;
 				this.trackColor = Style.TEA_GREEN;
 			}
-		} );
+		});
 		listPanel.add(listScrollPane);
 	}
 
@@ -258,7 +255,6 @@ public class SearchPage extends Page {
 		posterLbl.setMinimumSize(POSTER_SIZE);
 		posterLbl.setMaximumSize(POSTER_SIZE);
 		result.add(posterLbl, gbc);
-		
 
 		// add name
 		String titleString = givenMedia.getName();
@@ -276,7 +272,6 @@ public class SearchPage extends Page {
 		JLabel descLbl = new JLabel(ui.getHtmlFormatText(descString, DESCRIPTION_CPERLINE, MAX_PASS));
 		descLbl.setFont(Style.DESC_FONT);
 		descLbl.setForeground(Style.TEA_GREEN);
-		
 
 		gbc.gridx = 2; // col 3
 		gbc.insets = new Insets(20, 0, 20, 70);
@@ -311,6 +306,7 @@ public class SearchPage extends Page {
 					// and change user information based on:
 					int showStatusToUpdate = showStatus.getSelectedIndex();
 					System.out.println(showStatusToUpdate);
+					System.out.println(givenMedia.getStatus());
 				});
 
 				gbc2.gridy = 0;

@@ -10,13 +10,5 @@ public class AdminMediaPage extends AdminUserPage {
 	public AdminMediaPage(UI ui) {
 		super(ui);
 	}
-<<<<<<< HEAD:src/UI/Pages/AdminMediaPage.java
-=======
-
-
-	
-	
-
 	// TODO Rewrite header for the Admin Panel
->>>>>>> origin/Ryan's-Branch:src/UI/Pages/adminPage.java
 }
