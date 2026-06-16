@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 
-import javax.sound.sampled.Line;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -111,8 +110,6 @@ public class SettingsPage extends Page {
 		ui.addButtonImg(impMediaButton, new ImageIcon("assets/UI/importicon.png"), 20, 45, 45);
 		ui.addButtonImg(delUserButton, new ImageIcon("assets/UI/binicon.png"), 20, 45, 45);
 		ui.addButtonImg(adminButton, new ImageIcon("assets/UI/adminicon.png"), 20, 45, 45);
-
-		ImageIcon filal = ui.resizeImg(new ImageIcon("assets/UI/filal.png"), 45, 45); // TODO REMOVE?
 
 		chngUserButton.addActionListener(e -> {
 			String changedUsername = JOptionPane.showInputDialog("Enter new username"); // Prompt to change username
@@ -225,7 +222,7 @@ public class SettingsPage extends Page {
 		buttonPanel.add(expMediaButton);
 		buttonPanel.add(impMediaButton);
 		buttonPanel.add(delUserButton);
-		buttonPanel.add(adminButton); // TODO (make sure only admins can see this button)
+		buttonPanel.add(adminButton);
 		adminButton.setVisible(isAdmin);
 
 		buttonPanel.setBorder(BorderFactory.createEmptyBorder(300, 100, 300, 100));
