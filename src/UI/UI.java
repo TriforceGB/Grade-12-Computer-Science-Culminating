@@ -384,12 +384,15 @@ public class UI extends JFrame implements EventListener {
 	 * Pulls the user's stats from the DB and returns them as a 2D array
 	 *
 	 * @return A 2D array of user stats, where each row is a stat and each column is
-	 *         a stat field. The format is as follows, Username, UserStats, MediaStats
+	 *         a stat field. The format is as follows: UserStats,
+	 *         MediaStats
 	 */
-	public String[][] pullStats() {
-		String[] name = {this.currentUser.getName()};
-		String[] userData = db.getUserStats(this.currentUser.getId());
+	public int[][] pullStats() {
+		int[] userData = db.getUserStats(this.currentUser.getId());
+		int[] mediaData = db.getMediaStats();
 
+		int[][] stats = { userData, mediaData };
+		return stats;
 
 	}
 
@@ -647,8 +650,12 @@ public class UI extends JFrame implements EventListener {
 		return this.currentUser.getIsAdmin();
 	}
 
-	public void setAdmin(boolean admin) {
+	public void showAdmin(boolean admin) {
 		this.settingPage.setAdmin(admin);
+	}
+
+	public void setStats() {
+		this.settingPage.getStats(this.pullStats());
 	}
 
 	/**
