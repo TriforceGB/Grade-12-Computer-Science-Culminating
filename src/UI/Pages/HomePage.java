@@ -3,6 +3,7 @@ package UI.Pages;
 import UI.Style;
 import UI.UI;
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -22,8 +23,15 @@ public class HomePage extends Page {
 	private JPanel backlogPanel = new JPanel();
 	private JPanel currentPanel = new JPanel();
 	private JPanel finishPanel = new JPanel();
+
+	private JScrollPane blScrollPane;
+	private JScrollPane crScrollPane;
+	private JScrollPane finScrollPane;
+
 	private int hgap = 20;
 	private int cols = 3;
+
+	private final Dimension STANDARD_WIDGET_SIZE = new Dimension(150, 225);
 
 	/**
 	 * Create the Home Page
@@ -62,6 +70,7 @@ public class HomePage extends Page {
 		if (backloggedMedia != null) {
 			for (int i = 0; i < backloggedMedia.length; i++) {
 				JButton backloggedButton = new JButton(String.valueOf(i));
+				backloggedButton.setPreferredSize(STANDARD_WIDGET_SIZE);
 				blbuttonpanel.add(backloggedButton);
 				Media displayMedia = backloggedMedia[i];
 				backloggedButton.addActionListener(e -> {
@@ -72,7 +81,7 @@ public class HomePage extends Page {
 			System.err.println("No Backlogged Media");
 		}
 
-		JScrollPane blScrollPane = new JScrollPane(blbuttonpanel);
+		blScrollPane = new JScrollPane(blbuttonpanel);
 		blScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		blScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		JLabel bllabel = new JLabel("Backlog", SwingConstants.CENTER);
@@ -103,6 +112,7 @@ public class HomePage extends Page {
 		if (currentWatchMedia != null) {
 			for (int i = 0; i < currentWatchMedia.length; i++) {
 				JButton currentWatchingButton = new JButton(String.valueOf(i));
+				currentWatchingButton.setPreferredSize(STANDARD_WIDGET_SIZE);
 				crbuttonpanel.add(currentWatchingButton);
 				Media displayMedia = currentWatchMedia[i];
 				currentWatchingButton.addActionListener(e -> {
@@ -113,7 +123,7 @@ public class HomePage extends Page {
 			System.err.println("No Watching Media");
 		}
 
-		JScrollPane crScrollPane = new JScrollPane(crbuttonpanel);
+		crScrollPane = new JScrollPane(crbuttonpanel);
 		crScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		crScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		JLabel crlabel = new JLabel("Currently Watching", SwingConstants.CENTER);
@@ -144,6 +154,7 @@ public class HomePage extends Page {
 		if (CompletedMedia != null) {
 			for (int i = 0; i < CompletedMedia.length; i++) {
 				JButton completeMediaButton = new JButton(String.valueOf(i));
+				completeMediaButton.setPreferredSize(STANDARD_WIDGET_SIZE);
 				finbuttonpanel.add(completeMediaButton);
 				Media displayMedia = CompletedMedia[i];
 				completeMediaButton.addActionListener(e -> {
@@ -154,7 +165,7 @@ public class HomePage extends Page {
 			System.err.println("No Completed Media");
 		}
 
-		JScrollPane finScrollPane = new JScrollPane(finbuttonpanel);
+		finScrollPane = new JScrollPane(finbuttonpanel);
 		finScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		finScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		JLabel finlabel = new JLabel("Finished", SwingConstants.CENTER);
@@ -181,5 +192,14 @@ public class HomePage extends Page {
 		// Refresh the UI
 		this.revalidate();
 		this.repaint();
+		
+		blScrollPane.revalidate();
+		blScrollPane.repaint();
+
+		crScrollPane.revalidate();
+		crScrollPane.repaint();
+
+		finScrollPane.revalidate();
+		finScrollPane.repaint();
 	}
 }
