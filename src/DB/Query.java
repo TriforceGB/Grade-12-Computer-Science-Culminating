@@ -195,4 +195,20 @@ class Query {
 			JOIN "User" AS u ON ud.userId = u.id
 			WHERE ud.mediaId = ?
 			""";
+	public static final String MEDIA_STATS = """
+			SELECT
+			type,
+			COUNT(*) AS count
+			FROM "Media"
+			GROUP BY type
+			""";
+	public static final String USER_STATS = """
+		SELECT
+		status,
+		COUNT(*) AS count
+		FROM "UserData" AS ud
+		GROUP BY status
+		WHERE ud.userId = ?
+	""";
+
 }

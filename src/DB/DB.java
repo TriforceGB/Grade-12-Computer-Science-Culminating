@@ -643,6 +643,27 @@ public class DB {
 			e.printStackTrace();
 			return null;
 		}
+	}
 
+
+	public String[] getUserStats(int userId) {
+		try (PreparedStatement stmt = dbConnect.prepareStatement(Query.USER_STATS)) {
+			stmt.setInt(1, userId);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				return new String[] {
+					rs.getString("username"),
+					rs.getString("mediaCount"),
+					rs.getString("reviewCount"),
+					rs.getString("averageRating")
+
+				};
+			}
+			return null;
+		} catch (Exception e) {
+			System.err.println("Exception While Finding User Stats:");
+			e.printStackTrace();
+			return null;
+		}
 	}
 }

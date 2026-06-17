@@ -381,6 +381,19 @@ public class UI extends JFrame implements EventListener {
 	}
 
 	/**
+	 * Pulls the user's stats from the DB and returns them as a 2D array
+	 *
+	 * @return A 2D array of user stats, where each row is a stat and each column is
+	 *         a stat field. The format is as follows, Username, UserStats, MediaStats
+	 */
+	public String[][] pullStats() {
+		String[] name = {this.currentUser.getName()};
+		String[] userData = db.getUserStats(this.currentUser.getId());
+
+
+	}
+
+	/**
 	 * Finds the Media and return it from the DB. Useful for Getting its ID
 	 *
 	 * @param refMedia The Media to locate
