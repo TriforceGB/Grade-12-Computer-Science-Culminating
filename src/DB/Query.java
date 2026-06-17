@@ -203,12 +203,12 @@ class Query {
 			GROUP BY type
 			""";
 	public static final String USER_STATS = """
-		SELECT
-		status,
-		COUNT(*) AS count
-		FROM "UserData" AS ud
-		GROUP BY status
-		WHERE ud.userId = ?
-	""";
+				SELECT
+				status,
+				COUNT(*) AS count
+				FROM "UserData" AS ud
+				WHERE ud.userId = ?
+				GROUP BY status
+			""";
 
 }

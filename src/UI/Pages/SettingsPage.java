@@ -23,11 +23,8 @@ import UI.UI;
  * The Settings Page Class. Used to display and edit user settings.
  */
 public class SettingsPage extends Page {
-	/**
-	 * Create the Settings Page
-	 *
-	 * @param ui The UI object that this page belongs to
-	 */
+	// Variables
+	JTextArea statistics;
 
 	private boolean isAdmin = false;
 
@@ -38,6 +35,32 @@ public class SettingsPage extends Page {
 		adminButton.setVisible(admin);
 	}
 
+	/**
+	 * Gets News Stats for when the User Logins
+	 *
+	 * @param username The Username Name
+	 * @param stats    The Stats for the Media and the
+	 */
+	public void getStats(int[][] stats) {
+		statistics.setText("""
+				Total Media Tracked: %d
+				Media Dropped: %d
+				Media Backlogged: %d
+				Media Watching: %d
+				Media Complete: %d
+				Total Media in DB: %d
+				Total Movies: %d
+				Total Shows: %d
+				Total Anime: %d
+				""".formatted(stats[0][4], stats[0][0], stats[0][1], stats[0][2], stats[0][3], stats[1][3], stats[1][0],
+				stats[1][1], stats[1][2]));
+	}
+
+	/**
+	 * Create the Settings Page
+	 *
+	 * @param ui The UI object that this page belongs to
+	 */
 	public SettingsPage(UI ui) {
 		super(ui); // Uses the basic page layout and background color
 
@@ -235,19 +258,14 @@ public class SettingsPage extends Page {
 		statLabel.setPreferredSize(new Dimension(400, 50));
 		statLabel.setBackground(Style.BALTIC_BLUE);
 		statLabel.setForeground(Style.TEA_GREEN);
-		JTextArea statistics = new JTextArea();
-		statistics.setFont(Style.BASE_FONT_BIGGER);
+
+		statistics = new JTextArea();
+		statistics.setFont(Style.BASE_FONT);
 		statistics.setEditable(false);
 		statistics.setPreferredSize(new Dimension(500, 600));
 		statistics.setBackground(Style.BORDER_COLOR);
 		statistics.setForeground(Style.TEA_GREEN);
 		statistics.setBorder(new LineBorder(Color.black));
-
-		statistics.append("stat 1 \n");
-		statistics.append("stat 2 \n");
-		statistics.append("stat 3 \n");
-		statistics.append("stat 4 \n");
-		statistics.append("stat 5 \n");
 
 		JScrollPane statScrollPane = new JScrollPane(statistics);
 		statScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
