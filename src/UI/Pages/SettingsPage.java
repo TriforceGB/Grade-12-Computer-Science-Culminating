@@ -117,7 +117,7 @@ public class SettingsPage extends Page {
 		impMediaButton.setFont(Style.BASE_FONT_BIG);
 		delUserButton.setFont(Style.BASE_FONT_BIG);
 		adminButton.setFont(Style.BASE_FONT_BIG);
-		addApiKeyButton.setFont(Style.BASE_FONT);
+		addApiKeyButton.setFont(Style.BASE_FONT_BIG);
 
 		// Colours
 		chngUserButton.setBackground(Style.LIGHT_GREEN);

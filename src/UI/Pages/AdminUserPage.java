@@ -146,7 +146,7 @@ public class AdminUserPage extends Page {
 	}
 
 	private void createWipeBtn() {
-		wipeUsersBtn = new JButton("Wipe User Data");
+		wipeUsersBtn = new JButton("Wipe All Users");
 		wipeUsersBtn.setFont(Style.BASE_FONT);
 		wipeUsersBtn.setBackground(Style.LIGHT_GREEN);
 		wipeUsersBtn.setForeground(Style.BALTIC_BLUE);

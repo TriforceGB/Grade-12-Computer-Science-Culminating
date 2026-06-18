@@ -208,6 +208,13 @@ public class MediaPage extends Page {
 		titleScrollPane.getVerticalScrollBar().setUnitIncrement(8);
 		titleScrollPane.getHorizontalScrollBar().setUnitIncrement(8);
 		titleScrollPane.setBorder(BorderFactory.createEmptyBorder());
+		titleScrollPane.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
+			@Override
+			protected void configureScrollBarColors() {
+				this.thumbColor = Style.BORDER_COLOR;
+				this.trackColor = Style.TEA_GREEN;
+			}
+		});
 
 		showType = new JLabel("Blank Type");
 		showType.setForeground(Style.TEA_GREEN);
@@ -229,6 +236,13 @@ public class MediaPage extends Page {
 		descScrollPane.getVerticalScrollBar().setUnitIncrement(16);
 		descScrollPane.getHorizontalScrollBar().setUnitIncrement(8);
 		descScrollPane.setBorder(BorderFactory.createEmptyBorder());
+		descScrollPane.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
+			@Override
+			protected void configureScrollBarColors() {
+				this.thumbColor = Style.BORDER_COLOR;
+				this.trackColor = Style.TEA_GREEN;
+			}
+		});
 
 		selectorsContainerPanel = new JPanel(new GridBagLayout());
 		selectorsContainerPanel.setBackground(Style.BORDER_COLOR);
@@ -443,6 +457,7 @@ public class MediaPage extends Page {
 
 			JScrollPane commentContainer = new JScrollPane(comment);
 			commentContainer.setPreferredSize(new Dimension(400, 150));
+			
 
 			int result = JOptionPane.showConfirmDialog(null, commentContainer, "Add/Edit Review Comment",
 					JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);

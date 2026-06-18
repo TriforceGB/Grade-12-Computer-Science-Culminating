@@ -285,7 +285,7 @@ public class AdminMediaPage extends AdminUserPage {
 	}
 
 	private void createWipeBtn() {
-		wipeMediaBtn = new JButton("Wipe Media Data");
+		wipeMediaBtn = new JButton("Wipe All Media");
 		wipeMediaBtn.setFont(Style.BASE_FONT);
 		wipeMediaBtn.setBackground(Style.LIGHT_GREEN);
 		wipeMediaBtn.setForeground(Style.BALTIC_BLUE);
