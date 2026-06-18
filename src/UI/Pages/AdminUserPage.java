@@ -152,7 +152,17 @@ public class AdminUserPage extends Page {
 		wipeUsersBtn.setForeground(Style.BALTIC_BLUE);
 		ui.addButtonImg(wipeUsersBtn, new ImageIcon("assets/UI/shredicon.png"), 20, 30, 30);
 		wipeUsersBtn.addActionListener(e -> {
-
+			int result = JOptionPane.showConfirmDialog(this,
+					"Are you sure you want to wipe all user data? This Will Remove Every Account Including You and Log you Out",
+					"Confirm Wipe",
+					JOptionPane.YES_NO_OPTION);
+			if (result == JOptionPane.YES_OPTION) {
+				if (ui.remakeUserTable()) {
+					JOptionPane.showMessageDialog(this, "User data wiped successfully. You will be logged out.",
+							"Success", JOptionPane.INFORMATION_MESSAGE);
+					ui.logout();
+				}
+			}
 		});
 	}
 

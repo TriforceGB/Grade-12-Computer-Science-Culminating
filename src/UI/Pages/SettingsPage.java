@@ -40,8 +40,7 @@ public class SettingsPage extends Page {
 	/**
 	 * Gets News Stats for when the User Logins
 	 *
-	 * @param username The Username Name
-	 * @param stats    The Stats for the Media and the
+	 * @param stats The Stats for the Media and the
 	 */
 	public void getStats(int[][] stats) {
 		statistics.setText("""

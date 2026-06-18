@@ -112,8 +112,18 @@ public class DB {
 	 * Delete all the data in Media DB and remakes the Table
 	 */
 	public void remakeMediaDB() {
-		this.executeCommand(Query.REMOVE_MEDIA_TABLE);
-		this.executeCommand(Query.CREATE_MEDIA_TABLE);
+		this.executeCommand(Query.REMOVE_MEDIA_TABLE); // Remove the Table
+		this.executeCommand(Query.REMOVE_USERDATA_TABLE);
+		this.executeCommand(Query.CREATE_MEDIA_TABLE); // Remake the Table
+		this.executeCommand(Query.CREATE_USERDATA_TABLE);
+	}
+
+	public void remakeUserDB() {
+		this.executeCommand(Query.REMOVE_USER_TABLE);
+		this.executeCommand(Query.REMOVE_USERDATA_TABLE);
+		this.executeCommand(Query.CREATE_USERS_TABLE);
+		this.executeCommand(Query.CREATE_USERDATA_TABLE);
+		this.createUser(new User("admin", "admin", true)); // Create Admin User
 	}
 
 	/**

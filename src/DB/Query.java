@@ -61,6 +61,14 @@ class Query {
 	public static final String REMOVE_MEDIA_TABLE = """
 					DROP TABLE IF EXISTS "Media";
 			""";
+	// Remove the USER DB
+	public static final String REMOVE_USER_TABLE = """
+					DROP TABLE IF EXISTS "User";
+			""";
+	// Remove the USERDATA DB
+	public static final String REMOVE_USERDATA_TABLE = """
+					DROP TABLE IF EXISTS "UserData";
+			""";
 	// User Queries
 	// Creation, Editing, Deletion of Users
 	public static final String CREATE_USER = """

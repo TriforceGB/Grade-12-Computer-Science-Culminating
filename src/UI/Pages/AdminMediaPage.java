@@ -291,7 +291,17 @@ public class AdminMediaPage extends AdminUserPage {
 		wipeMediaBtn.setForeground(Style.BALTIC_BLUE);
 		ui.addButtonImg(wipeMediaBtn, new ImageIcon("assets/UI/shredicon.png"), 20, 30, 30);
 		wipeMediaBtn.addActionListener(e -> {
-
+			int result = JOptionPane.showConfirmDialog(this,
+					"Are you sure you want to wipe all Media data? This Will remove every Movie, Show, Anime and all User Data Related to It",
+					"Confirm Wipe",
+					JOptionPane.YES_NO_OPTION);
+			if (result == JOptionPane.YES_OPTION) {
+				if (ui.remakeMediaTable()) {
+					JOptionPane.showMessageDialog(this, "User data wiped successfully. You will be logged out.",
+							"Success", JOptionPane.INFORMATION_MESSAGE);
+					loadData();
+				}
+			}
 		});
 	}
 
@@ -334,6 +344,9 @@ public class AdminMediaPage extends AdminUserPage {
 	public void loadData() {
 		tableModel.setRowCount(0);
 		MediaTable = ui.pullMedia();
+		if (MediaTable == null) {
+			return;
+		}
 		for (Media m : MediaTable) {
 			// { "Id", "Type", "Name", "Ep. Count", "PosterPath", "PosterLink" };
 			Object[] data = new Object[] { m.getId(), ui.getMeidaTypeFromInt(m.getType()), m.getName(),

@@ -777,7 +777,13 @@ public class UI extends JFrame implements EventListener {
 		}
 	}
 
-	public void remakeMediaTable() {
+	public boolean remakeMediaTable() {
 		db.remakeMediaDB();
+		return true;
+	}
+
+	public boolean remakeUserTable() {
+		db.remakeUserDB();
+		return true;
 	}
 }
