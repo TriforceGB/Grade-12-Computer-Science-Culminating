@@ -557,13 +557,17 @@ public class ListPage extends Page {
 		listTable.getTableHeader().setFont(Style.HEADER_FONT);
 
 		tableScrollContainer = new JScrollPane(listTable);
-		tableScrollContainer.setBackground(Style.BALTIC_BLUE);
+		tableScrollContainer.setBackground(Style.BORDER_COLOR);
 		tableScrollContainer.setBorder(BORDER);
 		tableScrollContainer.getViewport().setBackground(PageColor);
 		tableScrollContainer.setMaximumSize(new Dimension(Short.MAX_VALUE, 500));
+		tableScrollContainer.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR));
 
 		contentPanel.add(filterPanel, BorderLayout.WEST);
 		contentPanel.add(tableScrollContainer, BorderLayout.CENTER);
+		contentPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 5, false));
+		contentPanel.setBackground(Style.TEA_GREEN);
+
 		JPanel bufferPanel = new JPanel();
 		bufferPanel.setBackground(PageColor);
 		bufferPanel.setPreferredSize(new Dimension(0, 80));
@@ -587,7 +591,7 @@ public class ListPage extends Page {
 			toAddToTable[0] = ui.resizeImg(new ImageIcon(PATH_FOR_DEFAULT_IMAGE), POSTER_WIDTH, POSTER_HEIGHT);
 		}
 
-		toAddToTable[1] = ui.getHtmlFormatText(media.getName(), CPERLINE_TITLE, MAXPASS);
+		toAddToTable[1] = ui.getHtmlFormatText(media.getName(), CPERLINE_TITLE, MAXPASS, 300);
 		toAddToTable[2] = ui.getStatusString(media.getStatus());
 		toAddToTable[3] = media.getRating();
 		toAddToTable[4] = media.getLastEpisode();

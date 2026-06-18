@@ -583,9 +583,9 @@ public class UI extends JFrame implements EventListener {
 	 * @return The string of text formatted via html with line breaks at parts
 	 *         attempting to match cPerLine, but based on number of words
 	 */
-	public String getHtmlFormatText(String toFormat, int cPerLine, int maxPass) {
+	public String getHtmlFormatText(String toFormat, int cPerLine, int maxPass, int maxWidth) {
 		String[] words = toFormat.split(" "); // split @ each space for each word
-		String result = "<html><body style='width: 300px;'>"; // result string to return
+		String result = "<html><body style='width: " + maxWidth + "px;'>"; // result string to return
 
 		int tracker = 0; // tracks current line number of chars
 		for (String word : words) {
