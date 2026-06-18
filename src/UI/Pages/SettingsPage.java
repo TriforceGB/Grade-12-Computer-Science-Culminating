@@ -58,7 +58,7 @@ public class SettingsPage extends Page {
 				Total Movies: %d
 
 				Total Shows: %d
-				
+
 				Total Anime: %d
 				""".formatted(stats[0][4], stats[0][0], stats[0][1], stats[0][2], stats[0][3], stats[1][3], stats[1][0],
 				stats[1][1], stats[1][2]));
@@ -244,7 +244,10 @@ public class SettingsPage extends Page {
 			}
 
 		});
-		adminButton.addActionListener(e -> ui.switchPanel("adminUsr"));
+		adminButton.addActionListener(e -> {
+			ui.updateAdminPanel();
+			ui.switchPanel("adminUsr");
+		});
 
 		// buttonPanel.setPreferredSize(new Dimension(600, 400));
 		buttonPanel.add(chngUserButton);

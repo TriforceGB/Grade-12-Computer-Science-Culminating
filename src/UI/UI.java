@@ -145,6 +145,14 @@ public class UI extends JFrame implements EventListener {
 	}
 
 	/**
+	 * Update Both Table when the Admin Panel is Loaded
+	 */
+	public void updateAdminPanel() {
+		adminMediaPage.loadData();
+		adminUsrPage.loadData();
+	}
+
+	/**
 	 * This method logs in the user and sends them into the homepage if the account
 	 * exists
 	 *
@@ -762,6 +770,5 @@ public class UI extends JFrame implements EventListener {
 
 	public void remakeMediaTable() {
 		db.remakeMediaDB();
-
 	}
 }
