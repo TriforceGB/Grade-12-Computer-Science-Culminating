@@ -21,10 +21,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 import javax.swing.plaf.basic.BasicScrollBarUI;
+import javax.swing.border.EmptyBorder;
 
 import DTO.LocalDB.Media;
 import DTO.LocalDB.Media.UserData;
@@ -38,7 +40,7 @@ public class MediaPage extends Page {
 	private final String DEFAULT_POSTER_IMAGE_PATH = "assets/UI/filal.png";
 
 	// Variables
-	Media media; // Media that is being displayed
+	private Media media; // Media that is being displayed
 
 	private JPanel westSidePanel;
 	private GridBagConstraints gbc;
@@ -53,12 +55,14 @@ public class MediaPage extends Page {
 
 	private JPanel infEastSidePanel;
 
+	private JScrollPane titleScrollPane;
 	private JLabel titleLabel;
 	private JLabel showType;
+	private JScrollPane descScrollPane;
 	private JLabel descLabel;
-	private final int CPERLINE_DESC = 40;
-	private final int MAXPASS_DESC = 5;
 	private JLabel statusLabel;
+
+	private JPanel selectorsContainerPanel;
 	private final String[] TYPES = new String[] { "Undecided", "Dropped", "Backlog", "Watching", "Completed" };
 	private JComboBox<String> statusSelector;
 	private JLabel usrRatingLabel;
@@ -71,20 +75,24 @@ public class MediaPage extends Page {
 
 	private JPanel usrReviewsSidePanel;
 	private JLabel usrReviewsTitleLabel;
-	private JPanel scrollContentPanel;
+	private JPanel usrReviewsScrollContentPanel;
 	private JScrollPane usrReviewsScrollPane;
 
 	private JButton backButton;
 	private JButton saveButton;
 	private JButton addEditReviewButton;
 
+	private JPanel wrapperPanel;
+
+	private final int CPERLINE_TITLE = 120;
+	private final int CPERLINE_DESC = 100;
 	private final int CPERLINE_REVIEW_COMMENT = 80;
-	private final int MAXPASS_REVIEW_COMMENT = 5;
+	private final int MAXPASS = 5;
 
 	private String panelToSendBackTo;
 
-	private int gap = 20;
-	private int imagedimensions = 30;
+	private final int GAP = 20;
+	private final int IMAGE_DIMENSIONS = 30;
 
 	/**
 	 * Create the Media Page
@@ -134,7 +142,6 @@ public class MediaPage extends Page {
 		startDateLabel = new JLabel("Start Date: ");
 		startDateLabel.setFont(Style.BASE_FONT);
 		startDateLabel.setForeground(Style.TEA_GREEN);
-		
 
 		finishDateLabel = new JLabel("End Date: ");
 		finishDateLabel.setFont(Style.BASE_FONT);
@@ -148,7 +155,6 @@ public class MediaPage extends Page {
 		startDateField.setBackground(Style.TEA_GREEN);
 		startDateField.setForeground(Style.BALTIC_BLUE);
 		startDateField.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
-		
 
 		finishDateField = new JTextField(12);
 		finishDateField.setText("YYYY-MM-DD");
@@ -192,15 +198,40 @@ public class MediaPage extends Page {
 		titleLabel.setForeground(Style.TEA_GREEN);
 		titleLabel.setFont(Style.TITLE_FONT);
 
+		wrapperPanel = new JPanel(new GridBagLayout());
+		wrapperPanel.add(titleLabel);
+		wrapperPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+		wrapperPanel.setBackground(Style.BALTIC_BLUE);
+
+		titleScrollPane = new JScrollPane(wrapperPanel);
+		titleScrollPane.setPreferredSize(new Dimension(700, 120));
+		titleScrollPane.getVerticalScrollBar().setUnitIncrement(8);
+		titleScrollPane.getHorizontalScrollBar().setUnitIncrement(8);
+		titleScrollPane.setBorder(BorderFactory.createEmptyBorder());
+
 		showType = new JLabel("Blank Type");
 		showType.setForeground(Style.TEA_GREEN);
 		showType.setFont(Style.BASE_FONT);
 
 		descLabel = new JLabel(ui.getHtmlFormatText(
 				"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc faucibus urna justo, ac egestas nibh malesuada sed. Cras sit amet mi aliquet, accumsan quam a, hendrerit libero. Nullam aliquet augue et arcu facilisis, quis fermentum est pellentesque. Vivamus sodales, eros sit amet aliquet placerat, felis metus hendrerit ex, a molestie nunc tortor ut erat. Ut placerat laoreet erat, auctor pulvinar urna aliquam at. Mauris varius nisi eget faucibus blandit. Duis at ornare libero. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean imperdiet elementum neque fermentum sagittis. Suspendisse potenti. Maecenas cursus pellentesque blandit. Nulla quis erat massa. Donec a sapien.",
-				CPERLINE_DESC, MAXPASS_DESC));
+				CPERLINE_DESC, MAXPASS, 400));
 		descLabel.setFont(Style.SMALL_DESC_FONT);
 		descLabel.setForeground(Style.TEA_GREEN);
+
+		wrapperPanel = new JPanel(new GridBagLayout());
+		wrapperPanel.add(descLabel);
+		wrapperPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+		wrapperPanel.setBackground(Style.BALTIC_BLUE);
+
+		descScrollPane = new JScrollPane(wrapperPanel);
+		descScrollPane.setPreferredSize(new Dimension(700, 500));
+		descScrollPane.getVerticalScrollBar().setUnitIncrement(16);
+		descScrollPane.getHorizontalScrollBar().setUnitIncrement(8);
+		descScrollPane.setBorder(BorderFactory.createEmptyBorder());
+
+		selectorsContainerPanel = new JPanel(new GridBagLayout());
+		selectorsContainerPanel.setBackground(Style.BORDER_COLOR);
 
 		statusLabel = new JLabel("Status");
 		statusLabel.setFont(Style.BASE_FONT);
@@ -265,71 +296,83 @@ public class MediaPage extends Page {
 	void formatMainInfDisplayComponents() {
 		gbc.gridy = 0;
 		gbc.gridx = 0;
-		gbc.insets = new Insets(20, 40, 0, 0);
-		infEastSidePanel.add(titleLabel, gbc);
+		gbc.insets = new Insets(20, 20, 0, 0);
+		infEastSidePanel.add(titleScrollPane, gbc);
 
 		gbc.gridy = 0;
 		gbc.gridx = 1;
-		gbc.insets = new Insets(20, 20, 0, 0);
+		gbc.insets = new Insets(20, 20, 0, 20);
 		infEastSidePanel.add(showType, gbc);
 
 		gbc.gridy = 1;
 		gbc.gridx = 0;
-		gbc.insets = new Insets(10, 40, 80, 0);
-		infEastSidePanel.add(descLabel, gbc);
+		gbc.insets = new Insets(10, 20, 0, 0);
+		infEastSidePanel.add(descScrollPane, gbc);
 
-		gbc.gridy = 2;
+		// selectors components to container panel
+
+		gbc.gridy = 0;
 		gbc.gridx = 0;
-		gbc.insets = new Insets(0, 40, 10, 0);
-		infEastSidePanel.add(statusLabel, gbc);
+		gbc.insets = new Insets(0, 0, 0, 0);
+		selectorsContainerPanel.add(statusLabel, gbc);
 
-		gbc.gridy = 3;
+		gbc.gridy = 1;
 		gbc.gridx = 0;
-		gbc.insets = new Insets(0, 40, 10, 0);
-		infEastSidePanel.add(statusSelector, gbc);
-
-		gbc.gridy = 2;
-		gbc.gridx = 1;
 		gbc.insets = new Insets(0, 0, 10, 0);
-		infEastSidePanel.add(usrRatingLabel, gbc);
+		selectorsContainerPanel.add(statusSelector, gbc);
 
-		gbc.gridy = 3;
+		gbc.gridy = 0;
+		gbc.gridx = 1;
+		gbc.insets = new Insets(0, 0, 0, 0);
+		selectorsContainerPanel.add(usrRatingLabel, gbc);
+
+		gbc.gridy = 1;
 		gbc.gridx = 1;
 		gbc.insets = new Insets(0, 20, 10, 0);
-		infEastSidePanel.add(usrRatingSelector, gbc);
+		selectorsContainerPanel.add(usrRatingSelector, gbc);
 
-		gbc.gridy = 2;
+		gbc.gridy = 0;
 		gbc.gridx = 2;
-		gbc.insets = new Insets(0, 20, 10, 0);
-		infEastSidePanel.add(rewatchLabel, gbc);
+		gbc.insets = new Insets(0, 20, 0, 0);
+		selectorsContainerPanel.add(rewatchLabel, gbc);
 
-		gbc.gridy = 3;
+		gbc.gridy = 1;
 		gbc.gridx = 2;
 		gbc.insets = new Insets(0, 0, 10, 0);
-		infEastSidePanel.add(rewatchesSelector, gbc);
+		selectorsContainerPanel.add(rewatchesSelector, gbc);
 
-		gbc.gridy = 4;
+		gbc.gridy = 2;
 		gbc.gridx = 0;
 		gbc.insets = new Insets(0, 40, 10, 0);
-		infEastSidePanel.add(cEpLabel, gbc);
+		selectorsContainerPanel.add(cEpLabel, gbc);
 
-		gbc.gridy = 5;
+		gbc.gridy = 3;
 		gbc.gridx = 0;
 		gbc.insets = new Insets(0, 40, 10, 0);
-		infEastSidePanel.add(cEpSelector, gbc);
+		selectorsContainerPanel.add(cEpSelector, gbc);
+
+		// add selector panel
+		gbc.gridy = 2;
+		gbc.gridx = 0;
+		gbc.insets = new Insets(0, 10, 0, 20);
+		gbc.gridwidth = 2;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		infEastSidePanel.add(selectorsContainerPanel, gbc);
+
+		gbc = new GridBagConstraints(); // reset back to ensure no weird changes
 	}
 
 	void createFormatUsrReviewsSidePanel() {
 		usrReviewsSidePanel = new JPanel(new BorderLayout());
 		usrReviewsSidePanel.setBackground(Style.BORDER_COLOR);
-		
+
 		usrReviewsTitleLabel = new JLabel("User Reviews");
 		usrReviewsTitleLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		usrReviewsTitleLabel.setFont(Style.BASE_FONT);
 		usrReviewsTitleLabel.setForeground(Style.TEA_GREEN);
-		scrollContentPanel = new JPanel(new GridLayout(0, 1, 0, 10));
-		scrollContentPanel.setBackground(Style.BALTIC_BLUE);
-		usrReviewsScrollPane = new JScrollPane(scrollContentPanel);
+		usrReviewsScrollContentPanel = new JPanel(new GridLayout(0, 1, 0, 10));
+		usrReviewsScrollContentPanel.setBackground(Style.BALTIC_BLUE);
+		usrReviewsScrollPane = new JScrollPane(usrReviewsScrollContentPanel);
 		usrReviewsScrollPane.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2, false));
 		usrReviewsScrollPane.setPreferredSize(new Dimension(250, 0));
 		usrReviewsScrollPane.getVerticalScrollBar().setUnitIncrement(16);
@@ -360,7 +403,7 @@ public class MediaPage extends Page {
 		backButton.addActionListener(e -> {
 			ui.switchPanel(panelToSendBackTo);
 		});
-		ui.addButtonImg(backButton, new ImageIcon("assets/UI/backicon.png"), gap, imagedimensions, imagedimensions);
+		ui.addButtonImg(backButton, new ImageIcon("assets/UI/backicon.png"), GAP, IMAGE_DIMENSIONS, IMAGE_DIMENSIONS);
 		southEastSidePanel.add(backButton);
 
 		saveButton = new JButton("Save");
@@ -380,7 +423,7 @@ public class MediaPage extends Page {
 			}
 			ui.callreset();
 		});
-		ui.addButtonImg(saveButton, new ImageIcon("assets/UI/saveicon.png"), gap, imagedimensions, imagedimensions);
+		ui.addButtonImg(saveButton, new ImageIcon("assets/UI/saveicon.png"), GAP, IMAGE_DIMENSIONS, IMAGE_DIMENSIONS);
 
 		southEastSidePanel.add(saveButton);
 
@@ -390,8 +433,30 @@ public class MediaPage extends Page {
 		addEditReviewButton.setBackground(Style.LIGHT_GREEN);
 		addEditReviewButton.setForeground(Style.BALTIC_BLUE);
 
-		ui.addButtonImg(addEditReviewButton, new ImageIcon("assets/UI/reviewicon.png"), gap, imagedimensions,
-				imagedimensions);
+		ui.addButtonImg(addEditReviewButton, new ImageIcon("assets/UI/reviewicon.png"), GAP, IMAGE_DIMENSIONS,
+				IMAGE_DIMENSIONS);
+
+		addEditReviewButton.addActionListener(e -> {
+			JTextArea comment = new JTextArea();
+			comment.setLineWrap(true);
+			comment.setWrapStyleWord(true);
+
+			JScrollPane commentContainer = new JScrollPane(comment);
+			commentContainer.setPreferredSize(new Dimension(400, 150));
+
+			int result = JOptionPane.showConfirmDialog(null, commentContainer, "Add/Edit Review Comment",
+					JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+			// if user hit the okay button
+			if (result == JOptionPane.OK_OPTION) {
+
+				// ui rework
+				setupReviews(media);
+				// if user hit the cancel option and closed option
+			} else if (result == JOptionPane.CANCEL_OPTION || result == JOptionPane.CLOSED_OPTION) {
+
+			}
+		});
 
 		southEastSidePanel.add(addEditReviewButton);
 	}
@@ -400,7 +465,7 @@ public class MediaPage extends Page {
 		JPanel result = new JPanel(new GridBagLayout());
 		result.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2, true));
 		result.setBackground(Style.BALTIC_BLUE);
-		
+
 		GridBagConstraints gbc2 = new GridBagConstraints();
 
 		String name = review[0];
@@ -409,7 +474,7 @@ public class MediaPage extends Page {
 		usrName.setForeground(Style.TEA_GREEN);
 
 		String comment = review[1];
-		JLabel usrComment = new JLabel(ui.getHtmlFormatText(comment, CPERLINE_REVIEW_COMMENT, MAXPASS_REVIEW_COMMENT));
+		JLabel usrComment = new JLabel(ui.getHtmlFormatText(comment, CPERLINE_REVIEW_COMMENT, MAXPASS, 150));
 		usrComment.setForeground(Style.TEA_GREEN);
 		usrComment.setFont(Style.BASE_FONT);
 
@@ -446,10 +511,10 @@ public class MediaPage extends Page {
 			poster.setIcon(ui.resizeImg(new ImageIcon(DEFAULT_POSTER_IMAGE_PATH), POSTER_WIDTH, POSTER_HEIGHT));
 		startDateField.setText(obj.getStartDate());
 		finishDateField.setText(obj.getFinishDate());
-		titleLabel.setText(obj.getName());
+		titleLabel.setText(ui.getHtmlFormatText(obj.getName(), CPERLINE_TITLE, MAXPASS, 400));
 		int showTypeInt = obj.getType();
 		showType.setText(ui.getMeidaTypeFromInt(showTypeInt));
-		descLabel.setText(ui.getHtmlFormatText(obj.getDescription(), CPERLINE_DESC, MAXPASS_DESC));
+		descLabel.setText(ui.getHtmlFormatText(obj.getDescription(), CPERLINE_DESC, MAXPASS, 400));
 		statusSelector.setSelectedIndex(obj.getStatus()); // but we love you for this one now. only for now
 		usrRatingSelector.setValue(obj.getRating());
 		rewatchesSelector.setValue(obj.getRewatched());
@@ -460,13 +525,37 @@ public class MediaPage extends Page {
 		cEpTextField.setForeground(Style.BALTIC_BLUE);
 		cEpTextField.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
-		scrollContentPanel.removeAll();
+		setupReviews(obj);
+	}
+
+	private void setupReviews(Media obj) {
+		usrReviewsScrollContentPanel.removeAll();
 		String[][] reviews = ui.pullReview(obj.getId());
+		if (reviews.length == 0) 
+			setBlankReviews();
+		else
+			placeReviews(reviews);
+	}
+
+	private void setBlankReviews() {
+		JPanel wrapperPanel = new JPanel(new GridBagLayout());
+		JLabel blankLbl = new JLabel("No user reviews.");
+		wrapperPanel.add(blankLbl);
+		usrReviewsScrollPane.setViewportView(wrapperPanel);
+
+		usrReviewsScrollPane.revalidate();
+		usrReviewsScrollPane.repaint();
+	}
+
+	private void placeReviews(String[][] reviews) {
+		usrReviewsScrollPane.setViewportView(usrReviewsScrollContentPanel);
 		for (int i = 0; i < reviews.length; i++) {
 			if (reviews[i][1] != null) {
-				scrollContentPanel.add(getReviewPanel(reviews[i]));
+				usrReviewsScrollContentPanel.add(getReviewPanel(reviews[i]));
 			}
 		}
+		usrReviewsScrollPane.revalidate();
+		usrReviewsScrollPane.repaint();
 	}
 
 	/**

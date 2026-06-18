@@ -200,16 +200,14 @@ public class SearchPage extends Page {
 		listScrollPane = new JScrollPane(scrollWrapperPanel);
 		listScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		listScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		listScrollPane.setPreferredSize(new Dimension(1500, 800));
+		listScrollPane.setPreferredSize(new Dimension(1700, 800));
 		listScrollPane.getVerticalScrollBar().setUnitIncrement(16);
 
-		scrollContentPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 4, true));
+		scrollContentPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 5, false));
 		scrollContentPanel.setBackground(Style.TEA_GREEN);
 		listScrollPane.setBackground(Style.BORDER_COLOR);
-		listScrollPane.setForeground(Style.BORDER_COLOR);
 		listScrollPane.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR));
 		scrollWrapperPanel.setBackground(Style.BORDER_COLOR);
-		// scrollWrapperPanel.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR));
 
 		listScrollPane.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
 			@Override
@@ -258,23 +256,23 @@ public class SearchPage extends Page {
 
 		// add name
 		String titleString = givenMedia.getName();
-		JLabel titleLbl = new JLabel(ui.getHtmlFormatText(titleString, TITLE_CPERLINE, MAX_PASS));
+		JLabel titleLbl = new JLabel(ui.getHtmlFormatText(titleString, TITLE_CPERLINE, MAX_PASS, 300));
 		titleLbl.setFont(Style.TITLE_FONT);
 		titleLbl.setForeground(Style.TEA_GREEN);
 
 		gbc.gridx = 1; // col 2
-		gbc.insets = new Insets(20, 0, 20, 100);
+		gbc.insets = new Insets(20, 0, 20, 50);
 		result.add(titleLbl, gbc);
 
 		// add desc.
 		// description is mounted via singular line
 		String descString = givenMedia.getDescription();
-		JLabel descLbl = new JLabel(ui.getHtmlFormatText(descString, DESCRIPTION_CPERLINE, MAX_PASS));
+		JLabel descLbl = new JLabel(ui.getHtmlFormatText(descString, DESCRIPTION_CPERLINE, MAX_PASS, 400));
 		descLbl.setFont(Style.DESC_FONT);
 		descLbl.setForeground(Style.TEA_GREEN);
 
 		gbc.gridx = 2; // col 3
-		gbc.insets = new Insets(20, 0, 20, 70);
+		gbc.insets = new Insets(20, 0, 20, 50);
 
 		result.add(descLbl, gbc);
 

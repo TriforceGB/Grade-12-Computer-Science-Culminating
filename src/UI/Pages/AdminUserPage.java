@@ -41,6 +41,7 @@ public class AdminUserPage extends Page {
 	private JPanel btnPanel;
 	private JButton editBtn;
 	private JButton delBtn;
+	private JButton wipeUsersBtn;
 
 	// true allows for rounded
 	protected final Border BORDER = BorderFactory.createLineBorder(Style.BORDER_COLOR, 2, true);
@@ -59,9 +60,11 @@ public class AdminUserPage extends Page {
 		createBtnPanel();
 		createEditBtn();
 		createDelBtn();
+		createWipeBtn();
 
 		addEditBtn();
 		addDelBtn();
+		addWipeBtn();
 		addBtnPanel();
 
 		this.add(contentPanel, BorderLayout.CENTER);
@@ -140,6 +143,21 @@ public class AdminUserPage extends Page {
 		editBtn.setForeground(Style.BALTIC_BLUE); 
 		ui.addButtonImg(editBtn, new ImageIcon("assets/UI/editicon.png"), 20, 30, 30);
 		editBtn.addActionListener(e -> editRow(userTable.getSelectedRow()));
+	}
+
+	private void createWipeBtn() {
+		wipeUsersBtn = new JButton("Wipe User Data");
+		wipeUsersBtn.setFont(Style.BASE_FONT);
+		wipeUsersBtn.setBackground(Style.LIGHT_GREEN);
+		wipeUsersBtn.setForeground(Style.BALTIC_BLUE);
+		ui.addButtonImg(wipeUsersBtn, new ImageIcon("assets/UI/shredicon.png"), 20, 30, 30);
+		wipeUsersBtn.addActionListener(e -> {
+
+		});
+	}
+
+	private void addWipeBtn() {
+		btnPanel.add(wipeUsersBtn);
 	}
 
 	private void editRow(int selectedRow) {
