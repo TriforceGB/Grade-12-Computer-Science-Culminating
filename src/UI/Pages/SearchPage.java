@@ -189,6 +189,9 @@ public class SearchPage extends Page {
 		searchPanel.add(searchBtn, gbc);
 	}
 
+	/**
+	 * This is a Shell function that
+	 */
 	void runSearch() {
 		procureSearches(10, searchField.getText(), searchTypeBox.getSelectedIndex());
 	}

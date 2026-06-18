@@ -45,16 +45,17 @@ public class TheTVDB {
 	public boolean updateKey(String newKey, String key_path) {
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(key_path))) {
 			writer.write(newKey);
-			this.getKey(key_path);
-			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			return false;
 		}
+		this.getKey(key_path);
+		token = this.login(key_path);
+		return token != null;
 	}
 
 	private String login(String key_path) {
 		TheTVDBLoginRequest requestBody = new TheTVDBLoginRequest(getKey(key_path)); // Create the Json as an Object
+		System.out.println(gson.toJson(requestBody));
 		try {
 			HttpRequest request = HttpRequest.newBuilder()
 					.uri(new URI(ENDPOINT + "/login"))
