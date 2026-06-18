@@ -454,7 +454,11 @@ public class MediaPage extends Page {
 			}
 		}
 
-		System.out.println(reviews.length);
+		if (reviews.length == 0) {
+			usrReviewsSidePanel.removeAll();
+		} else {
+			createFormatUsrReviewsSidePanel();
+		}
 	}
 
 	
