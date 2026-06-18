@@ -3,7 +3,11 @@ package UI.Pages;
 import UI.Style;
 import UI.UI;
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
+
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -19,11 +23,26 @@ import DTO.LocalDB.Media;
 public class HomePage extends Page {
 	// Variables
 	private JPanel contentPanel;
-	private JPanel backlogPanel = new JPanel();
-	private JPanel currentPanel = new JPanel();
-	private JPanel finishPanel = new JPanel();
-	private int hgap = 20;
-	private int cols = 3;
+	private final JPanel SOUTH_PADDING_PANEL = new JPanel();
+
+	private JPanel backlogPanel;
+	private JPanel cWatchPanel;
+	private JPanel finPanel;
+
+	private JPanel backlogBtnPanel;
+	private JPanel cWatchBtnPanel;
+
+	private JScrollPane backlogScrollPane;
+	private JScrollPane cWatchScrollPane;
+	private JScrollPane finScrollPane;
+
+	private final int HGAP = 20;
+	private final int COLS = 3;
+
+	private final int POSTER_WIDTH = 150;
+	private final int POSTER_HEIGHT = 225;
+	private final Dimension STANDARD_WIDGET_SIZE = new Dimension(POSTER_WIDTH, POSTER_HEIGHT);
+	private final FlowLayout WRAPPER_PANEL_LAYOUT = new FlowLayout(FlowLayout.LEFT, 60, 50);
 
 	/**
 	 * Create the Home Page
@@ -34,7 +53,6 @@ public class HomePage extends Page {
 		super(ui); // Uses the basic page layout and background color
 
 		panelLayout();
-
 	}
 
 	/**
@@ -42,45 +60,58 @@ public class HomePage extends Page {
 	 */
 	private void panelLayout() {
 		contentPanel = new JPanel(); // Create the Panel
-		contentPanel.setBackground(this.PageColor);
-		contentPanel.setLayout(new GridLayout(1, 3, hgap, 0));
+		contentPanel.setBackground(PageColor);
+		contentPanel.setLayout(new GridLayout(1, 3, 0, 0));
+		add(contentPanel, BorderLayout.CENTER);
+
+		SOUTH_PADDING_PANEL.setBackground(PageColor);
+		add(SOUTH_PADDING_PANEL, BorderLayout.SOUTH);
 	}
 
 	/**
 	 * Create the Backlog Panel Widget for the User
 	 */
 	private void backlogPanel() {
+		backlogPanel = new JPanel();
 		backlogPanel.setLayout(new BorderLayout());
 		backlogPanel.setBackground(this.PageColor);
 
-		JPanel blbuttonpanel = new JPanel();
-		blbuttonpanel.setBackground(this.PageColor);
-		blbuttonpanel.setLayout(new GridLayout(0, cols, hgap, 20));
+		backlogBtnPanel = new JPanel();
+		backlogBtnPanel.setBackground(this.PageColor);
+		backlogBtnPanel.setLayout(new GridLayout(0, COLS, HGAP, 20));
 
 		// Pull Backlogged Media
-		Media[] backloggedMedia = ui.findMedia(true, true, true, false, false, true, false, false, "", 0, 10);
+		Media[] backloggedMedia = ui.findMedia(true, true, true, false, false, true,
+				false, false, "", 0, 10);
 		if (backloggedMedia != null) {
 			for (int i = 0; i < backloggedMedia.length; i++) {
-				JButton backloggedButton = new JButton(String.valueOf(i));
-				blbuttonpanel.add(backloggedButton);
+				JButton backLogBtn = new JButton();
+				backLogBtn.setPreferredSize(STANDARD_WIDGET_SIZE);
 				Media displayMedia = backloggedMedia[i];
-				backloggedButton.addActionListener(e -> {
+				backLogBtn.addActionListener(e -> {
 					ui.openMediaPage(displayMedia, "home");
 				});
+				backLogBtn.setIcon(ui.resizeImg(new ImageIcon(displayMedia.getPosterPath()), POSTER_WIDTH, POSTER_HEIGHT));
+				backlogBtnPanel.add(backLogBtn);
 			}
 		} else {
-			System.err.println("No Backlogged Media");
+			System.out.println("No Backlogged Media");
 		}
 
-		JScrollPane blScrollPane = new JScrollPane(blbuttonpanel);
-		blScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-		blScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		JLabel bllabel = new JLabel("Backlog", SwingConstants.CENTER);
-		bllabel.setForeground(Style.TEA_GREEN);
-		bllabel.setFont(Style.BASE_FONT);
+		JPanel wrapperPanel = new JPanel(WRAPPER_PANEL_LAYOUT);
+		wrapperPanel.setBackground(this.PageColor);
+		wrapperPanel.add(backlogBtnPanel);
 
-		backlogPanel.add(bllabel, BorderLayout.PAGE_START);
-		backlogPanel.add(blbuttonpanel, BorderLayout.CENTER);
+		backlogScrollPane = new JScrollPane(wrapperPanel);
+		backlogScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		backlogScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		backlogScrollPane.getVerticalScrollBar().setUnitIncrement(16);
+		JLabel backlogLbl = new JLabel("Backlog", SwingConstants.CENTER);
+		backlogLbl.setForeground(Style.TEA_GREEN);
+		backlogLbl.setFont(Style.BASE_FONT);
+
+		backlogPanel.add(backlogLbl, BorderLayout.NORTH);
+		backlogPanel.add(backlogScrollPane, BorderLayout.CENTER);
 
 		backlogPanel.revalidate();
 		backlogPanel.repaint();
@@ -92,82 +123,98 @@ public class HomePage extends Page {
 	 * Create the Current Watching Panel Widget for the User
 	 */
 	private void currentWatchingPanel() {
-		currentPanel.setLayout(new BorderLayout());
-		currentPanel.setBackground(this.PageColor);
+		cWatchPanel = new JPanel();
+		cWatchPanel.setLayout(new BorderLayout());
+		cWatchPanel.setBackground(this.PageColor);
 
-		JPanel crbuttonpanel = new JPanel();
-		crbuttonpanel.setBackground(this.PageColor);
-		crbuttonpanel.setLayout(new GridLayout(0, cols, hgap, 20));
+		cWatchBtnPanel = new JPanel();
+		cWatchBtnPanel.setBackground(this.PageColor);
+		cWatchBtnPanel.setLayout(new GridLayout(0, COLS, HGAP, 20));
 
 		Media[] currentWatchMedia = ui.findMedia(true, true, true, false, false, false, true, false, "", 0, 10);
 		if (currentWatchMedia != null) {
 			for (int i = 0; i < currentWatchMedia.length; i++) {
-				JButton currentWatchingButton = new JButton(String.valueOf(i));
-				crbuttonpanel.add(currentWatchingButton);
+				JButton cWatchingBtn = new JButton(String.valueOf(i));
+				cWatchingBtn.setPreferredSize(STANDARD_WIDGET_SIZE);
 				Media displayMedia = currentWatchMedia[i];
-				currentWatchingButton.addActionListener(e -> {
+				cWatchingBtn.addActionListener(e -> {
 					ui.openMediaPage(displayMedia, "home");
 				});
+				cWatchingBtn.setIcon(ui.resizeImg(new ImageIcon(displayMedia.getPosterPath()), POSTER_WIDTH, POSTER_HEIGHT));
+				cWatchBtnPanel.add(cWatchingBtn);
 			}
 		} else {
-			System.err.println("No Watching Media");
+			System.out.println("No Watching Media");
 		}
 
-		JScrollPane crScrollPane = new JScrollPane(crbuttonpanel);
-		crScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-		crScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		JLabel crlabel = new JLabel("Currently Watching", SwingConstants.CENTER);
-		crlabel.setFont(Style.BASE_FONT);
-		crlabel.setForeground(Style.TEA_GREEN);
+		JPanel wrapperPanel = new JPanel(WRAPPER_PANEL_LAYOUT);
+		wrapperPanel.setBackground(this.PageColor);
+		wrapperPanel.add(cWatchBtnPanel);
 
-		currentPanel.add(crlabel, BorderLayout.PAGE_START);
-		currentPanel.add(crbuttonpanel, BorderLayout.CENTER);
+		cWatchScrollPane = new JScrollPane(wrapperPanel);
+		cWatchScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		cWatchScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		cWatchScrollPane.getVerticalScrollBar().getUnitIncrement(16);
+		JLabel cWatchLbl = new JLabel("Currently Watching", SwingConstants.CENTER);
+		cWatchLbl.setFont(Style.BASE_FONT);
+		cWatchLbl.setForeground(Style.TEA_GREEN);
 
-		currentPanel.revalidate();
-		currentPanel.repaint();
+		cWatchPanel.add(cWatchLbl, BorderLayout.NORTH);
+		cWatchPanel.add(cWatchScrollPane, BorderLayout.CENTER);
+
+		cWatchPanel.revalidate();
+		cWatchPanel.repaint();
 		// Add the current panel to the content panel
-		contentPanel.add(currentPanel);
+		contentPanel.add(cWatchPanel);
 	}
 
 	/**
 	 * Create the Finish Panel Widget for the User
 	 */
 	private void finishPanel() {
-		finishPanel.setLayout(new BorderLayout());
-		finishPanel.setBackground(this.PageColor);
+		finPanel = new JPanel();
+		finPanel.setLayout(new BorderLayout());
+		finPanel.setBackground(this.PageColor);
 
-		JPanel finbuttonpanel = new JPanel();
-		finbuttonpanel.setBackground(this.PageColor);
-		finbuttonpanel.setLayout(new GridLayout(0, cols, hgap, 20));
+		JPanel finBtnPanel = new JPanel();
+		finBtnPanel.setBackground(this.PageColor);
+		finBtnPanel.setLayout(new GridLayout(0, COLS, HGAP, 20));
 
-		Media[] CompletedMedia = ui.findMedia(true, true, true, false, false, false, false, true, "", 0, 10);
-		if (CompletedMedia != null) {
-			for (int i = 0; i < CompletedMedia.length; i++) {
-				JButton completeMediaButton = new JButton(String.valueOf(i));
-				finbuttonpanel.add(completeMediaButton);
-				Media displayMedia = CompletedMedia[i];
-				completeMediaButton.addActionListener(e -> {
+		Media[] completedMedia = ui.findMedia(true, true, true, false, false, false, false, true, "", 0, 10);
+		if (completedMedia != null) {
+			for (int i = 0; i < completedMedia.length; i++) {
+				JButton finBtn = new JButton(String.valueOf(i));
+				finBtn.setPreferredSize(STANDARD_WIDGET_SIZE);
+				Media displayMedia = completedMedia[i];
+				finBtn.addActionListener(e -> {
 					ui.openMediaPage(displayMedia, "home");
 				});
+				finBtn.setIcon(ui.resizeImg(new ImageIcon(displayMedia.getPosterPath()), POSTER_WIDTH, POSTER_HEIGHT));
+				finBtnPanel.add(finBtn);
 			}
 		} else {
-			System.err.println("No Completed Media");
+			System.out.println("No Completed Media");
 		}
 
-		JScrollPane finScrollPane = new JScrollPane(finbuttonpanel);
+		JPanel wrapperPanel = new JPanel(WRAPPER_PANEL_LAYOUT);
+		wrapperPanel.setBackground(this.PageColor);
+		wrapperPanel.add(finBtnPanel);
+
+		finScrollPane = new JScrollPane(wrapperPanel);
 		finScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		finScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		JLabel finlabel = new JLabel("Finished", SwingConstants.CENTER);
-		finlabel.setFont(Style.BASE_FONT);
-		finlabel.setForeground(Style.TEA_GREEN);
+		finScrollPane.getVerticalScrollBar().getUnitIncrement(16);
+		JLabel finLbl = new JLabel("Finished", SwingConstants.CENTER);
+		finLbl.setFont(Style.BASE_FONT);
+		finLbl.setForeground(Style.TEA_GREEN);
 
-		finishPanel.add(finlabel, BorderLayout.PAGE_START);
-		finishPanel.add(finbuttonpanel, BorderLayout.CENTER);
+		finPanel.add(finLbl, BorderLayout.NORTH);
+		finPanel.add(finScrollPane, BorderLayout.CENTER);
 
-		finishPanel.revalidate();
-		finishPanel.repaint();
+		finPanel.revalidate();
+		finPanel.repaint();
 		// Add the finish panel to the content panel
-		contentPanel.add(finishPanel);
+		contentPanel.add(finPanel);
 	}
 
 	public void createWidgets() {
@@ -175,11 +222,11 @@ public class HomePage extends Page {
 		backlogPanel();
 		currentWatchingPanel();
 		finishPanel();
-		this.contentPanel.revalidate();
-		this.contentPanel.repaint();
-		this.add(contentPanel, BorderLayout.CENTER);
+		contentPanel.revalidate();
+		contentPanel.repaint();
+
 		// Refresh the UI
-		this.revalidate();
-		this.repaint();
+		contentPanel.revalidate();
+		contentPanel.repaint();
 	}
 }
