@@ -111,7 +111,6 @@ class Query {
 			INSERT INTO "Media" ("type", "externalId", "name", "description", "episodeCount", "posterPath", "posterLink")
 			VALUES (?, ?, ?, ?, ?, ?, ?)
 			""";
-	/
 	public static final String EDIT_MEDIA = """
 			UPDATE "Media"
 			SET "type" = ?, "externalId" = ?, "name" = ?, "description" = ?, "episodeCount" = ?, "posterPath" = ?, "posterLink" = ?
