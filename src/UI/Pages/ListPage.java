@@ -8,7 +8,9 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
-
+import java.awt.Point;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 
 import javax.swing.BorderFactory;
@@ -80,7 +82,8 @@ public class ListPage extends Page {
 			"Backlog " + CHECKBOX_CHAR, "Watching " + CHECKBOX_CHAR,
 			"Completed " + CHECKBOX_CHAR, "Dropped " + CHECKBOX_CHAR }; // space seperated checkbox representations
 	private MoniagaStringList selectedOptions = new MoniagaStringList(SHOW_STATUS_DEFAULT_OPTIONS);
-	// see MoniagaStringList file for more specifications on how the internals of that array work
+	// see MoniagaStringList file for more specifications on how the internals of
+	// that array work
 
 	private JLabel minRatingLbl;
 	private JSpinner minRating;
@@ -570,6 +573,30 @@ public class ListPage extends Page {
 			}
 		});
 
+		// do on double click open media btn
+		// borrowed code implenation from gemini adding in direct functionality to what is needed on our open media btn
+		listTable.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// Check if it's a double click
+				if (e.getClickCount() == 2) {
+					JTable target = (JTable) e.getSource();
+					Point point = e.getPoint();
+					int row = target.rowAtPoint(point); // Find visual row index clicked
+
+					// Verify the click happened on a valid row item
+					if (row != -1) {
+						// Convert visual view row index to data model row index
+						int modelRow = target.convertRowIndexToModel(row);
+
+						Media show = Response[modelRow]; // Gets Show User has Selected
+
+						ui.openMediaPage(show, "list");
+					}
+				}
+			}
+		});
+
 		// do header mods
 		listTable.getTableHeader().setFont(Style.HEADER_FONT);
 
@@ -586,7 +613,7 @@ public class ListPage extends Page {
 				this.trackColor = Style.TEA_GREEN;
 			}
 		});
-		
+
 		tableScrollContainer.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR));
 
 		contentPanel.add(filterPanel, BorderLayout.WEST);
