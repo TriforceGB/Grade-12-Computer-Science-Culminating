@@ -406,7 +406,7 @@ public class UI extends JFrame implements EventListener {
 
 			// Recreate the media with the new ID
 			UserData userData = media.getUserData();
-			media = db.locateMedia(media.getName(), media.getType(), media.getExternalId());
+			media = db.locateMedia(media.getName(), media.getType(), media.getExternalId(), this.currentUser.getId());
 
 			// Add UserDate to DB
 			if (!db.createUserData(newUser.getId(), media.getId(), userData)) {
@@ -457,7 +457,8 @@ public class UI extends JFrame implements EventListener {
 	 * @return The located Media, or null if not found
 	 */
 	public Media locateMedia(Media refMedia) {
-		Media locatedMedia = db.locateMedia(refMedia.getName(), refMedia.getType(), refMedia.getExternalId());
+		Media locatedMedia = db.locateMedia(refMedia.getName(), refMedia.getType(), refMedia.getExternalId(),
+				this.currentUser.getId());
 		return locatedMedia;
 	}
 

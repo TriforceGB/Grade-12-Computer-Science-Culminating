@@ -350,7 +350,7 @@ public class MediaPage extends Page {
 		gbc.gridx = 0;
 		gbc.insets = new Insets(0, 40, 10, 0);
 		selectorsContainerPanel.add(cEpSelector, gbc);
-
+		;
 		// add selector panel
 		gbc.gridy = 2;
 		gbc.gridx = 0;
@@ -411,6 +411,8 @@ public class MediaPage extends Page {
 						JOptionPane.INFORMATION_MESSAGE);
 				media = ui.locateMedia(media);
 				userReview = media.getReview();
+				setupMediaPanel(media, panelToSendBackTo);
+
 			} else {
 				JOptionPane.showMessageDialog(this, "Failed to Save!", "Error",
 						JOptionPane.ERROR_MESSAGE);
@@ -432,6 +434,7 @@ public class MediaPage extends Page {
 
 		addEditReviewButton.addActionListener(e -> {
 			JTextArea comment = new JTextArea();
+			comment.setText(userReview);
 			comment.setLineWrap(true);
 			comment.setWrapStyleWord(true);
 
@@ -443,6 +446,8 @@ public class MediaPage extends Page {
 
 			// if user hit the okay button
 			if (result == JOptionPane.OK_OPTION) {
+				addReview(comment.getText());
+				updateUserData();
 
 				// ui rework
 				setupReviews(media);
@@ -496,6 +501,7 @@ public class MediaPage extends Page {
 	public void setupMediaPanel(Media obj, String panelName) {
 		media = obj; // Stores it for the Rest of the UI to Use
 		panelToSendBackTo = panelName;
+		userReview = media.getReview();
 
 		// then load data
 		File posterFile = new File(obj.getPosterPath());

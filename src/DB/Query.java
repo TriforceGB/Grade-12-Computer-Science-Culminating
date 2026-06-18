@@ -140,22 +140,22 @@ class Query {
 				FROM Media AS m
 			""";
 	public static final String LOCATE_MEDIA = """
-				SELECT
-					m.*,
-					ud.status,
-					COALESCE(ud.startDate, 'yyyy-mm-dd') as startDate,
-					COALESCE(ud.finishDate, 'yyyy-mm-dd') as finishDate,
-					ud.rating,
-					ud.lastEpisode,
-					ud.review,
-					ud.rewatched,
-					count(*) OVER() AS count
-				FROM Media AS m
-				LEFT JOIN "UserData" AS ud ON m.id = ud.mediaId
-				WHERE
-					m.name = ? AND
-					m.type = ? AND
-					m.externalId = ?
+			SELECT
+				m.*,
+				ud.status,
+				COALESCE(ud.startDate, 'yyyy-mm-dd') as startDate,
+				COALESCE(ud.finishDate, 'yyyy-mm-dd') as finishDate,
+				ud.rating,
+				ud.lastEpisode,
+				ud.review,
+				ud.rewatched,
+				count(*) OVER() AS count
+			FROM Media AS m
+			LEFT JOIN "UserData" AS ud ON m.id = ud.mediaId AND ud.userId = ?
+			WHERE
+				m.name = ? AND
+				m.type = ? AND
+				m.externalId = ?
 			""";
 	// User Data Query
 	// Create Edit Delete

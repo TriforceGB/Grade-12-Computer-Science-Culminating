@@ -415,11 +415,12 @@ public class DB {
 	 * @param externalID
 	 * @return The Media that Matches the Variables
 	 */
-	public Media locateMedia(String name, int type, int externalID) {
+	public Media locateMedia(String name, int type, int externalID, int userId) {
 		try (PreparedStatement stmt = dbConnect.prepareStatement(Query.LOCATE_MEDIA)) {
-			stmt.setString(1, name);
-			stmt.setInt(2, type);
-			stmt.setInt(3, externalID);
+			stmt.setInt(1, userId);
+			stmt.setString(2, name);
+			stmt.setInt(3, type);
+			stmt.setInt(4, externalID);
 			ResultSet rs = stmt.executeQuery();
 			if (rs.next()) {
 				return new Media(
