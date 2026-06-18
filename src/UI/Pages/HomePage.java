@@ -6,7 +6,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
-import java.awt.Insets;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -15,6 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
+import javax.swing.plaf.basic.BasicScrollBarUI;
 
 import DTO.LocalDB.Media;
 
@@ -41,6 +41,7 @@ public class HomePage extends Page {
 	private final int HGAP = 20;
 	private final int COLS = 3;
 
+	// constants used for layouts
 	private final int POSTER_WIDTH = 150;
 	private final int POSTER_HEIGHT = 225;
 	private final Dimension STANDARD_WIDGET_SIZE = new Dimension(POSTER_WIDTH, POSTER_HEIGHT);
@@ -86,6 +87,8 @@ public class HomePage extends Page {
 		Media[] backloggedMedia = ui.findMedia(true, true, true, false, false, true,
 				false, false, "", 0, 10);
 		if (backloggedMedia != null) {
+			// then dynamically add buttons for media access.
+			// all the three other panels follow the same method
 			for (int i = 0; i < backloggedMedia.length; i++) {
 				JButton backLogBtn = new JButton();
 				backLogBtn.setPreferredSize(STANDARD_WIDGET_SIZE);
@@ -95,6 +98,10 @@ public class HomePage extends Page {
 				});
 				backLogBtn.setIcon(
 						ui.resizeImg(new ImageIcon(displayMedia.getPosterPath()), POSTER_WIDTH, POSTER_HEIGHT));
+
+				backLogBtn.setContentAreaFilled(false);
+				backLogBtn.setBorderPainted(false);
+
 				backlogBtnPanel.add(backLogBtn);
 			}
 		} else {
@@ -110,6 +117,13 @@ public class HomePage extends Page {
 		backlogScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		backlogScrollPane.getVerticalScrollBar().setUnitIncrement(16);
 		backlogScrollPane.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR, 2));
+		backlogScrollPane.getVerticalScrollBar().setUI(new BasicScrollBarUI() { // changing scroll bar color
+			@Override
+			protected void configureScrollBarColors() {
+				this.thumbColor = Style.BORDER_COLOR;
+				this.trackColor = Style.TEA_GREEN;
+			}
+		});
 		JLabel backlogLbl = new JLabel("Backlog", SwingConstants.CENTER);
 		backlogLbl.setForeground(Style.TEA_GREEN);
 		backlogLbl.setFont(Style.BASE_FONT);
@@ -163,8 +177,15 @@ public class HomePage extends Page {
 		cWatchScrollPane = new JScrollPane(wrapperPanel);
 		cWatchScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		cWatchScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		cWatchScrollPane.getVerticalScrollBar().getUnitIncrement(16);
+		cWatchScrollPane.getVerticalScrollBar().setUnitIncrement(16);
 		cWatchScrollPane.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR, 2));
+		cWatchScrollPane.getVerticalScrollBar().setUI(new BasicScrollBarUI() { // changing scroll bar color
+			@Override
+			protected void configureScrollBarColors() {
+				this.thumbColor = Style.BORDER_COLOR;
+				this.trackColor = Style.TEA_GREEN;
+			}
+		});
 		JLabel cWatchLbl = new JLabel("Currently Watching", SwingConstants.CENTER);
 		cWatchLbl.setFont(Style.BASE_FONT);
 		cWatchLbl.setForeground(Style.TEA_GREEN);
@@ -217,8 +238,15 @@ public class HomePage extends Page {
 		finScrollPane = new JScrollPane(wrapperPanel);
 		finScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		finScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		finScrollPane.getVerticalScrollBar().getUnitIncrement(16);
+		finScrollPane.getVerticalScrollBar().setUnitIncrement(16);
 		finScrollPane.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR, 2));
+		finScrollPane.getVerticalScrollBar().setUI(new BasicScrollBarUI() { // changing scroll bar color
+			@Override
+			protected void configureScrollBarColors() {
+				this.thumbColor = Style.BORDER_COLOR;
+				this.trackColor = Style.TEA_GREEN;
+			}
+		});
 		JLabel finLbl = new JLabel("Finished", SwingConstants.CENTER);
 		finLbl.setFont(Style.BASE_FONT);
 		finLbl.setForeground(Style.TEA_GREEN);

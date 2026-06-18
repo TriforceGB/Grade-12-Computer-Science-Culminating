@@ -5,12 +5,12 @@ package DTO.LocalDB;
  * Useful for Having info on the Current User
  */
 public class User {
-	private int id;
-	private String username;
-	private String password;
-	private boolean isAdmin;
-	private String created;
-	private String lastLogin;
+	private int id; // The User ID
+	private String username; // The Username
+	private String password; // The Password to The User
+	private boolean isAdmin; // Is this user an Admin
+	private String created; // When was the User Created
+	private String lastLogin; // When was the User Last Login
 
 	// Extra
 	private Media[] mediaRelation; // Stores all Media that is connected to User (Ie they have a relationship with

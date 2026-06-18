@@ -5,7 +5,7 @@ package DTO.API.Request;
  */
 public class TheTVDBLoginRequest {
 	@SuppressWarnings("unused")
-	private String apikey;
+	private String apikey; // The API Key
 
 	public TheTVDBLoginRequest(String apikey) {
 		this.apikey = apikey;

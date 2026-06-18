@@ -9,8 +9,8 @@ import java.sql.Statement;
 import java.time.LocalDate;
 
 import DTO.LocalDB.Media;
-import DTO.LocalDB.User;
 import DTO.LocalDB.Media.UserData;
+import DTO.LocalDB.User;
 
 /**
  * This is the public interface for the application to interact with the
@@ -118,10 +118,13 @@ public class DB {
 		this.executeCommand(Query.CREATE_USERDATA_TABLE);
 	}
 
+	/**
+	 * Delete User and UserData then Re-add them
+	 */
 	public void remakeUserDB() {
-		this.executeCommand(Query.REMOVE_USER_TABLE);
+		this.executeCommand(Query.REMOVE_USER_TABLE); // Remove Table
 		this.executeCommand(Query.REMOVE_USERDATA_TABLE);
-		this.executeCommand(Query.CREATE_USERS_TABLE);
+		this.executeCommand(Query.CREATE_USERS_TABLE); // Remakes Table
 		this.executeCommand(Query.CREATE_USERDATA_TABLE);
 		this.createUser(new User("admin", "admin", true)); // Create Admin User
 	}
@@ -639,7 +642,7 @@ public class DB {
 	}
 
 	/**
-	 * Finds all the Review from Users for a Given Meida
+	 * Finds all the Review from Users for a Given Media
 	 *
 	 * @param mediaId the Id of the Media
 	 * @return a 2D array of Review data (username, review, rating)

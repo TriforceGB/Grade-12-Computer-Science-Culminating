@@ -82,11 +82,8 @@ class Page extends JPanel {
 		JButton settingButton = new JButton("Settings");
 		JButton exitButton = new JButton("Exit");
 
-		// Fonts
-
-		// Colours
-
-		// Images
+		// Styling of all buttons:
+		// home button
 		ImageIcon homeicon = ui.resizeImg(new ImageIcon("assets/UI/homeicon.png"), 30, 30);
 		homeButton.setFont(Style.BASE_FONT);
 		homeButton.setBackground(Style.LIGHT_GREEN);
@@ -98,6 +95,7 @@ class Page extends JPanel {
 		homeButton.setIconTextGap(20);
 		homeButton.setFocusable(false);
 
+		// list button
 		ImageIcon listicon = ui.resizeImg(new ImageIcon("assets/UI/listicon.png"), 30, 30);
 		listButton.setFont(Style.BASE_FONT);
 		listButton.setBackground(Style.LIGHT_GREEN);
@@ -109,6 +107,7 @@ class Page extends JPanel {
 		listButton.setIconTextGap(20);
 		listButton.setFocusable(false);
 
+		// search button
 		ImageIcon searchicon = ui.resizeImg(new ImageIcon("assets/UI/searchicon.png"), 30, 30);
 		searchButton.setFont(Style.BASE_FONT);
 		searchButton.setBackground(Style.LIGHT_GREEN);
@@ -120,6 +119,7 @@ class Page extends JPanel {
 		searchButton.setIconTextGap(20);
 		searchButton.setFocusable(false);
 
+		// settings button
 		ImageIcon settingicon = ui.resizeImg(new ImageIcon("assets/UI/settingicon.png"), 30, 30);
 		settingButton.setFont(Style.BASE_FONT);
 		settingButton.setBackground(Style.LIGHT_GREEN);
@@ -131,6 +131,7 @@ class Page extends JPanel {
 		settingButton.setIconTextGap(20);
 		settingButton.setFocusable(false);
 
+		// exit button
 		ImageIcon exiticon = ui.resizeImg(new ImageIcon("assets/UI/exiticon.png"), 30, 30);
 		exitButton.setFont(Style.BASE_FONT);
 		exitButton.setBackground(Style.LIGHT_GREEN);
@@ -142,7 +143,7 @@ class Page extends JPanel {
 		exitButton.setIconTextGap(20);
 		exitButton.setFocusable(false);
 
-		// Action listener
+		// Action listeners for every button, functionality
 		homeButton.addActionListener(e -> {
 			ui.createHomePage();
 			ui.switchPanel("home");
