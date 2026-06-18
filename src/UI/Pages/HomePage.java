@@ -3,7 +3,6 @@ package UI.Pages;
 import UI.Style;
 import UI.UI;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;

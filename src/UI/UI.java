@@ -61,8 +61,6 @@ public class UI extends JFrame implements EventListener {
 	private boolean loadedAdminUserPage = false;
 	private boolean loadedAdminMediaPage = false;
 
-	private final int HTML_FORMAT_MAX_CHAR_LENGTH = 200;
-
 	/**
 	 * This Create the UI and Display it for the User
 	 */
@@ -78,6 +76,7 @@ public class UI extends JFrame implements EventListener {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Set the default close operation
 		this.getContentPane().setBackground(Style.BALTIC_BLUE); // Set Default Background Color
 		this.setResizable(false); // Disable window resizing
+		this.setIconImage(resizeImg(new ImageIcon("assets/UI/filal.png"), 50, 50).getImage());
 
 		// Initializing Panels
 		this.loginPage = new LoginPage(this);
@@ -142,6 +141,14 @@ public class UI extends JFrame implements EventListener {
 		mediaPage.setupMediaPanel(ref, panelNameCalledFrom);
 		// then swap
 		switchPanel("media");
+	}
+
+	/**
+	 * Update Both Table when the Admin Panel is Loaded
+	 */
+	public void updateAdminPanel() {
+		adminMediaPage.loadData();
+		adminUsrPage.loadData();
 	}
 
 	/**
@@ -400,7 +407,7 @@ public class UI extends JFrame implements EventListener {
 
 			// Recreate the media with the new ID
 			UserData userData = media.getUserData();
-			media = db.locateMedia(media.getName(), media.getType(), media.getExternalId());
+			media = db.locateMedia(media.getName(), media.getType(), media.getExternalId(), this.currentUser.getId());
 
 			// Add UserDate to DB
 			if (!db.createUserData(newUser.getId(), media.getId(), userData)) {
@@ -422,7 +429,7 @@ public class UI extends JFrame implements EventListener {
 		return reviews;
 	}
 
-	public void callreset(){
+	public void callreset() {
 
 		listPage.resetfunction();
 
@@ -451,7 +458,8 @@ public class UI extends JFrame implements EventListener {
 	 * @return The located Media, or null if not found
 	 */
 	public Media locateMedia(Media refMedia) {
-		Media locatedMedia = db.locateMedia(refMedia.getName(), refMedia.getType(), refMedia.getExternalId());
+		Media locatedMedia = db.locateMedia(refMedia.getName(), refMedia.getType(), refMedia.getExternalId(),
+				this.currentUser.getId());
 		return locatedMedia;
 	}
 
@@ -557,6 +565,16 @@ public class UI extends JFrame implements EventListener {
 		return this.api.searchAnime(query, amount);
 	}
 
+	/**
+	 * Override the Current API Key to a New one
+	 *
+	 * @param api The API Key to Add
+	 * @return if the file was Made
+	 */
+	public boolean addAPIKey(String api) {
+		return this.api.updateKey(api);
+	}
+
 	// Image and Other UI Methods
 	public ImageIcon resizeImg(ImageIcon original, int width, int height) {
 		Image ogImage = original.getImage();
@@ -585,9 +603,9 @@ public class UI extends JFrame implements EventListener {
 	 * @return The string of text formatted via html with line breaks at parts
 	 *         attempting to match cPerLine, but based on number of words
 	 */
-	public String getHtmlFormatText(String toFormat, int cPerLine, int maxPass) {
+	public String getHtmlFormatText(String toFormat, int cPerLine, int maxPass, int maxWidth) {
 		String[] words = toFormat.split(" "); // split @ each space for each word
-		String result = "<html><body style='width: 300px;'>"; // result string to return
+		String result = "<html><body style='width: " + maxWidth + "px;'>"; // result string to return
 
 		int tracker = 0; // tracks current line number of chars
 		for (String word : words) {
@@ -758,5 +776,15 @@ public class UI extends JFrame implements EventListener {
 			default:
 				return "Unknown";
 		}
+	}
+
+	public boolean remakeMediaTable() {
+		db.remakeMediaDB();
+		return true;
+	}
+
+	public boolean remakeUserTable() {
+		db.remakeUserDB();
+		return true;
 	}
 }
