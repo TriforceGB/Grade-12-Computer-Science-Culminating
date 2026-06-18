@@ -251,6 +251,16 @@ public class UI extends JFrame implements EventListener {
 	}
 
 	/**
+	 * Delete Media Given Object
+	 *
+	 * @param delMedia The Media Object to Delete
+	 * @return if it was delete
+	 */
+	public boolean deleteMedia(Media delMedia) {
+		return db.deleteMedia(delMedia.getId());
+	}
+
+	/**
 	 * Pulls all Users from the DB
 	 *
 	 * @return An array of all Users

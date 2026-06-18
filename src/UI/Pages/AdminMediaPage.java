@@ -239,6 +239,21 @@ public class AdminMediaPage extends AdminUserPage {
 	private void createDelBtn() {
 		delBtn = new JButton("Del");
 		delBtn.setFont(Style.BASE_FONT);
+
+		delBtn.addActionListener(e -> {
+			int selectedRow = userTable.getSelectedRow();
+			if (selectedRow != -1) {
+				Media deleteMedia = MediaTable[selectedRow];
+
+				int result = JOptionPane.showConfirmDialog(this,
+						"Are you sure you want to delete %s?".formatted(deleteMedia.getName()), "Delete User",
+						JOptionPane.YES_NO_OPTION);
+				if (result == JOptionPane.YES_OPTION) {
+					ui.deleteMedia(deleteMedia);
+					loadData();
+				}
+			}
+		});
 	}
 
 	private void addDelBtn() {
