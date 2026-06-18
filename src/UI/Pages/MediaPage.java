@@ -70,7 +70,7 @@ public class MediaPage extends Page {
 
 	private JPanel usrReviewsSidePanel;
 	private JLabel usrReviewsTitleLabel;
-	private JPanel scrollContentPanel;
+	private JPanel usrReviewsScrollContentPanel;
 	private JScrollPane usrReviewsScrollPane;
 
 	private JButton backButton;
@@ -82,8 +82,8 @@ public class MediaPage extends Page {
 
 	private String panelToSendBackTo;
 
-	private int gap = 20;
-	private int imagedimensions = 30;
+	private final int GAP = 20;
+	private final int IMAGE_DIMENSIONS = 30;
 
 	/**
 	 * Create the Media Page
@@ -321,9 +321,9 @@ public class MediaPage extends Page {
 		usrReviewsTitleLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		usrReviewsTitleLabel.setFont(Style.BASE_FONT);
 		usrReviewsTitleLabel.setForeground(Style.TEA_GREEN);
-		scrollContentPanel = new JPanel(new GridLayout(0, 1, 0, 10));
-		scrollContentPanel.setBackground(Style.BALTIC_BLUE);
-		usrReviewsScrollPane = new JScrollPane(scrollContentPanel);
+		usrReviewsScrollContentPanel = new JPanel(new GridLayout(0, 1, 0, 10));
+		usrReviewsScrollContentPanel.setBackground(Style.BALTIC_BLUE);
+		usrReviewsScrollPane = new JScrollPane(usrReviewsScrollContentPanel);
 		usrReviewsScrollPane.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2, false));
 		usrReviewsScrollPane.setPreferredSize(new Dimension(250, 0));
 		usrReviewsScrollPane.getVerticalScrollBar().setUnitIncrement(16);
@@ -348,7 +348,7 @@ public class MediaPage extends Page {
 		backButton.addActionListener(e -> {
 			ui.switchPanel(panelToSendBackTo);
 		});
-		ui.addButtonImg(backButton, new ImageIcon("assets/UI/backicon.png"), gap, imagedimensions, imagedimensions);
+		ui.addButtonImg(backButton, new ImageIcon("assets/UI/backicon.png"), GAP, IMAGE_DIMENSIONS, IMAGE_DIMENSIONS);
 		southEastSidePanel.add(backButton);
 
 		saveButton = new JButton("Save");
@@ -367,7 +367,7 @@ public class MediaPage extends Page {
 						JOptionPane.ERROR_MESSAGE);
 			}
 		});
-		ui.addButtonImg(saveButton, new ImageIcon("assets/UI/saveicon.png"), gap, imagedimensions, imagedimensions);
+		ui.addButtonImg(saveButton, new ImageIcon("assets/UI/saveicon.png"), GAP, IMAGE_DIMENSIONS, IMAGE_DIMENSIONS);
 
 		southEastSidePanel.add(saveButton);
 
@@ -377,7 +377,7 @@ public class MediaPage extends Page {
 		addEditReviewButton.setBackground(Style.LIGHT_GREEN);
 		addEditReviewButton.setForeground(Style.BALTIC_BLUE);
 
-		ui.addButtonImg(addEditReviewButton, new ImageIcon("assets/UI/reviewicon.png"), gap, imagedimensions, imagedimensions);
+		ui.addButtonImg(addEditReviewButton, new ImageIcon("assets/UI/reviewicon.png"), GAP, IMAGE_DIMENSIONS, IMAGE_DIMENSIONS);
 
 		southEastSidePanel.add(addEditReviewButton);
 	}
@@ -446,13 +446,15 @@ public class MediaPage extends Page {
 		cEpTextField.setForeground(Style.BALTIC_BLUE);
 		cEpTextField.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
-		scrollContentPanel.removeAll();
+		usrReviewsScrollContentPanel.removeAll();
 		String[][] reviews = ui.pullReview(obj.getId());
 		for (int i = 0; i < reviews.length; i++) {
 			if (reviews[i][1] != null) {
-				scrollContentPanel.add(getReviewPanel(reviews[i]));
+				usrReviewsScrollContentPanel.add(getReviewPanel(reviews[i]));
 			}
 		}
+
+		System.out.println(reviews.length);
 	}
 
 	
