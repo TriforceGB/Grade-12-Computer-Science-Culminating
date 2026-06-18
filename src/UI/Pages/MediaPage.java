@@ -145,7 +145,7 @@ public class MediaPage extends Page {
 		startDateField.setFocusable(false);
 		startDateField.setBackground(Style.TEA_GREEN);
 		startDateField.setForeground(Style.BALTIC_BLUE);
-		
+
 		finishDateField = new JTextField(12);
 		finishDateField.setText("YYYY-MM-DD");
 		finishDateField.setFont(Style.BASE_FONT);
@@ -227,7 +227,7 @@ public class MediaPage extends Page {
 		usrRatingTextfield.setBackground(Style.TEA_GREEN);
 		usrRatingTextfield.setForeground(Style.BALTIC_BLUE);
 		usrRatingTextfield.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-		
+
 		rewatchLabel = new JLabel("Rewatch: ");
 		rewatchLabel.setFont(Style.BASE_FONT);
 		rewatchLabel.setForeground(Style.TEA_GREEN);
@@ -336,7 +336,6 @@ public class MediaPage extends Page {
 	}
 
 	void addButtonsToSouth() {
-		
 
 		backButton = new JButton("Back");
 		backButton.setFont(Style.BASE_FONT);
@@ -375,7 +374,8 @@ public class MediaPage extends Page {
 		addEditReviewButton.setBackground(Style.LIGHT_GREEN);
 		addEditReviewButton.setForeground(Style.BALTIC_BLUE);
 
-		ui.addButtonImg(addEditReviewButton, new ImageIcon("assets/UI/reviewicon.png"), gap, imagedimensions, imagedimensions);
+		ui.addButtonImg(addEditReviewButton, new ImageIcon("assets/UI/reviewicon.png"), gap, imagedimensions,
+				imagedimensions);
 
 		southEastSidePanel.add(addEditReviewButton);
 	}
@@ -384,7 +384,7 @@ public class MediaPage extends Page {
 		JPanel result = new JPanel(new GridBagLayout());
 		result.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2, true));
 		result.setBackground(Style.BORDER_COLOR);
-		
+
 		GridBagConstraints gbc2 = new GridBagConstraints();
 
 		String name = review[0];
@@ -453,7 +453,6 @@ public class MediaPage extends Page {
 		}
 	}
 
-	
 	/**
 	 * Handle the Logic for if to Edit or Create or Remove Status
 	 *
@@ -481,7 +480,12 @@ public class MediaPage extends Page {
 				finishDateField.getText(), (Integer) usrRatingSelector.getValue(), (Integer) cEpSelector.getValue(),
 				null,
 				(Integer) rewatchesSelector.getValue());
-		if (media.getStatus() == 0) { // Create the User Data
+		if (newUserData.getStatus() == 0 && media.getStatus() == 0) {
+			JOptionPane.showMessageDialog(this,
+					"Please Set Status to Non Undecided before Saving", "Error",
+					JOptionPane.ERROR_MESSAGE);
+			return false;
+		} else if (media.getStatus() == 0) { // Create the User Data
 			return ui.createUserData(media.getId(), newUserData);
 		} else if (newUserData.getStatus() == 0) {
 			int confirm = JOptionPane.showConfirmDialog(this,
