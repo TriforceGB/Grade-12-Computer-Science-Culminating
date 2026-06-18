@@ -27,7 +27,8 @@ import UI.Style;
 import UI.UI;
 
 public class AdminUserPage extends Page {
-	// very similar layout to media page except all things are laid out for the users
+	// very similar layout to media page except all things are laid out for the
+	// users
 	// different calls are made, but styles are same
 	// differenet row column exists for the table
 
@@ -175,7 +176,6 @@ public class AdminUserPage extends Page {
 
 	private void editRow(int selectedRow) {
 		// { "Id", "Username", "Password", "Is Admin", "Date Created", "Last Login" };
-		// TODO get selected row and only create if valid
 		if (selectedRow != -1) {
 			User editedUser = userList[selectedRow];
 			JDialog editWindow = new JDialog();
@@ -296,22 +296,23 @@ public class AdminUserPage extends Page {
 							"Unable to Edit Yourself", "Error",
 							JOptionPane.ERROR_MESSAGE);
 					editWindow.dispose();
-				}
-				editedUser.setUsername(usrEdit.getText());
-				editedUser.setPassword(pwdEdit.getText());
-
-				editedUser.setAdmin(isAdminEdit.getSelectedIndex() == 0);
-				if (ui.editUser(editedUser)) {
-					JOptionPane.showMessageDialog(this,
-							"Change to User was Made", "Info",
-							JOptionPane.INFORMATION_MESSAGE);
 				} else {
-					JOptionPane.showMessageDialog(this,
-							"Failed to Update User", "Error",
-							JOptionPane.ERROR_MESSAGE);
+					editedUser.setUsername(usrEdit.getText());
+					editedUser.setPassword(pwdEdit.getText());
+
+					editedUser.setAdmin(isAdminEdit.getSelectedIndex() == 0);
+					if (ui.editUser(editedUser)) {
+						JOptionPane.showMessageDialog(this,
+								"Change to User was Made", "Info",
+								JOptionPane.INFORMATION_MESSAGE);
+					} else {
+						JOptionPane.showMessageDialog(this,
+								"Failed to Update User", "Error",
+								JOptionPane.ERROR_MESSAGE);
+					}
+					loadData();
+					editWindow.dispose();
 				}
-				loadData();
-				editWindow.dispose();
 			});
 			editWindow.add(okButton);
 
