@@ -160,7 +160,7 @@ public class AdminMediaPage extends AdminUserPage {
 
 	// allow a row edit based on the call of the btn above
 	private void editRow() {
-		// Column row ids 
+		// Column row ids
 		// { "Id", "Type", "Name", "Ep. Count", "PosterPath", "PosterLink" };
 		// ensures a row is selected
 		if (userTable.getSelectedRow() != -1) {
@@ -314,7 +314,7 @@ public class AdminMediaPage extends AdminUserPage {
 					JOptionPane.YES_NO_OPTION);
 			if (result == JOptionPane.YES_OPTION) {
 				if (ui.remakeMediaTable()) {
-					JOptionPane.showMessageDialog(this, "User data wiped successfully. You will be logged out.",
+					JOptionPane.showMessageDialog(this, "Media data wiped successfully.",
 							"Success", JOptionPane.INFORMATION_MESSAGE);
 					loadData();
 				}
@@ -361,7 +361,8 @@ public class AdminMediaPage extends AdminUserPage {
 		contentPanel.add(btnPanel, BorderLayout.SOUTH);
 	}
 
-	// admin media page comes form admin user page to allow sharing of page reference
+	// admin media page comes form admin user page to allow sharing of page
+	// reference
 	// this overides how the data gets loaded because a different pull is needed
 	@Override
 	public void loadData() {
