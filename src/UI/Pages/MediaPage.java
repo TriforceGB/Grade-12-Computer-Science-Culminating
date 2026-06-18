@@ -441,11 +441,20 @@ public class MediaPage extends Page {
 			JScrollPane commentContainer = new JScrollPane(comment);
 			commentContainer.setPreferredSize(new Dimension(400, 150));
 
-			int result = JOptionPane.showConfirmDialog(null, commentContainer, "Add/Edit Review Comment",
-					JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+			Object[] options = { "Save", "Delete", "Cancel" };
 
-			// if user hit the okay button
-			if (result == JOptionPane.OK_OPTION) {
+			int result = JOptionPane.showOptionDialog(
+					null,
+					commentContainer,
+					"Add/Edit Review Comment",
+					JOptionPane.YES_NO_OPTION,
+					JOptionPane.PLAIN_MESSAGE,
+					null,
+					options,
+					options[0]);
+
+			// if user hit the save button
+			if (result == 0) {
 				addReview(comment.getText());
 				media = ui.locateMedia(media);
 				updateUserData();
@@ -453,9 +462,9 @@ public class MediaPage extends Page {
 				// ui rework
 				setupReviews(media);
 				// if user hit the cancel option and closed option
-			} else if (result == JOptionPane.CANCEL_OPTION || result == JOptionPane.CLOSED_OPTION) {
-
-			}
+			} else if (result == 1) {
+				// user hit delete
+			} else 
 		});
 
 		southEastSidePanel.add(addEditReviewButton);
