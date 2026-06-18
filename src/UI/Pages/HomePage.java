@@ -97,6 +97,10 @@ public class HomePage extends Page {
 				});
 				backLogBtn.setIcon(
 						ui.resizeImg(new ImageIcon(displayMedia.getPosterPath()), POSTER_WIDTH, POSTER_HEIGHT));
+
+				backLogBtn.setContentAreaFilled(false);
+				backLogBtn.setBorderPainted(false);
+
 				backlogBtnPanel.add(backLogBtn);
 			}
 		} else {
