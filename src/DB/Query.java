@@ -87,7 +87,9 @@ class Query {
 			""";
 	// Finds all Users
 	public static final String ALL_USERS = """
-			SELECT *
+			SELECT
+			*,
+			COUNT(*) OVER() AS count
 			FROM "User"
 			""";
 
@@ -124,7 +126,7 @@ class Query {
 					m.type IN (?, ?, ?) AND
 					COALESCE(ud.status, 0) IN (?, ?, ?, ?, ?) AND
 					COALESCE(ud.rating, 0) BETWEEN ? AND ?
-				ORDER BY ud.status DESC NULLS LAST;
+				ORDER BY ud.status DESC NULLS LAST, ud.rating DESC NULLS LAST, m.name;
 
 			""";
 	public static final String ALL_MEDIA = """
@@ -193,4 +195,20 @@ class Query {
 			JOIN "User" AS u ON ud.userId = u.id
 			WHERE ud.mediaId = ?
 			""";
+	public static final String MEDIA_STATS = """
+			SELECT
+			type,
+			COUNT(*) AS count
+			FROM "Media"
+			GROUP BY type
+			""";
+	public static final String USER_STATS = """
+				SELECT
+				status,
+				COUNT(*) AS count
+				FROM "UserData" AS ud
+				WHERE ud.userId = ?
+				GROUP BY status
+			""";
+
 }
