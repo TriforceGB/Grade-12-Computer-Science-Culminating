@@ -64,7 +64,7 @@ class AniList {
 					.uri(new URI(API_URL)) // URL
 					.header("Content-Type", "application/json") // What we are expecting back
 					.POST(HttpRequest.BodyPublishers.ofString(gson.toJson(message))) // Our Message
-					.build(); // Create
+					.build();
 
 			// Take Response as String
 			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
