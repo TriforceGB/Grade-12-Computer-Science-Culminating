@@ -525,7 +525,7 @@ public class MediaPage extends Page {
 	private void setupReviews(Media obj) {
 		usrReviewsScrollContentPanel.removeAll();
 		String[][] reviews = ui.pullReview(obj.getId());
-		if (reviews.length == 0) 
+		if (reviews.length == 0)
 			setBlankReviews();
 		else
 			placeReviews(reviews);
@@ -533,7 +533,11 @@ public class MediaPage extends Page {
 
 	private void setBlankReviews() {
 		JPanel wrapperPanel = new JPanel(new GridBagLayout());
+		wrapperPanel.setBackground(Style.BALTIC_BLUE);
 		JLabel blankLbl = new JLabel("No user reviews.");
+		blankLbl.setFont(Style.BASE_FONT_BIG);
+		blankLbl.setForeground(Style.TEA_GREEN);
+
 		wrapperPanel.add(blankLbl);
 		usrReviewsScrollPane.setViewportView(wrapperPanel);
 
