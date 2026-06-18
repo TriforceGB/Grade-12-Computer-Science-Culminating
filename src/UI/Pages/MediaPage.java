@@ -24,6 +24,7 @@ import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
+import javax.swing.plaf.basic.BasicScrollBarUI;
 
 import DTO.LocalDB.Media;
 import DTO.LocalDB.Media.UserData;
@@ -332,6 +333,13 @@ public class MediaPage extends Page {
 		usrReviewsScrollPane.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2, false));
 		usrReviewsScrollPane.setPreferredSize(new Dimension(250, 0));
 		usrReviewsScrollPane.getVerticalScrollBar().setUnitIncrement(16);
+		usrReviewsScrollPane.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
+			@Override
+			protected void configureScrollBarColors() {
+				this.thumbColor = Style.BORDER_COLOR;
+				this.trackColor = Style.TEA_GREEN;
+			}
+		});
 	}
 
 	private void addSidePanelsToMain() {

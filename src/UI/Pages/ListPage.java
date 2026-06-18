@@ -25,6 +25,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.Border;
+import javax.swing.plaf.basic.BasicScrollBarUI;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
@@ -561,6 +562,14 @@ public class ListPage extends Page {
 		tableScrollContainer.setBorder(BORDER);
 		tableScrollContainer.getViewport().setBackground(PageColor);
 		tableScrollContainer.setMaximumSize(new Dimension(Short.MAX_VALUE, 500));
+		tableScrollContainer.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
+			@Override
+			protected void configureScrollBarColors() {
+				this.thumbColor = Style.BORDER_COLOR;
+				this.trackColor = Style.TEA_GREEN;
+			}
+		});
+		
 
 		contentPanel.add(filterPanel, BorderLayout.WEST);
 		contentPanel.add(tableScrollContainer, BorderLayout.CENTER);
