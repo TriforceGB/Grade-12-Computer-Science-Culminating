@@ -277,7 +277,7 @@ public class MediaPage extends Page {
 		usrReviewsScrollPane.getVerticalScrollBar().setUnitIncrement(16);
 	}
 
-	void addSidePanelsToMain() {
+	private void addSidePanelsToMain() {
 		usrReviewsSidePanel.add(usrReviewsTitleLabel, BorderLayout.NORTH);
 		usrReviewsSidePanel.add(usrReviewsScrollPane, BorderLayout.CENTER);
 
