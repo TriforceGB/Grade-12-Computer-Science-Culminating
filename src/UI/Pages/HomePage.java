@@ -6,7 +6,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
-import java.awt.Insets;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -41,6 +40,7 @@ public class HomePage extends Page {
 	private final int HGAP = 20;
 	private final int COLS = 3;
 
+	// constants used for layouts
 	private final int POSTER_WIDTH = 150;
 	private final int POSTER_HEIGHT = 225;
 	private final Dimension STANDARD_WIDGET_SIZE = new Dimension(POSTER_WIDTH, POSTER_HEIGHT);
@@ -86,6 +86,8 @@ public class HomePage extends Page {
 		Media[] backloggedMedia = ui.findMedia(true, true, true, false, false, true,
 				false, false, "", 0, 10);
 		if (backloggedMedia != null) {
+			// then dynamically add buttons for media access.
+			// all the three other panels follow the same method
 			for (int i = 0; i < backloggedMedia.length; i++) {
 				JButton backLogBtn = new JButton();
 				backLogBtn.setPreferredSize(STANDARD_WIDGET_SIZE);

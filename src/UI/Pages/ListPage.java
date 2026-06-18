@@ -8,7 +8,9 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
-
+import java.awt.Point;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 
 import javax.swing.BorderFactory;
@@ -71,6 +73,7 @@ public class ListPage extends Page {
 	private JLabel statusFilterLbl;
 
 	private JComboBox<String> statusFilter;
+	// used for the multi-select combo box
 	private final char CHECKBOX_CHAR = '☒';
 	private final char UNCHECKBOX_CHAR = '☐';
 	private final String[] SHOW_STATUS_DEFAULT_OPTIONS = new String[] { "Undecided", "Dropped", "Backlog", "Watching",
@@ -79,6 +82,8 @@ public class ListPage extends Page {
 			"Backlog " + CHECKBOX_CHAR, "Watching " + CHECKBOX_CHAR,
 			"Completed " + CHECKBOX_CHAR, "Dropped " + CHECKBOX_CHAR }; // space seperated checkbox representations
 	private MoniagaStringList selectedOptions = new MoniagaStringList(SHOW_STATUS_DEFAULT_OPTIONS);
+	// see MoniagaStringList file for more specifications on how the internals of
+	// that array work
 
 	private JLabel minRatingLbl;
 	private JSpinner minRating;
@@ -118,14 +123,17 @@ public class ListPage extends Page {
 		addTypeCheckboxes();
 		addNameStatusButtons();
 		addRatingSelectorButtons();
+		// create a wrraper to store the buttons in better layout
 		btnWrapper = new JPanel(new GridLayout());
 		addSearchButton();
 		addResetButton();
 		addOpenMedia();
 
+		// standard gridbaglayout settings to place in correct location
 		gbc.gridy = 8;
 		gbc.gridx = 0;
 		gbc.gridwidth = 2;
+		// add it along with everything else
 		filterPanel.add(btnWrapper, gbc);
 
 		gbc = new GridBagConstraints(); // reset for safety
@@ -134,7 +142,7 @@ public class ListPage extends Page {
 		addTableToListPanel();
 	}
 
-	void createFilterPanel() {
+	private void createFilterPanel() {
 		// create filter panel
 		filterPanel = new JPanel();
 		filterPanel.setBackground(PageColor);
@@ -146,7 +154,7 @@ public class ListPage extends Page {
 		filterPanel.setSize(new Dimension(150, 0));
 	}
 
-	void createContentPanel() {
+	private void createContentPanel() {
 		contentPanel = new JPanel(new BorderLayout());
 		contentPanel.setBackground(PageColor);
 
@@ -154,7 +162,7 @@ public class ListPage extends Page {
 		this.add(contentPanel);
 	}
 
-	void addTypeCheckboxes() {
+	private void addTypeCheckboxes() {
 		// three checkboxes in three different rows (type) (all require a label
 		// attached)
 		// note row comments are not accurate (psa gridy = 0 -> row 1)
@@ -210,7 +218,7 @@ public class ListPage extends Page {
 
 	}
 
-	void addNameStatusButtons() {
+	private void addNameStatusButtons() {
 		// name & status row
 		// name is textfield and status is a dropdown
 		nameFilterLbl = new JLabel("Name: ");
@@ -303,7 +311,7 @@ public class ListPage extends Page {
 		gbc = new GridBagConstraints();
 	}
 
-	void addRatingSelectorButtons() {
+	private void addRatingSelectorButtons() {
 		// rating range row 2x JSpinners
 		minRatingLbl = new JLabel("Min Rating: ");
 		minRatingLbl.setFont(Style.BASE_FONT);
@@ -378,7 +386,7 @@ public class ListPage extends Page {
 		gbc = new GridBagConstraints(); // reset for safety
 	}
 
-	void addSearchButton() {
+	private void addSearchButton() {
 		// search button on set row
 		searchButton = new JButton("Search");
 		searchButton.setBackground(Style.LIGHT_GREEN);
@@ -396,6 +404,7 @@ public class ListPage extends Page {
 			boolean isBacklog = false;
 			boolean isWatched = false;
 			boolean isCompleted = false;
+			// identify what is currently selected from msl
 			for (int i = 0; i < selectedOptions.count(); i++) {
 				char c = selectedOptions.getAt(i).toLowerCase().charAt(0);
 				switch (c) {
@@ -437,8 +446,8 @@ public class ListPage extends Page {
 		btnWrapper.add(searchButton);
 	}
 
-	// TODO prepare default search
-	void addResetButton() {
+	// reset button applies default search filters in casse filters get broken
+	private void addResetButton() {
 		resetButton = new JButton("Reset");
 		resetButton.setBackground(Style.LIGHT_GREEN);
 		resetButton.setForeground(Style.BALTIC_BLUE);
@@ -455,7 +464,7 @@ public class ListPage extends Page {
 		addDefaultListToTable();
 	}
 
-	void addOpenMedia() {
+	private void addOpenMedia() {
 		openMedia = new JButton("Open Media");
 		openMedia.setBackground(Style.LIGHT_GREEN);
 		openMedia.setForeground(Style.BALTIC_BLUE);
@@ -478,14 +487,14 @@ public class ListPage extends Page {
 		btnWrapper.add(openMedia);
 	}
 
-	void createListPanel() {
+	private void createListPanel() {
 		// create list panel
 		listPanel = new JPanel();
 		listPanel.setBackground(PageColor);
 		listPanel.setLayout(new BorderLayout());
 	}
 
-	void addTableToListPanel() {
+	private void addTableToListPanel() {
 		// create JTable to display on list panel
 		listTableModel = new DefaultTableModel(colNames, 0) {
 			@Override
@@ -564,6 +573,30 @@ public class ListPage extends Page {
 			}
 		});
 
+		// do on double click open media btn
+		// borrowed code implenation from gemini adding in direct functionality to what is needed on our open media btn
+		listTable.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// Check if it's a double click
+				if (e.getClickCount() == 2) {
+					JTable target = (JTable) e.getSource();
+					Point point = e.getPoint();
+					int row = target.rowAtPoint(point); // Find visual row index clicked
+
+					// Verify the click happened on a valid row item
+					if (row != -1) {
+						// Convert visual view row index to data model row index
+						int modelRow = target.convertRowIndexToModel(row);
+
+						Media show = Response[modelRow]; // Gets Show User has Selected
+
+						ui.openMediaPage(show, "list");
+					}
+				}
+			}
+		});
+
 		// do header mods
 		listTable.getTableHeader().setFont(Style.HEADER_FONT);
 
@@ -572,6 +605,7 @@ public class ListPage extends Page {
 		tableScrollContainer.setBorder(BORDER);
 		tableScrollContainer.getViewport().setBackground(PageColor);
 		tableScrollContainer.setMaximumSize(new Dimension(Short.MAX_VALUE, 500));
+		// apply styling to the vertial scroll bar
 		tableScrollContainer.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
 			@Override
 			protected void configureScrollBarColors() {
@@ -579,7 +613,7 @@ public class ListPage extends Page {
 				this.trackColor = Style.TEA_GREEN;
 			}
 		});
-		
+
 		tableScrollContainer.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR));
 
 		contentPanel.add(filterPanel, BorderLayout.WEST);
@@ -600,7 +634,7 @@ public class ListPage extends Page {
 		}
 	}
 
-	void addToListTable(Media media) {
+	private void addToListTable(Media media) {
 		Object[] toAddToTable = new Object[colNames.length];
 		// "Icon", "Name", "Status", "Rating", "Last EP", "Rewatch"
 		File posterFile = new File(media.getPosterPath());
@@ -619,7 +653,7 @@ public class ListPage extends Page {
 		listTableModel.addRow(toAddToTable);
 	}
 
-	void clearListTable() {
+	private void clearListTable() {
 		listTableModel.setRowCount(0);
 	}
 }

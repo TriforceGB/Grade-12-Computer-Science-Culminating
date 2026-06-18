@@ -27,6 +27,9 @@ import UI.Style;
 import UI.UI;
 
 public class AdminUserPage extends Page {
+	// very similar layout to media page except all things are laid out for the users
+	// different calls are made, but styles are same
+	// differenet row column exists for the table
 
 	private User[] userList;
 
