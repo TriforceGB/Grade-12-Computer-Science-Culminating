@@ -135,6 +135,12 @@ public class UI extends JFrame implements EventListener {
 			loadedAdminMediaPage = true;
 			adminMediaPage.loadData();
 		}
+		if (panelName.equals("search")) {
+			this.panelContainer.remove(searchPage);
+			searchPage = new SearchPage(this);
+			this.panelContainer.add(searchPage, "search");
+			this.card.show(this.panelContainer, panelName);
+		}
 	}
 
 	// a share point for the media page to open from any panel and send back to that panel
