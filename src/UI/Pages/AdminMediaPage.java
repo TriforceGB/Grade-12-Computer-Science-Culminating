@@ -344,6 +344,7 @@ public class AdminMediaPage extends AdminUserPage {
 						"Are you sure you want to delete %s?".formatted(deleteMedia.getName()), "Delete User",
 						JOptionPane.YES_NO_OPTION);
 				if (result == JOptionPane.YES_OPTION) {
+					ui.deleteImage(deleteMedia.getPosterPath());
 					ui.deleteMedia(deleteMedia);
 					loadData();
 				}

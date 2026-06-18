@@ -120,7 +120,8 @@ public class UI extends JFrame implements EventListener {
 	public void switchPanel(String panelName) {
 		this.card.show(this.panelContainer, panelName);
 
-		// additional checks to do loading and reset functions upon loading certain windows
+		// additional checks to do loading and reset functions upon loading certain
+		// windows
 		if (panelName.equals("list")) {
 			callreset();
 		}
@@ -143,7 +144,8 @@ public class UI extends JFrame implements EventListener {
 		}
 	}
 
-	// a share point for the media page to open from any panel and send back to that panel
+	// a share point for the media page to open from any panel and send back to that
+	// panel
 	public void openMediaPage(Media ref, String panelNameCalledFrom) {
 		// setup page
 		mediaPage.setupMediaPanel(ref, panelNameCalledFrom);
@@ -789,13 +791,61 @@ public class UI extends JFrame implements EventListener {
 	}
 
 	// allowing public functions to formulate db tables
+
+	/**
+	 * This Remake the Media Table
+	 *
+	 * @return True if Remade
+	 */
 	public boolean remakeMediaTable() {
+		this.deleteImageFolder("assets/Images/Anime");
+		this.deleteImageFolder("assets/Images/Movies");
+		this.deleteImageFolder("assets/Images/Shows");
 		db.remakeMediaDB();
 		return true;
 	}
 
+	/**
+	 * This Remake the User Table
+	 *
+	 * @return If the Table was Remade
+	 */
 	public boolean remakeUserTable() {
 		db.remakeUserDB();
 		return true;
+	}
+
+	/**
+	 * This Delete a File with the Given Path
+	 *
+	 * @param path The Path to the Image
+	 */
+	public void deleteImage(String path) {
+		File file = new File(path); // find the Image
+		try {
+			if (file.delete()) {
+				System.out.println("Image deleted: " + path);
+			}
+		} catch (Exception e) {
+			System.out.println("Failed to delete image: " + path);
+			e.printStackTrace();
+		}
+
+	}
+
+	/**
+	 * This Delete the folder with all the images of Media in it
+	 */
+	private void deleteImageFolder(String path) {
+		File folder = new File(path);
+		if (folder.isDirectory()) {
+			File[] files = folder.listFiles();
+			if (files != null) {
+				for (File file : files) {
+					file.delete();
+				}
+			}
+		}
+
 	}
 }
