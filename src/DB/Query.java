@@ -111,6 +111,7 @@ class Query {
 			INSERT INTO "Media" ("type", "externalId", "name", "description", "episodeCount", "posterPath", "posterLink")
 			VALUES (?, ?, ?, ?, ?, ?, ?)
 			""";
+	/
 	public static final String EDIT_MEDIA = """
 			UPDATE "Media"
 			SET "type" = ?, "externalId" = ?, "name" = ?, "description" = ?, "episodeCount" = ?, "posterPath" = ?, "posterLink" = ?
@@ -120,6 +121,7 @@ class Query {
 			DELETE FROM "Media"
 			WHERE "id" = ?
 			""";
+	// Find a Media in DB with the Given Filter
 	public static final String FIND_MEDIA = """
 				SELECT
 					m.*,
@@ -141,12 +143,14 @@ class Query {
 				ORDER BY ud.status DESC NULLS LAST, ud.rating DESC NULLS LAST, m.name;
 
 			""";
+	// Return all Media in the DB
 	public static final String ALL_MEDIA = """
 				SELECT
 					m.*,
 					count(*) OVER() AS count
 				FROM Media AS m
 			""";
+	// Find a Media base on userId, name, type, externalID
 	public static final String LOCATE_MEDIA = """
 			SELECT
 				m.*,
@@ -197,6 +201,7 @@ class Query {
 				JOIN UserData AS ud ON m.id = ud.mediaId
 				WHERE ud.userId = ?
 			""";
+	// Find the Review for a Given Show
 	public static final String ALL_USER_REVIEW = """
 			SELECT
 				u.username,
@@ -207,6 +212,7 @@ class Query {
 			JOIN "User" AS u ON ud.userId = u.id
 			WHERE ud.mediaId = ? AND ud.review IS NOT NULL AND ud.review <> ''
 			""";
+	// Get Stats for the DB
 	public static final String MEDIA_STATS = """
 			SELECT
 			type,
@@ -214,13 +220,14 @@ class Query {
 			FROM "Media"
 			GROUP BY type
 			""";
+	// Get Stats for the User
 	public static final String USER_STATS = """
-				SELECT
-				status,
-				COUNT(*) AS count
-				FROM "UserData" AS ud
-				WHERE ud.userId = ?
-				GROUP BY status
+			SELECT
+			status,
+			COUNT(*) AS count
+			FROM "UserData" AS ud
+			WHERE ud.userId = ?
+			GROUP BY status
 			""";
 
 }
