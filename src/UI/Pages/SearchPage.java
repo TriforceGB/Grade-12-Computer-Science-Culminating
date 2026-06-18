@@ -83,6 +83,11 @@ public class SearchPage extends Page {
 		addListScrollContainer();
 	}
 
+	/**
+	 * Creates content panel that will contain all the components of the page
+	 * 
+	 * Includes border styling and coloring
+	 */
 	void createContentPanel() {
 		contentPanel = new JPanel();
 		contentPanel.setBackground(PageColor);
@@ -91,6 +96,11 @@ public class SearchPage extends Page {
 		this.add(contentPanel);
 	}
 
+	/**
+	 * Creates the search panel that will contain all the search components
+	 * 
+	 * Includes border styling and coloring
+	 */
 	void createSearchPanel() {
 		searchPanel = new JPanel();
 		searchPanel.setBackground(PageColor);
@@ -100,6 +110,11 @@ public class SearchPage extends Page {
 		contentPanel.add(searchPanel, BorderLayout.NORTH);
 	}
 
+	/**
+	 * Creates the list panel that will contain all the list components
+	 * 
+	 * Includes border styling and coloring
+	 */
 	void createListPanel() {
 		listPanel = new JPanel();
 		listPanel.setBackground(PageColor);
@@ -108,6 +123,11 @@ public class SearchPage extends Page {
 		contentPanel.add(listPanel, BorderLayout.CENTER);
 	}
 
+	/**
+	 *  Creates search label for the search panel
+	 * 
+	 * Includes styling and formatting
+	 */
 	void addSearchLabel() {
 		searchLbl = new JLabel("Search: ");
 		searchLbl.setFont(Style.BASE_FONT);
@@ -121,8 +141,15 @@ public class SearchPage extends Page {
 		searchPanel.add(searchLbl, gbc);
 	}
 
+	/**
+	 * Adds the search bar for the search panel
+	 * 
+	 * Includes styling and formatting
+	 */
 	void addSearchField() {
 		searchField = new JTextField(20);
+
+		//Styling
 		searchField.setFont(Style.BASE_FONT);
 		searchField.setBackground(Style.TEA_GREEN);
 		searchField.setForeground(Style.BALTIC_BLUE);
@@ -139,8 +166,15 @@ public class SearchPage extends Page {
 		searchPanel.add(searchField, gbc);
 	}
 
+	/**
+	 * Adds the media search type dropdown box, switches button icons depending on the type of media being searched for the search panel
+	 * 
+	 * Includes stlying and formatting
+	 */
 	void addSearchTypeBox() {
 		searchTypeBox = new JComboBox<String>(TYPES);
+
+		// Styling
 		searchTypeBox.setFont(Style.BASE_FONT);
 		searchTypeBox.setBackground(Style.TEA_GREEN);
 		searchTypeBox.setForeground(Style.BALTIC_BLUE);
@@ -153,7 +187,7 @@ public class SearchPage extends Page {
 		// only padding on bottom for spacing
 		gbc.insets = new Insets(0, 0, 10, 0);
 
-		searchTypeBox.addActionListener(e -> {
+		searchTypeBox.addActionListener(e -> { // changing search button icon depending on media type
 			String showtype = searchTypeBox.getSelectedItem().toString();
 			if (showtype.equals("Movie")) {
 				ui.addButtonImg(searchBtn, new ImageIcon("assets/UI/moviesearchicon.png"), 20, 30, 30);
@@ -169,7 +203,14 @@ public class SearchPage extends Page {
 		searchPanel.add(searchTypeBox, gbc);
 	}
 
+	/**
+	 * Adds search button for the search panel
+	 * 
+	 * Includes styling and formatting
+	 */
 	void addSearchBtn() {
+
+		// Styling (background, text font and color, image)
 		searchBtn = new JButton("Search");
 		searchBtn.setFont(Style.BASE_FONT);
 		searchBtn.setBackground(Style.LIGHT_GREEN);
@@ -193,23 +234,30 @@ public class SearchPage extends Page {
 		procureSearches(10, searchField.getText(), searchTypeBox.getSelectedIndex());
 	}
 
+	/**
+	 * Creates the scrolling area for all the media searched
+	 * 
+	 * Includes styling and some formatting
+	 */
 	void addListScrollContainer() {
+		// creating the panel where all the searched media is put in
 		scrollWrapperPanel = new JPanel(new BorderLayout());
 		scrollContentPanel = new JPanel(new GridLayout(0, 1, 0, 20));
 		scrollWrapperPanel.add(scrollContentPanel, BorderLayout.NORTH);
+
+		// creating the scroll area
 		listScrollPane = new JScrollPane(scrollWrapperPanel);
 		listScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		listScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		listScrollPane.setPreferredSize(new Dimension(1700, 800));
 		listScrollPane.getVerticalScrollBar().setUnitIncrement(16);
-
 		scrollContentPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 5, false));
 		scrollContentPanel.setBackground(Style.TEA_GREEN);
 		listScrollPane.setBackground(Style.BORDER_COLOR);
 		listScrollPane.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR));
 		scrollWrapperPanel.setBackground(Style.BORDER_COLOR);
 
-		listScrollPane.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
+		listScrollPane.getVerticalScrollBar().setUI(new BasicScrollBarUI() { // changing scroll bar color
 			@Override
 			protected void configureScrollBarColors() {
 				this.thumbColor = Style.BORDER_COLOR;
@@ -219,10 +267,10 @@ public class SearchPage extends Page {
 		listPanel.add(listScrollPane);
 	}
 
+
 	JPanel getSearchResultPanel(Media givenMedia) {
 		JPanel result = new JPanel();
 		result.setBackground(Style.BORDER_COLOR);
-		// result.setBorder(BorderFactory.createLineBorder(Color.BLACK, 4, true));
 		result.setLayout(new GridBagLayout());
 		gbc = new GridBagConstraints(); // reset gbc to ensure ready to go
 
@@ -333,6 +381,12 @@ public class SearchPage extends Page {
 		return result;
 	}
 
+	/**
+	 * Takes the url path for the poster image and gets the media's poster image
+	 * 
+	 * @param url url that leads toward the poster image
+	 * @return poster image
+	 */
 	ImageIcon getSearchResultPoster(URL url) {
 		try {
 			return ui.resizeImg(new ImageIcon(ImageIO.read(url)), POSTER_WIDTH, POSTER_HEIGHT);
@@ -341,6 +395,11 @@ public class SearchPage extends Page {
 		}
 	}
 
+	/**
+	 * If there is no image found that gets updated, this method returns a set placeholder image
+	 * 
+	 * @return the placeholder image (our mascot Filal Baruqi)
+	 */
 	ImageIcon getDefaultPoster() {
 		try {
 			return ui.resizeImg(new ImageIcon(PATH_FOR_DEFAULT_IMAGE), POSTER_WIDTH, POSTER_HEIGHT);

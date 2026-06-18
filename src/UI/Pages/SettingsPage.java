@@ -26,11 +26,12 @@ public class SettingsPage extends Page {
 	// Variables
 	JTextArea statistics;
 
-	private boolean isAdmin = false;
+	private boolean isAdmin = false; // user admin status
 
-	private JButton adminButton;
-	private JButton addApiKeyButton;
+	private JButton adminButton; // admin panel access button
+	private JButton addApiKeyButton; // api key enter button
 
+	// method takes in admin status and makes the admin panel access button visible for admins and invisible for non admins (they cannot click it)
 	public void setAdmin(boolean admin) {
 		isAdmin = admin;
 		adminButton.setVisible(admin);

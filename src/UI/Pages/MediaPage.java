@@ -124,6 +124,11 @@ public class MediaPage extends Page {
 		this.add(southEastSidePanel, BorderLayout.SOUTH);
 	}
 
+	/**
+	 * Creates the major panels of the media page
+	 * 
+	 * Adds layouts and background coloring of panels as well
+	 */
 	void createPagePanels() {
 		westSidePanel = new JPanel(new GridBagLayout());
 		westSidePanel.setBackground(Style.BORDER_COLOR);
@@ -134,19 +139,32 @@ public class MediaPage extends Page {
 		southEastSidePanel.setBackground(Style.BALTIC_BLUE);
 	}
 
+	/**
+	 * Creates the components of the first section found on the left (the east is a lie)
+	 * 
+	 * Creates poster labels, start and end finish labels and fields for the appropriate media
+	 * 
+	 * Includes styling of each component including background colors, text font and coloring, and borders
+	 * 
+	 * Creates placeholder dates until updated with correct information 
+	 */
 	void createEastDisplayComponents() {
+		// media poster label and image
 		poster = new JLabel();
 		poster.setPreferredSize(new Dimension(POSTER_WIDTH, POSTER_HEIGHT));
 		poster.setIcon(ui.resizeImg(new ImageIcon(DEFAULT_POSTER_IMAGE_PATH), POSTER_WIDTH, POSTER_HEIGHT));
 
+		// start date label
 		startDateLabel = new JLabel("Start Date: ");
 		startDateLabel.setFont(Style.BASE_FONT);
 		startDateLabel.setForeground(Style.TEA_GREEN);
 
+		// finish date label
 		finishDateLabel = new JLabel("End Date: ");
 		finishDateLabel.setFont(Style.BASE_FONT);
 		finishDateLabel.setForeground(Style.TEA_GREEN);
 
+		// start date field (updated in another method when correct information is found)
 		startDateField = new JTextField(12);
 		startDateField.setText("YYYY-MM-DD");
 		startDateField.setFont(Style.BASE_FONT);
@@ -156,6 +174,7 @@ public class MediaPage extends Page {
 		startDateField.setForeground(Style.BALTIC_BLUE);
 		startDateField.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
 
+		// finish date field (updated in another method when correct information is found)
 		finishDateField = new JTextField(12);
 		finishDateField.setText("YYYY-MM-DD");
 		finishDateField.setFont(Style.BASE_FONT);
@@ -166,6 +185,11 @@ public class MediaPage extends Page {
 		finishDateField.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
 	}
 
+	/**
+	 * Formats the components of the first section found on the left
+	 * 
+	 * Uses grid bag layout to shift each component into place
+	 */
 	void formatEastSideDisplayComponents() {
 		gbc.gridy = 0;
 		gbc.gridx = 0; // constant
@@ -189,26 +213,41 @@ public class MediaPage extends Page {
 		westSidePanel.add(finishDateField, gbc);
 	}
 
+	/**
+	 * Creates the components of the second section found in the middle
+	 * 
+	 * Creates the title label, description lable, show type label (more like media type label, tells you whether its a movie, tvshow, or anime),
+	 * the current status of the show with the user label and dropdown box, the user's rating, number of rewatches, and current episode labels and spinners.
+	 * 
+	 * Also creates sliders for the title and description in the event that they are too long for the label to hold them (avoids ui layout messing up)
+	 * 
+	 * Creates placeholder text for each label until updated with the correct information
+	 * 
+	 * Styles all the components of the section as well
+	 */
 	void createMainInfDisplayComponents() {
 		infEastSidePanel = new JPanel(new GridBagLayout());
 		infEastSidePanel.setBackground(Style.BORDER_COLOR);
 		gbc = new GridBagConstraints(); // refresh components
 
+		// title label
 		titleLabel = new JLabel("Blank Insert Placeholder Title");
 		titleLabel.setForeground(Style.TEA_GREEN);
 		titleLabel.setFont(Style.TITLE_FONT);
 
+		// encasing the title label and scroll bar below
 		wrapperPanel = new JPanel(new GridBagLayout());
 		wrapperPanel.add(titleLabel);
 		wrapperPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 		wrapperPanel.setBackground(Style.BALTIC_BLUE);
 
+		// scroll bar in the event the title is too long
 		titleScrollPane = new JScrollPane(wrapperPanel);
 		titleScrollPane.setPreferredSize(new Dimension(700, 120));
 		titleScrollPane.getVerticalScrollBar().setUnitIncrement(8);
 		titleScrollPane.getHorizontalScrollBar().setUnitIncrement(8);
 		titleScrollPane.setBorder(BorderFactory.createEmptyBorder());
-		titleScrollPane.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
+		titleScrollPane.getVerticalScrollBar().setUI(new BasicScrollBarUI() { // styles the bar itself 
 			@Override
 			protected void configureScrollBarColors() {
 				this.thumbColor = Style.BORDER_COLOR;
@@ -216,27 +255,31 @@ public class MediaPage extends Page {
 			}
 		});
 
+		// media type label
 		showType = new JLabel("Blank Type");
 		showType.setForeground(Style.TEA_GREEN);
 		showType.setFont(Style.BASE_FONT);
 
+		// description label
 		descLabel = new JLabel(ui.getHtmlFormatText(
 				"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc faucibus urna justo, ac egestas nibh malesuada sed. Cras sit amet mi aliquet, accumsan quam a, hendrerit libero. Nullam aliquet augue et arcu facilisis, quis fermentum est pellentesque. Vivamus sodales, eros sit amet aliquet placerat, felis metus hendrerit ex, a molestie nunc tortor ut erat. Ut placerat laoreet erat, auctor pulvinar urna aliquam at. Mauris varius nisi eget faucibus blandit. Duis at ornare libero. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean imperdiet elementum neque fermentum sagittis. Suspendisse potenti. Maecenas cursus pellentesque blandit. Nulla quis erat massa. Donec a sapien.",
 				CPERLINE_DESC, MAXPASS, 400));
 		descLabel.setFont(Style.SMALL_DESC_FONT);
 		descLabel.setForeground(Style.TEA_GREEN);
 
+		// encasing description label and scroll bar below
 		wrapperPanel = new JPanel(new GridBagLayout());
 		wrapperPanel.add(descLabel);
 		wrapperPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 		wrapperPanel.setBackground(Style.BALTIC_BLUE);
 
+		// scroll bar in the event the description is too long
 		descScrollPane = new JScrollPane(wrapperPanel);
 		descScrollPane.setPreferredSize(new Dimension(700, 500));
 		descScrollPane.getVerticalScrollBar().setUnitIncrement(16);
 		descScrollPane.getHorizontalScrollBar().setUnitIncrement(8);
 		descScrollPane.setBorder(BorderFactory.createEmptyBorder());
-		descScrollPane.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
+		descScrollPane.getVerticalScrollBar().setUI(new BasicScrollBarUI() { // styles the bar itself
 			@Override
 			protected void configureScrollBarColors() {
 				this.thumbColor = Style.BORDER_COLOR;
@@ -244,13 +287,16 @@ public class MediaPage extends Page {
 			}
 		});
 
+		// selector container panel
 		selectorsContainerPanel = new JPanel(new GridBagLayout());
 		selectorsContainerPanel.setBackground(Style.BORDER_COLOR);
 
+		// media status label
 		statusLabel = new JLabel("Status");
 		statusLabel.setFont(Style.BASE_FONT);
 		statusLabel.setForeground(Style.TEA_GREEN);
 
+		// media status dropdown selector
 		statusSelector = new JComboBox<String>(TYPES);
 		statusSelector.setFont(Style.BASE_FONT);
 		statusSelector.setFocusable(false);
@@ -264,10 +310,12 @@ public class MediaPage extends Page {
 			editStatus(newStatus, media);
 		});
 
+		// user's rating label
 		usrRatingLabel = new JLabel("Your Rating: ");
 		usrRatingLabel.setFont(Style.BASE_FONT);
 		usrRatingLabel.setForeground(Style.TEA_GREEN);
 
+		// user's rating spinner
 		usrRatingSelector = new JSpinner(new SpinnerNumberModel(0, 0, 10, 1));
 		usrRatingSelector.setFont(Style.BASE_FONT);
 		usrRatingSelector.setBackground(Style.TEA_GREEN);
@@ -279,10 +327,12 @@ public class MediaPage extends Page {
 		usrRatingTextfield.setForeground(Style.BALTIC_BLUE);
 		usrRatingTextfield.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
+		// num of rewatches label
 		rewatchLabel = new JLabel("Rewatch: ");
 		rewatchLabel.setFont(Style.BASE_FONT);
 		rewatchLabel.setForeground(Style.TEA_GREEN);
 
+		// num of rewatches spinner
 		rewatchesSelector = new JSpinner(new SpinnerNumberModel(0, 0, Integer.MAX_VALUE, 1));
 		rewatchesSelector.setFont(Style.BASE_FONT);
 		rewatchesSelector.setBackground(Style.TEA_GREEN);
@@ -294,19 +344,26 @@ public class MediaPage extends Page {
 		rewatchesTextfield.setForeground(Style.BALTIC_BLUE);
 		rewatchesTextfield.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
+		// current episode label
 		cEpLabel = new JLabel("Current Episode: ");
 		cEpLabel.setFont(Style.BASE_FONT);
 		cEpLabel.setForeground(Style.TEA_GREEN);
 
+		// current episode spinner (gets updated based on number of episodes the show has, done in another method)
 		cEpSpinnerModel = new SpinnerNumberModel(0, 0, 0, 0);
 		cEpSelector = new JSpinner(cEpSpinnerModel);
 		cEpSelector.setFont(Style.BASE_FONT);
 		cEpSelector.setBackground(Style.TEA_GREEN);
 		cEpSelector.setForeground(Style.BALTIC_BLUE);
 		cEpSelector.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-		// had to put the textfield color setter where the model is set
+		//textfield color setter is where the model is set otherwise it would not display
 	}
 
+	/**
+	 * Formats the components of the media information display section
+	 * 
+	 * Uses a gridbag layout to shift each component into place
+	 */
 	void formatMainInfDisplayComponents() {
 		gbc.gridy = 0;
 		gbc.gridx = 0;
@@ -376,21 +433,35 @@ public class MediaPage extends Page {
 		gbc = new GridBagConstraints(); // reset back to ensure no weird changes
 	}
 
+	/**
+	 * Creates and formats the user review section found on the right 
+	 * 
+	 *  Adds the title label at the top and the user review panel. Adds in scroll bar.
+	 * 
+	 *  Styles all components
+	 */
 	void createFormatUsrReviewsSidePanel() {
+
+		// creating the panel containing every component
 		usrReviewsSidePanel = new JPanel(new BorderLayout());
 		usrReviewsSidePanel.setBackground(Style.BORDER_COLOR);
 
+		// title label for user reviews
 		usrReviewsTitleLabel = new JLabel("User Reviews");
 		usrReviewsTitleLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		usrReviewsTitleLabel.setFont(Style.BASE_FONT);
 		usrReviewsTitleLabel.setForeground(Style.TEA_GREEN);
+
+		// content panel for user reviews
 		usrReviewsScrollContentPanel = new JPanel(new GridLayout(0, 1, 0, 10));
 		usrReviewsScrollContentPanel.setBackground(Style.BALTIC_BLUE);
+
+		// scroll bar for user reviews
 		usrReviewsScrollPane = new JScrollPane(usrReviewsScrollContentPanel);
 		usrReviewsScrollPane.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2, false));
 		usrReviewsScrollPane.setPreferredSize(new Dimension(250, 0));
 		usrReviewsScrollPane.getVerticalScrollBar().setUnitIncrement(16);
-		usrReviewsScrollPane.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
+		usrReviewsScrollPane.getVerticalScrollBar().setUI(new BasicScrollBarUI() { // changes the bar color
 			@Override
 			protected void configureScrollBarColors() {
 				this.thumbColor = Style.BORDER_COLOR;
@@ -399,6 +470,9 @@ public class MediaPage extends Page {
 		});
 	}
 
+	/**
+	 * Adds the section panels to the main panel
+	 */
 	private void addSidePanelsToMain() {
 		usrReviewsSidePanel.add(usrReviewsTitleLabel, BorderLayout.NORTH);
 		usrReviewsSidePanel.add(usrReviewsScrollPane, BorderLayout.CENTER);
@@ -407,25 +481,41 @@ public class MediaPage extends Page {
 		eastSidePanel.add(usrReviewsSidePanel, BorderLayout.CENTER);
 	}
 
+	/**
+	 * Adds footer buttons
+	 * 
+	 * Includes addition of the back button to take user back to the previous page,
+	 * save button to save the user's inputted information,
+	 * add / edit review button for user to add or edit a review of the media
+	 * 
+	 * Includes formatting and styling of the buttons
+	 */
 	void addButtonsToSouth() {
 
+		// back button
 		backButton = new JButton("Back");
 		backButton.setFont(Style.BASE_FONT);
 		backButton.setBackground(Style.LIGHT_GREEN);
 		backButton.setForeground(Style.BALTIC_BLUE);
 		backButton.setPreferredSize(new Dimension(600, 50));
+		ui.addButtonImg(backButton, new ImageIcon("assets/UI/backicon.png"), GAP, IMAGE_DIMENSIONS, IMAGE_DIMENSIONS);
+
+		// functionality, sends user back to previous panel
 		backButton.addActionListener(e -> {
 			ui.switchPanel(panelToSendBackTo);
 		});
-		ui.addButtonImg(backButton, new ImageIcon("assets/UI/backicon.png"), GAP, IMAGE_DIMENSIONS, IMAGE_DIMENSIONS);
+		
 		southEastSidePanel.add(backButton);
 
+		// save button
 		saveButton = new JButton("Save");
 		saveButton.setPreferredSize(new Dimension(600, 50));
 		saveButton.setFont(Style.BASE_FONT);
 		saveButton.setBackground(Style.LIGHT_GREEN);
 		saveButton.setForeground(Style.BALTIC_BLUE);
+		ui.addButtonImg(saveButton, new ImageIcon("assets/UI/saveicon.png"), GAP, IMAGE_DIMENSIONS, IMAGE_DIMENSIONS);
 
+		// functionality, updates reviews if possible and relays success or failure to do so back to the user
 		saveButton.addActionListener(e -> {
 			if (updateUserData()) {
 				JOptionPane.showMessageDialog(this, "Successfully Saved!", "Success",
@@ -437,19 +527,19 @@ public class MediaPage extends Page {
 			}
 			ui.callreset();
 		});
-		ui.addButtonImg(saveButton, new ImageIcon("assets/UI/saveicon.png"), GAP, IMAGE_DIMENSIONS, IMAGE_DIMENSIONS);
+		
 
 		southEastSidePanel.add(saveButton);
 
+		// add / edit review button
 		addEditReviewButton = new JButton("Add/Edit Review");
 		addEditReviewButton.setPreferredSize(new Dimension(600, 50));
 		addEditReviewButton.setFont(Style.BASE_FONT);
 		addEditReviewButton.setBackground(Style.LIGHT_GREEN);
 		addEditReviewButton.setForeground(Style.BALTIC_BLUE);
+		ui.addButtonImg(addEditReviewButton, new ImageIcon("assets/UI/reviewicon.png"), GAP, IMAGE_DIMENSIONS, IMAGE_DIMENSIONS);
 
-		ui.addButtonImg(addEditReviewButton, new ImageIcon("assets/UI/reviewicon.png"), GAP, IMAGE_DIMENSIONS,
-				IMAGE_DIMENSIONS);
-
+		// functionality, prompts up a new mini window where the user is able to input text and choose to actually add the review or cancel it
 		addEditReviewButton.addActionListener(e -> {
 			JTextArea comment = new JTextArea();
 			comment.setLineWrap(true);
@@ -476,27 +566,41 @@ public class MediaPage extends Page {
 		southEastSidePanel.add(addEditReviewButton);
 	}
 
+	/**
+	 * Collects review information and adds it to a review panel to be displayed
+	 * 
+	 * Includes styling and formatting of review components
+	 * 
+	 * @param review the user's written review, including their name, comment (review), and rating
+	 * @return new JPanel to add to the review panel (the multiple user reviews)
+	 */
 	JPanel getReviewPanel(String[] review) {
+
+		// the review panel to be added
 		JPanel result = new JPanel(new GridBagLayout());
 		result.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2, true));
 		result.setBackground(Style.BALTIC_BLUE);
 
 		GridBagConstraints gbc2 = new GridBagConstraints();
 
+		// collecting username from review and adding it to panel
 		String name = review[0];
 		JLabel usrName = new JLabel(name);
 		usrName.setFont(Style.BASE_FONT_BIG);
 		usrName.setForeground(Style.TEA_GREEN);
 
+		// collecting the comment (review) and adding it to panel
 		String comment = review[1];
 		JLabel usrComment = new JLabel(ui.getHtmlFormatText(comment, CPERLINE_REVIEW_COMMENT, MAXPASS, 150));
 		usrComment.setForeground(Style.TEA_GREEN);
 		usrComment.setFont(Style.BASE_FONT);
 
+		// collecting the user's rating and adding it to panel
 		JLabel usrRating = new JLabel(review[2] + "/10");
 		usrRating.setForeground(Style.TEA_GREEN);
 		usrRating.setFont(Style.BASE_FONT);
 
+		// formatting
 		gbc2.gridy = 0;
 		gbc2.gridx = 0;
 		result.add(usrName, gbc2);
@@ -514,6 +618,12 @@ public class MediaPage extends Page {
 		return result;
 	}
 
+	/**
+	 * Gathers all the media data that is to be updated, including all found in the obj parameter below
+	 * 
+	 * @param obj all the actual media information including posterpath, name, description, episode count, user start date and end date, media type, and amount of rewatches
+	 * @param panelName name of the panel the user would return to if the user presses the back button
+	 */
 	public void setupMediaPanel(Media obj, String panelName) {
 		media = obj; // Stores it for the Rest of the UI to Use
 		panelToSendBackTo = panelName;
@@ -534,15 +644,20 @@ public class MediaPage extends Page {
 		usrRatingSelector.setValue(obj.getRating());
 		rewatchesSelector.setValue(obj.getRewatched());
 		cEpSelector.setModel(new SpinnerNumberModel(obj.getLastEpisode(), 0, obj.getEpisodeCount(), 1));
-		JSpinner.DefaultEditor cEpEditor = (JSpinner.DefaultEditor) cEpSelector.getEditor();
-		JTextField cEpTextField = cEpEditor.getTextField();
-		cEpTextField.setBackground(Style.TEA_GREEN);
+		JSpinner.DefaultEditor cEpEditor = (JSpinner.DefaultEditor) cEpSelector.getEditor(); // getting the text field of the spinner
+		JTextField cEpTextField = cEpEditor.getTextField(); 
+		cEpTextField.setBackground(Style.TEA_GREEN); // styling the current episode spinner here as the model is updated with all the information
 		cEpTextField.setForeground(Style.BALTIC_BLUE);
 		cEpTextField.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
 		setupReviews(obj);
 	}
 
+	/**
+	 * Gathers all the reviews from users and calls on other methods to update 
+	 * 
+	 * @param obj same parameter as found in the setupMediaPanel method above
+	 */
 	private void setupReviews(Media obj) {
 		usrReviewsScrollContentPanel.removeAll();
 		String[][] reviews = ui.pullReview(obj.getId());
@@ -552,6 +667,9 @@ public class MediaPage extends Page {
 			placeReviews(reviews);
 	}
 
+	/**
+	 * If no user reviews are found, this method is called to display that no user reviews exist yet
+	 */
 	private void setBlankReviews() {
 		JPanel wrapperPanel = new JPanel(new GridBagLayout());
 		JLabel blankLbl = new JLabel("No user reviews.");
@@ -562,6 +680,11 @@ public class MediaPage extends Page {
 		usrReviewsScrollPane.repaint();
 	}
 
+	/**
+	 * Calls on getReviewPanel method, gives it all the reviews that were found
+	 * 
+	 * @param reviews contains all user's reviews
+	 */
 	private void placeReviews(String[][] reviews) {
 		usrReviewsScrollPane.setViewportView(usrReviewsScrollContentPanel);
 		for (int i = 0; i < reviews.length; i++) {
