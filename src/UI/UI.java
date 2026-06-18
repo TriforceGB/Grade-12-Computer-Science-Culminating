@@ -76,6 +76,7 @@ public class UI extends JFrame implements EventListener {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Set the default close operation
 		this.getContentPane().setBackground(Style.BALTIC_BLUE); // Set Default Background Color
 		this.setResizable(false); // Disable window resizing
+		this.setIconImage(resizeImg(new ImageIcon("assets/UI/filal.png"), 50, 50).getImage());
 
 		// Initializing Panels
 		this.loginPage = new LoginPage(this);

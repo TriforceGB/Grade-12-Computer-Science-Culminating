@@ -203,7 +203,7 @@ public class AdminMediaPage extends AdminUserPage {
 
 			JLabel epCountLbl = new JLabel("Ep Count: ");
 			epCountLbl.setFont(Style.BASE_FONT);
-			epCountLbl.setForeground(PageColor);
+			epCountLbl.setForeground(Style.TEA_GREEN);
 			editWindow.add(epCountLbl);
 
 			JSpinner epCountEdit = new JSpinner(new SpinnerNumberModel(0, 0, Integer.MAX_VALUE, 1));
@@ -285,7 +285,7 @@ public class AdminMediaPage extends AdminUserPage {
 	}
 
 	private void createWipeBtn() {
-		wipeMediaBtn = new JButton("Wipe Media Data");
+		wipeMediaBtn = new JButton("Wipe All Media");
 		wipeMediaBtn.setFont(Style.BASE_FONT);
 		wipeMediaBtn.setBackground(Style.LIGHT_GREEN);
 		wipeMediaBtn.setForeground(Style.BALTIC_BLUE);

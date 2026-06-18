@@ -25,6 +25,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
+import javax.swing.plaf.basic.BasicScrollBarUI;
 import javax.swing.border.EmptyBorder;
 
 import DTO.LocalDB.Media;
@@ -208,6 +209,13 @@ public class MediaPage extends Page {
 		titleScrollPane.getVerticalScrollBar().setUnitIncrement(8);
 		titleScrollPane.getHorizontalScrollBar().setUnitIncrement(8);
 		titleScrollPane.setBorder(BorderFactory.createEmptyBorder());
+		titleScrollPane.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
+			@Override
+			protected void configureScrollBarColors() {
+				this.thumbColor = Style.BORDER_COLOR;
+				this.trackColor = Style.TEA_GREEN;
+			}
+		});
 
 		showType = new JLabel("Blank Type");
 		showType.setForeground(Style.TEA_GREEN);
@@ -229,6 +237,13 @@ public class MediaPage extends Page {
 		descScrollPane.getVerticalScrollBar().setUnitIncrement(16);
 		descScrollPane.getHorizontalScrollBar().setUnitIncrement(8);
 		descScrollPane.setBorder(BorderFactory.createEmptyBorder());
+		descScrollPane.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
+			@Override
+			protected void configureScrollBarColors() {
+				this.thumbColor = Style.BORDER_COLOR;
+				this.trackColor = Style.TEA_GREEN;
+			}
+		});
 
 		selectorsContainerPanel = new JPanel(new GridBagLayout());
 		selectorsContainerPanel.setBackground(Style.BORDER_COLOR);
@@ -376,6 +391,13 @@ public class MediaPage extends Page {
 		usrReviewsScrollPane.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2, false));
 		usrReviewsScrollPane.setPreferredSize(new Dimension(250, 0));
 		usrReviewsScrollPane.getVerticalScrollBar().setUnitIncrement(16);
+		usrReviewsScrollPane.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
+			@Override
+			protected void configureScrollBarColors() {
+				this.thumbColor = Style.BORDER_COLOR;
+				this.trackColor = Style.TEA_GREEN;
+			}
+		});
 	}
 
 	private void addSidePanelsToMain() {
@@ -440,6 +462,7 @@ public class MediaPage extends Page {
 
 			JScrollPane commentContainer = new JScrollPane(comment);
 			commentContainer.setPreferredSize(new Dimension(400, 150));
+			
 
 			Object[] options = { "Save", "Delete", "Cancel" };
 
