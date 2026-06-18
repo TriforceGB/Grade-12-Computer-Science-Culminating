@@ -643,6 +643,82 @@ public class DB {
 			e.printStackTrace();
 			return null;
 		}
+	}
 
+	/**
+	 * Finds the Total Number of Shows that have a Status realted to the user
+	 *
+	 * @param userId The User that is asking the Question (int)
+	 * @return an array with the following Values: Total Dropped, Total Backlog,
+	 *         Total Watching, Total Finish, Total
+	 */
+	public int[] getUserStats(int userId) {
+		try (PreparedStatement stmt = dbConnect.prepareStatement(Query.USER_STATS)) {
+			stmt.setInt(1, userId);
+			ResultSet rs = stmt.executeQuery();
+			int[] stats = new int[5]; // Dropped, Backlog, Watching, Completed, Total
+
+			for (int i = 0; i < stats.length; i++) {
+				// Finds Which Status count was given and put it in the right location
+				switch (rs.getInt("status")) {
+					case 1:
+						stats[0] = rs.getInt("count");
+						break;
+					case 2:
+						stats[1] = rs.getInt("count");
+						break;
+					case 3:
+						stats[2] = rs.getInt("count");
+						break;
+					case 4:
+						stats[3] = rs.getInt("count");
+						break;
+				}
+				if (!rs.next()) {
+					break;
+				}
+			}
+			stats[4] = stats[0] + stats[1] + stats[2] + stats[3]; // finds the Sum of the Data
+			return stats;
+		} catch (Exception e) {
+			System.err.println("Exception While Finding User Stats:");
+			e.printStackTrace();
+			return null;
+		}
+
+	}
+
+	/**
+	 * Finds and Return the total amount of media user type
+	 *
+	 * @return Returns an array with the following values: Total Movies, Total
+	 *         Shows, Total Anime, Total
+	 */
+	public int[] getMediaStats() {
+		try (Statement stmt = dbConnect.createStatement()) {
+			ResultSet rs = stmt.executeQuery(Query.MEDIA_STATS);
+			int[] stats = new int[4]; // Array for Movies, Shows, Anime, Total
+			while (rs.next()) {
+				// finds what is returned and puts it in the right location
+				switch (rs.getInt("type")) {
+					case 1:
+						stats[0] = rs.getInt("count"); // Movies
+						break;
+					case 2:
+						stats[1] = rs.getInt("count"); // TV Shows
+						break;
+					case 3:
+						stats[2] = rs.getInt("count"); // Anime
+						break;
+				}
+			}
+			stats[3] = stats[0] + stats[1] + stats[2]; // finds the Sum of the Data
+			return stats;
+
+		} catch (Exception e) {
+			System.err.println("Exception While Finding Media Stats:");
+			e.printStackTrace();
+			return null;
+		}
 	}
 }

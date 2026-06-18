@@ -61,6 +61,8 @@ public class UI extends JFrame implements EventListener {
 	private boolean loadedAdminUserPage = false;
 	private boolean loadedAdminMediaPage = false;
 
+	private final int HTML_FORMAT_MAX_CHAR_LENGTH = 200; 
+
 	/**
 	 * This Create the UI and Display it for the User
 	 */
@@ -121,6 +123,9 @@ public class UI extends JFrame implements EventListener {
 		if (panelName.equals("list") && !loadedMediaPageOnce) {
 			loadedMediaPageOnce = true;
 			listPage.addDefaultListToTable();
+		}
+		if (panelName.equals("home")) {
+			homePage.createWidgets();
 		}
 		if (panelName.equals("adminUsr") && !loadedAdminUserPage) {
 			loadedAdminUserPage = true;
@@ -216,6 +221,24 @@ public class UI extends JFrame implements EventListener {
 		} else {
 			return db.deleteUser(this.currentUser.getId());
 		}
+	}
+
+	/**
+	 * Pulls all Users from the DB
+	 *
+	 * @return An array of all Users
+	 */
+	public User[] pullUsers() {
+		return db.getAllUsers();
+	}
+
+	/**
+	 * Pulls all Media from DB
+	 *
+	 * @return An array of all Media
+	 */
+	public Media[] pullMedia() {
+		return db.exportMedia();
 	}
 
 	/**
@@ -350,9 +373,32 @@ public class UI extends JFrame implements EventListener {
 		return true;
 	}
 
+	/**
+	 * Gets Review for a Media
+	 *
+	 * @param mediaId The ID of the Media to get reviews for
+	 * @return A 2D array of reviews, where each row is a review and each column is
+	 *         a review field
+	 */
 	public String[][] pullReview(int mediaId) {
 		String[][] reviews = db.UserReview(mediaId);
 		return reviews;
+	}
+
+	/**
+	 * Pulls the user's stats from the DB and returns them as a 2D array
+	 *
+	 * @return A 2D array of user stats, where each row is a stat and each column is
+	 *         a stat field. The format is as follows: UserStats,
+	 *         MediaStats
+	 */
+	public int[][] pullStats() {
+		int[] userData = db.getUserStats(this.currentUser.getId());
+		int[] mediaData = db.getMediaStats();
+
+		int[][] stats = { userData, mediaData };
+		return stats;
+
 	}
 
 	/**
@@ -487,7 +533,7 @@ public class UI extends JFrame implements EventListener {
 	 */
 	public String getHtmlFormatText(String toFormat, int cPerLine, int maxPass) {
 		String[] words = toFormat.split(" "); // split @ each space for each word
-		String result = "<html>"; // result string to return
+		String result = "<html><body style='width: 300px;'>"; // result string to return
 
 		int tracker = 0; // tracks current line number of chars
 		for (String word : words) {
@@ -508,7 +554,7 @@ public class UI extends JFrame implements EventListener {
 			}
 		}
 		// when done append ending html
-		result += "</html>";
+		result += "</body></html>";
 
 		return result; // return once finished
 	}
@@ -609,8 +655,12 @@ public class UI extends JFrame implements EventListener {
 		return this.currentUser.getIsAdmin();
 	}
 
-	public void setAdmin(boolean admin) {
+	public void showAdmin(boolean admin) {
 		this.settingPage.setAdmin(admin);
+	}
+
+	public void setStats() {
+		this.settingPage.getStats(this.pullStats());
 	}
 
 	/**
