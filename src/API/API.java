@@ -1,7 +1,5 @@
 package API;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.net.http.HttpClient;
 import java.time.Duration;
 

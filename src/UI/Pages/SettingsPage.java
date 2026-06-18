@@ -28,11 +28,13 @@ public class SettingsPage extends Page {
 
 	private boolean isAdmin = false;
 
-	JButton adminButton;
+	private JButton adminButton;
+	private JButton addApiKeyButton;
 
 	public void setAdmin(boolean admin) {
 		isAdmin = admin;
 		adminButton.setVisible(admin);
+		addApiKeyButton.setVisible(admin);
 	}
 
 	/**
@@ -95,6 +97,7 @@ public class SettingsPage extends Page {
 		JButton impMediaButton = new JButton("Import Media");
 		JButton delUserButton = new JButton("Delete User");
 		adminButton = new JButton("Admin Panel");
+		addApiKeyButton = new JButton("Add API Key");
 		chngUserButton.setFocusable(false);
 		chngPassButton.setFocusable(false);
 		expUserButton.setFocusable(false);
@@ -103,6 +106,7 @@ public class SettingsPage extends Page {
 		impMediaButton.setFocusable(false);
 		delUserButton.setFocusable(false);
 		adminButton.setFocusable(false);
+		addApiKeyButton.setFocusable(false);
 
 		// Fonts
 		chngUserButton.setFont(Style.BASE_FONT_BIG);
@@ -113,6 +117,7 @@ public class SettingsPage extends Page {
 		impMediaButton.setFont(Style.BASE_FONT_BIG);
 		delUserButton.setFont(Style.BASE_FONT_BIG);
 		adminButton.setFont(Style.BASE_FONT_BIG);
+		addApiKeyButton.setFont(Style.BASE_FONT);
 
 		// Colours
 		chngUserButton.setBackground(Style.LIGHT_GREEN);
@@ -131,6 +136,8 @@ public class SettingsPage extends Page {
 		delUserButton.setForeground(Style.BALTIC_BLUE);
 		adminButton.setBackground(Style.LIGHT_GREEN);
 		adminButton.setForeground(Style.BALTIC_BLUE);
+		addApiKeyButton.setBackground(Style.LIGHT_GREEN);
+		addApiKeyButton.setForeground(Style.BALTIC_BLUE);
 
 		// Images
 
@@ -142,6 +149,7 @@ public class SettingsPage extends Page {
 		ui.addButtonImg(impMediaButton, new ImageIcon("assets/UI/importicon.png"), 20, 45, 45);
 		ui.addButtonImg(delUserButton, new ImageIcon("assets/UI/binicon.png"), 20, 45, 45);
 		ui.addButtonImg(adminButton, new ImageIcon("assets/UI/adminicon.png"), 20, 45, 45);
+		ui.addButtonImg(addApiKeyButton, new ImageIcon("assets/UI/apikeyicon.png"), 20, 45, 45);
 
 		chngUserButton.addActionListener(e -> {
 			String changedUsername = JOptionPane.showInputDialog("Enter new username"); // Prompt to change username
@@ -248,6 +256,9 @@ public class SettingsPage extends Page {
 			ui.updateAdminPanel();
 			ui.switchPanel("adminUsr");
 		});
+		addApiKeyButton.addActionListener(e -> {
+
+		});
 
 		// buttonPanel.setPreferredSize(new Dimension(600, 400));
 		buttonPanel.add(chngUserButton);
@@ -258,7 +269,9 @@ public class SettingsPage extends Page {
 		buttonPanel.add(impMediaButton);
 		buttonPanel.add(delUserButton);
 		buttonPanel.add(adminButton);
+		buttonPanel.add(addApiKeyButton);
 		adminButton.setVisible(isAdmin);
+		addApiKeyButton.setVisible(isAdmin);
 
 		buttonPanel.setBorder(BorderFactory.createEmptyBorder(300, 100, 300, 100));
 		// Stat Panel
