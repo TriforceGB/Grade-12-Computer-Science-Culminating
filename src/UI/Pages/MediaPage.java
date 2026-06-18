@@ -21,6 +21,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
@@ -38,7 +39,7 @@ public class MediaPage extends Page {
 	private final String DEFAULT_POSTER_IMAGE_PATH = "assets/UI/filal.png";
 
 	// Variables
-	Media media; // Media that is being displayed
+	private Media media; // Media that is being displayed
 
 	private JPanel westSidePanel;
 	private GridBagConstraints gbc;
@@ -308,7 +309,7 @@ public class MediaPage extends Page {
 		infEastSidePanel.add(descScrollPane, gbc);
 
 		// selectors components to container panel
-		
+
 		gbc.gridy = 0;
 		gbc.gridx = 0;
 		gbc.insets = new Insets(0, 0, 0, 0);
@@ -363,7 +364,7 @@ public class MediaPage extends Page {
 	void createFormatUsrReviewsSidePanel() {
 		usrReviewsSidePanel = new JPanel(new BorderLayout());
 		usrReviewsSidePanel.setBackground(Style.BORDER_COLOR);
-		
+
 		usrReviewsTitleLabel = new JLabel("User Reviews");
 		usrReviewsTitleLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		usrReviewsTitleLabel.setFont(Style.BASE_FONT);
@@ -427,6 +428,28 @@ public class MediaPage extends Page {
 		ui.addButtonImg(addEditReviewButton, new ImageIcon("assets/UI/reviewicon.png"), GAP, IMAGE_DIMENSIONS,
 				IMAGE_DIMENSIONS);
 
+		addEditReviewButton.addActionListener(e -> {
+			JTextArea comment = new JTextArea();
+			comment.setLineWrap(true);
+			comment.setWrapStyleWord(true);
+
+			JScrollPane commentContainer = new JScrollPane(comment);
+			commentContainer.setPreferredSize(new Dimension(400, 150));
+
+			int result = JOptionPane.showConfirmDialog(null, commentContainer, "Add/Edit Review Comment",
+					JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+			// if user hit the okay button
+			if (result == JOptionPane.OK_OPTION) {
+
+				// ui rework
+				setupReviews(media);
+				// if user hit the cancel option and closed option
+			} else if (result == JOptionPane.CANCEL_OPTION || result == JOptionPane.CLOSED_OPTION) {
+
+			}
+		});
+
 		southEastSidePanel.add(addEditReviewButton);
 	}
 
@@ -434,7 +457,7 @@ public class MediaPage extends Page {
 		JPanel result = new JPanel(new GridBagLayout());
 		result.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2, true));
 		result.setBackground(Style.BALTIC_BLUE);
-		
+
 		GridBagConstraints gbc2 = new GridBagConstraints();
 
 		String name = review[0];
@@ -494,13 +517,37 @@ public class MediaPage extends Page {
 		cEpTextField.setForeground(Style.BALTIC_BLUE);
 		cEpTextField.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
+		setupReviews(obj);
+	}
+
+	private void setupReviews(Media obj) {
 		usrReviewsScrollContentPanel.removeAll();
 		String[][] reviews = ui.pullReview(obj.getId());
+		if (reviews.length == 0) 
+			setBlankReviews();
+		else
+			placeReviews(reviews);
+	}
+
+	private void setBlankReviews() {
+		JPanel wrapperPanel = new JPanel(new GridBagLayout());
+		JLabel blankLbl = new JLabel("No user reviews.");
+		wrapperPanel.add(blankLbl);
+		usrReviewsScrollPane.setViewportView(wrapperPanel);
+
+		usrReviewsScrollPane.revalidate();
+		usrReviewsScrollPane.repaint();
+	}
+
+	private void placeReviews(String[][] reviews) {
+		usrReviewsScrollPane.setViewportView(usrReviewsScrollContentPanel);
 		for (int i = 0; i < reviews.length; i++) {
 			if (reviews[i][1] != null) {
 				usrReviewsScrollContentPanel.add(getReviewPanel(reviews[i]));
 			}
 		}
+		usrReviewsScrollPane.revalidate();
+		usrReviewsScrollPane.repaint();
 	}
 
 	/**
