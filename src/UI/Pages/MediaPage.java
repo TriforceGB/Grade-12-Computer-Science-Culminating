@@ -447,7 +447,7 @@ public class MediaPage extends Page {
 					null,
 					commentContainer,
 					"Add/Edit Review Comment",
-					JOptionPane.YES_NO_OPTION,
+					JOptionPane.YES_NO_CANCEL_OPTION,
 					JOptionPane.PLAIN_MESSAGE,
 					null,
 					options,
@@ -463,8 +463,14 @@ public class MediaPage extends Page {
 				setupReviews(media);
 				// if user hit the cancel option and closed option
 			} else if (result == 1) {
-				// user hit delete
-			} else 
+				addReview(""); // Remove Review
+				media = ui.locateMedia(media); // Update Media
+				updateUserData(); // Update DB
+				setupReviews(media); // Rebuilt UI
+			} else {
+				// Do Nothing
+				// Close Panel
+			}
 		});
 
 		southEastSidePanel.add(addEditReviewButton);
