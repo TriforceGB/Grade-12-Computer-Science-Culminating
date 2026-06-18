@@ -149,7 +149,10 @@ class Page extends JPanel {
 		});
 		listButton.addActionListener(e -> ui.switchPanel("list"));
 		searchButton.addActionListener(e -> ui.switchPanel("search"));
-		settingButton.addActionListener(e -> ui.switchPanel("setting"));
+		settingButton.addActionListener(e -> {
+			ui.setStats();
+			ui.switchPanel("setting");
+		});
 		exitButton.addActionListener(e -> ui.logout());
 
 		header.add(homeButton);

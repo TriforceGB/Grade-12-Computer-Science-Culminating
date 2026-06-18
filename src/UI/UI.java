@@ -219,6 +219,24 @@ public class UI extends JFrame implements EventListener {
 	}
 
 	/**
+	 * Pulls all Users from the DB
+	 *
+	 * @return An array of all Users
+	 */
+	public User[] pullUsers() {
+		return db.getAllUsers();
+	}
+
+	/**
+	 * Pulls all Media from DB
+	 *
+	 * @return An array of all Media
+	 */
+	public Media[] pullMedia() {
+		return db.exportMedia();
+	}
+
+	/**
 	 * With the Given Object, Add to DB
 	 *
 	 * @param newMedia New Media from Search to add
@@ -350,9 +368,32 @@ public class UI extends JFrame implements EventListener {
 		return true;
 	}
 
+	/**
+	 * Gets Review for a Media
+	 *
+	 * @param mediaId The ID of the Media to get reviews for
+	 * @return A 2D array of reviews, where each row is a review and each column is
+	 *         a review field
+	 */
 	public String[][] pullReview(int mediaId) {
 		String[][] reviews = db.UserReview(mediaId);
 		return reviews;
+	}
+
+	/**
+	 * Pulls the user's stats from the DB and returns them as a 2D array
+	 *
+	 * @return A 2D array of user stats, where each row is a stat and each column is
+	 *         a stat field. The format is as follows: UserStats,
+	 *         MediaStats
+	 */
+	public int[][] pullStats() {
+		int[] userData = db.getUserStats(this.currentUser.getId());
+		int[] mediaData = db.getMediaStats();
+
+		int[][] stats = { userData, mediaData };
+		return stats;
+
 	}
 
 	/**
@@ -609,8 +650,12 @@ public class UI extends JFrame implements EventListener {
 		return this.currentUser.getIsAdmin();
 	}
 
-	public void setAdmin(boolean admin) {
+	public void showAdmin(boolean admin) {
 		this.settingPage.setAdmin(admin);
+	}
+
+	public void setStats() {
+		this.settingPage.getStats(this.pullStats());
 	}
 
 	/**
