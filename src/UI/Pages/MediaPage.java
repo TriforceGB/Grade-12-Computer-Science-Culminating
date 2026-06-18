@@ -134,6 +134,7 @@ public class MediaPage extends Page {
 		startDateLabel = new JLabel("Start Date: ");
 		startDateLabel.setFont(Style.BASE_FONT);
 		startDateLabel.setForeground(Style.TEA_GREEN);
+		
 
 		finishDateLabel = new JLabel("End Date: ");
 		finishDateLabel.setFont(Style.BASE_FONT);
@@ -146,6 +147,8 @@ public class MediaPage extends Page {
 		startDateField.setFocusable(false);
 		startDateField.setBackground(Style.TEA_GREEN);
 		startDateField.setForeground(Style.BALTIC_BLUE);
+		startDateField.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+		
 
 		finishDateField = new JTextField(12);
 		finishDateField.setText("YYYY-MM-DD");
@@ -154,6 +157,7 @@ public class MediaPage extends Page {
 		finishDateField.setFocusable(false);
 		finishDateField.setBackground(Style.TEA_GREEN);
 		finishDateField.setForeground(Style.BALTIC_BLUE);
+		finishDateField.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
 	}
 
 	void formatEastSideDisplayComponents() {
@@ -207,6 +211,7 @@ public class MediaPage extends Page {
 		statusSelector.setFocusable(false);
 		statusSelector.setBackground(Style.TEA_GREEN);
 		statusSelector.setForeground(Style.BALTIC_BLUE);
+		statusSelector.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
 
 		// When you Change the Status, Update UI
 		statusSelector.addActionListener(e -> {
@@ -317,6 +322,7 @@ public class MediaPage extends Page {
 	void createFormatUsrReviewsSidePanel() {
 		usrReviewsSidePanel = new JPanel(new BorderLayout());
 		usrReviewsSidePanel.setBackground(Style.BORDER_COLOR);
+		
 		usrReviewsTitleLabel = new JLabel("User Reviews");
 		usrReviewsTitleLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		usrReviewsTitleLabel.setFont(Style.BASE_FONT);
@@ -324,6 +330,7 @@ public class MediaPage extends Page {
 		scrollContentPanel = new JPanel(new GridLayout(0, 1, 0, 10));
 		scrollContentPanel.setBackground(Style.BALTIC_BLUE);
 		usrReviewsScrollPane = new JScrollPane(scrollContentPanel);
+		usrReviewsScrollPane.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2, false));
 		usrReviewsScrollPane.setPreferredSize(new Dimension(250, 0));
 		usrReviewsScrollPane.getVerticalScrollBar().setUnitIncrement(16);
 	}
@@ -386,8 +393,8 @@ public class MediaPage extends Page {
 	JPanel getReviewPanel(String[] review) {
 		JPanel result = new JPanel(new GridBagLayout());
 		result.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2, true));
-		result.setBackground(Style.BORDER_COLOR);
-
+		result.setBackground(Style.BALTIC_BLUE);
+		
 		GridBagConstraints gbc2 = new GridBagConstraints();
 
 		String name = review[0];

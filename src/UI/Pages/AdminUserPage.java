@@ -43,7 +43,7 @@ public class AdminUserPage extends Page {
 	private JButton delBtn;
 
 	// true allows for rounded
-	protected final Border BORDER = BorderFactory.createLineBorder(Style.BORDER_COLOR, 4, true);
+	protected final Border BORDER = BorderFactory.createLineBorder(Style.BORDER_COLOR, 2, true);
 
 	public AdminUserPage(UI ui) {
 		super(ui);
@@ -69,11 +69,17 @@ public class AdminUserPage extends Page {
 
 	private void createContentPanel() {
 		contentPanel = new JPanel(new BorderLayout());
+		contentPanel.setBackground(Style.TROPICAL_TEAL);
 	}
 
 	private void createTableTitleLbl() {
 		tableTitleLbl = new JLabel("User DB");
 		tableTitleLbl.setFont(Style.HEADER_FONT);
+		tableTitleLbl.setHorizontalAlignment(SwingConstants.CENTER);
+		tableTitleLbl.setFont(Style.HEADER_FONT);
+		
+		tableTitleLbl.setForeground(Style.TEA_GREEN);
+		tableTitleLbl.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
 	}
 
 	private void addTableTitleLbl() {
@@ -124,11 +130,15 @@ public class AdminUserPage extends Page {
 
 	private void createBtnPanel() {
 		btnPanel = new JPanel(new GridLayout(1, 2, 10, 0));
+		btnPanel.setBackground(Style.BALTIC_BLUE);
 	}
 
 	private void createEditBtn() {
-		editBtn = new JButton("Edit");
+		editBtn = new JButton("Edit User Data");
 		editBtn.setFont(Style.BASE_FONT);
+		editBtn.setBackground(Style.LIGHT_GREEN);
+		editBtn.setForeground(Style.BALTIC_BLUE); 
+		ui.addButtonImg(editBtn, new ImageIcon("assets/UI/editicon.png"), 20, 30, 30);
 		editBtn.addActionListener(e -> editRow(userTable.getSelectedRow()));
 	}
 
@@ -145,41 +155,59 @@ public class AdminUserPage extends Page {
 			editWindow.setSize(new Dimension(800, 600));
 			editWindow.setResizable(false);
 			editWindow.setLayout(new GridLayout(7, 2, 20, 20));
+			editWindow.getContentPane().setBackground(Style.BALTIC_BLUE);
 
 			JLabel idLbl = new JLabel("Id: ");
 			idLbl.setFont(Style.BASE_FONT);
+			idLbl.setForeground(Style.TEA_GREEN);
 			editWindow.add(idLbl);
 
 			JTextField idEdit = new JTextField(18);
 			idEdit.setFont(Style.BASE_FONT);
+			idEdit.setBackground(Style.TEA_GREEN);
+			idEdit.setForeground(Style.BALTIC_BLUE);
+			idEdit.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR, 2));
 			idEdit.setText(String.valueOf(editedUser.getId()));
 			idEdit.setEditable(false);
 			editWindow.add(idEdit);
 
 			JLabel usrLbl = new JLabel("Username: ");
 			usrLbl.setFont(Style.BASE_FONT);
+			usrLbl.setForeground(Style.TEA_GREEN);
 			editWindow.add(usrLbl);
 
 			JTextField usrEdit = new JTextField(18);
 			usrEdit.setFont(Style.BASE_FONT);
+			usrEdit.setBackground(Style.TEA_GREEN);
+			usrEdit.setForeground(Style.BALTIC_BLUE);
+			usrEdit.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR, 2));
 			usrEdit.setText(editedUser.getUsername());
 			editWindow.add(usrEdit);
 
 			JLabel pwdLbl = new JLabel("Password: ");
 			pwdLbl.setFont(Style.BASE_FONT);
+			pwdLbl.setForeground(Style.TEA_GREEN);
 			editWindow.add(pwdLbl);
 
 			JTextField pwdEdit = new JTextField(18);
 			pwdEdit.setFont(Style.BASE_FONT);
+			pwdEdit.setBackground(Style.TEA_GREEN);
+			pwdEdit.setForeground(Style.BALTIC_BLUE);
+			pwdEdit.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR, 2));
 			pwdEdit.setText(editedUser.getPassword());
 			editWindow.add(pwdEdit);
 
 			JLabel isAdminLbl = new JLabel("Is Admin: ");
 			isAdminLbl.setFont(Style.BASE_FONT);
+			isAdminLbl.setForeground(Style.TEA_GREEN);
 			editWindow.add(isAdminLbl);
 
 			JComboBox<String> isAdminEdit = new JComboBox<String>(new String[] { "true", "false" });
 			isAdminEdit.setFont(Style.BASE_FONT);
+			isAdminEdit.setBackground(Style.TEA_GREEN);
+			isAdminEdit.setForeground(Style.BALTIC_BLUE);
+			isAdminEdit.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR, 2));
+			isAdminEdit.setFocusable(false);
 			if (editedUser.getIsAdmin()) {
 				isAdminEdit.setSelectedIndex(0);
 			} else {
@@ -189,26 +217,37 @@ public class AdminUserPage extends Page {
 
 			JLabel dateCLbl = new JLabel("Date Created: ");
 			dateCLbl.setFont(Style.BASE_FONT);
+			dateCLbl.setForeground(Style.TEA_GREEN);
 			editWindow.add(dateCLbl);
 
 			JTextField dateCEdit = new JTextField(18);
 			dateCEdit.setFont(Style.BASE_FONT);
+			dateCEdit.setBackground(Style.TEA_GREEN);
+			dateCEdit.setForeground(Style.BALTIC_BLUE);
+			dateCEdit.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR, 2));
 			dateCEdit.setText(editedUser.getCreated());
 			dateCEdit.setEditable(false);
 			editWindow.add(dateCEdit);
 
 			JLabel dateLLbl = new JLabel("Last Login: ");
 			dateLLbl.setFont(Style.BASE_FONT);
+			dateLLbl.setForeground(Style.TEA_GREEN);
 			editWindow.add(dateLLbl);
 
 			JTextField dateLEdit = new JTextField(18);
 			dateLEdit.setFont(Style.BASE_FONT);
+			dateLEdit.setBackground(Style.TEA_GREEN);
+			dateLEdit.setForeground(Style.BALTIC_BLUE);
+			dateLEdit.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR, 2));
 			dateLEdit.setText(editedUser.getLastLogin());
 			dateLEdit.setEditable(false);
 			editWindow.add(dateLEdit);
 
 			JButton cancelButton = new JButton("Cancel");
 			cancelButton.setFont(Style.BASE_FONT);
+			cancelButton.setBackground(Style.LIGHT_GREEN);
+			cancelButton.setForeground(Style.BALTIC_BLUE); 
+			ui.addButtonImg(cancelButton, new ImageIcon("assets/UI/xicon.png"), 20, 30, 30);
 			cancelButton.addActionListener(e -> {
 				editWindow.dispose();
 			});
@@ -216,6 +255,10 @@ public class AdminUserPage extends Page {
 
 			JButton okButton = new JButton("Ok");
 			okButton.setFont(Style.BASE_FONT);
+			okButton.setBackground(Style.LIGHT_GREEN);
+			okButton.setForeground(Style.BALTIC_BLUE); 
+			ui.addButtonImg(okButton, new ImageIcon("assets/UI/okicon.png"), 20, 40, 40);
+			
 			okButton.addActionListener(e -> {
 				if (ui.getId() == editedUser.getId()) {
 					JOptionPane.showMessageDialog(this,
@@ -254,8 +297,11 @@ public class AdminUserPage extends Page {
 	}
 
 	private void createDelBtn() {
-		delBtn = new JButton("Del");
+		delBtn = new JButton("Delete User");
 		delBtn.setFont(Style.BASE_FONT);
+		delBtn.setBackground(Style.LIGHT_GREEN);
+		delBtn.setForeground(Style.BALTIC_BLUE); 
+		ui.addButtonImg(delBtn, new ImageIcon("assets/UI/binicon.png"), 20, 30, 30);
 
 		delBtn.addActionListener(e -> {
 			int selectedRow = userTable.getSelectedRow();
