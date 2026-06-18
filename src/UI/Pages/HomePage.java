@@ -3,10 +3,10 @@ package UI.Pages;
 import UI.Style;
 import UI.UI;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.Insets;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -93,7 +93,8 @@ public class HomePage extends Page {
 				backLogBtn.addActionListener(e -> {
 					ui.openMediaPage(displayMedia, "home");
 				});
-				backLogBtn.setIcon(ui.resizeImg(new ImageIcon(displayMedia.getPosterPath()), POSTER_WIDTH, POSTER_HEIGHT));
+				backLogBtn.setIcon(
+						ui.resizeImg(new ImageIcon(displayMedia.getPosterPath()), POSTER_WIDTH, POSTER_HEIGHT));
 				backlogBtnPanel.add(backLogBtn);
 			}
 		} else {
@@ -129,7 +130,6 @@ public class HomePage extends Page {
 		cWatchPanel = new JPanel();
 		cWatchPanel.setLayout(new BorderLayout());
 		cWatchPanel.setBackground(this.PageColor);
-		
 
 		cWatchBtnPanel = new JPanel();
 		cWatchBtnPanel.setBackground(this.PageColor);
@@ -144,7 +144,12 @@ public class HomePage extends Page {
 				cWatchingBtn.addActionListener(e -> {
 					ui.openMediaPage(displayMedia, "home");
 				});
-				cWatchingBtn.setIcon(ui.resizeImg(new ImageIcon(displayMedia.getPosterPath()), POSTER_WIDTH, POSTER_HEIGHT));
+				cWatchingBtn.setIcon(
+						ui.resizeImg(new ImageIcon(displayMedia.getPosterPath()), POSTER_WIDTH, POSTER_HEIGHT));
+
+				cWatchingBtn.setContentAreaFilled(false);
+				cWatchingBtn.setBorderPainted(false);
+
 				cWatchBtnPanel.add(cWatchingBtn);
 			}
 		} else {
@@ -195,6 +200,10 @@ public class HomePage extends Page {
 					ui.openMediaPage(displayMedia, "home");
 				});
 				finBtn.setIcon(ui.resizeImg(new ImageIcon(displayMedia.getPosterPath()), POSTER_WIDTH, POSTER_HEIGHT));
+
+				finBtn.setContentAreaFilled(false);
+				finBtn.setBorderPainted(false);
+
 				finBtnPanel.add(finBtn);
 			}
 		} else {

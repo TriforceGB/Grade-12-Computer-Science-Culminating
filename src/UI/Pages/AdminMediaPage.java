@@ -46,6 +46,7 @@ public class AdminMediaPage extends AdminUserPage {
 	JPanel btnPanel;
 	JButton editBtn;
 	JButton delBtn;
+	JButton wipeMediaBtn;
 
 	public AdminMediaPage(UI ui) {
 		super(ui);
@@ -61,9 +62,11 @@ public class AdminMediaPage extends AdminUserPage {
 		createBtnPanel();
 		createEditBtn();
 		createDelBtn();
+		createWipeBtn();
 
 		addEditBtn();
 		addDelBtn();
+		addWipeBtn();
 		addBtnPanel();
 
 		this.add(contentPanel, BorderLayout.CENTER);
@@ -78,7 +81,7 @@ public class AdminMediaPage extends AdminUserPage {
 		tableTitleLbl = new JLabel("Media DB");
 		tableTitleLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		tableTitleLbl.setFont(Style.HEADER_FONT);
-		
+
 		tableTitleLbl.setForeground(Style.TEA_GREEN);
 		tableTitleLbl.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
 	}
@@ -138,7 +141,7 @@ public class AdminMediaPage extends AdminUserPage {
 		editBtn = new JButton("Edit Media Data");
 		editBtn.setFont(Style.BASE_FONT);
 		editBtn.setBackground(Style.LIGHT_GREEN);
-		editBtn.setForeground(Style.BALTIC_BLUE); 
+		editBtn.setForeground(Style.BALTIC_BLUE);
 		ui.addButtonImg(editBtn, new ImageIcon("assets/UI/editicon.png"), 20, 30, 30);
 		editBtn.addActionListener(e -> editRow());
 	}
@@ -200,7 +203,7 @@ public class AdminMediaPage extends AdminUserPage {
 
 			JLabel epCountLbl = new JLabel("Ep Count: ");
 			epCountLbl.setFont(Style.BASE_FONT);
-			epCountLbl.setForeground(PageColor);
+			epCountLbl.setForeground(Style.TEA_GREEN);
 			editWindow.add(epCountLbl);
 
 			JSpinner epCountEdit = new JSpinner(new SpinnerNumberModel(0, 0, Integer.MAX_VALUE, 1));
@@ -216,12 +219,12 @@ public class AdminMediaPage extends AdminUserPage {
 
 			JLabel posterPLbl = new JLabel("Poster Path: ");
 			posterPLbl.setFont(Style.BASE_FONT);
-      posterPLbl.setForeground(Style.TEA_GREEN);
+			posterPLbl.setForeground(Style.TEA_GREEN);
 			editWindow.add(posterPLbl);
 
 			JTextField posterPEdit = new JTextField(18);
 			posterPEdit.setFont(Style.BASE_FONT);
-      posterPEdit.setBackground(Style.TEA_GREEN);
+			posterPEdit.setBackground(Style.TEA_GREEN);
 			posterPEdit.setForeground(Style.BALTIC_BLUE);
 			posterPEdit.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR, 2));
 			posterPEdit.setText(editedMedia.getPosterPath());
@@ -229,7 +232,7 @@ public class AdminMediaPage extends AdminUserPage {
 
 			JLabel posterLLbl = new JLabel("Poster Link: ");
 			posterLLbl.setFont(Style.BASE_FONT);
-      posterLLbl.setForeground(Style.TEA_GREEN);
+			posterLLbl.setForeground(Style.TEA_GREEN);
 			editWindow.add(posterLLbl);
 
 			JTextField posterLEdit = new JTextField(18);
@@ -243,7 +246,7 @@ public class AdminMediaPage extends AdminUserPage {
 			JButton cancelButton = new JButton("Cancel");
 			cancelButton.setFont(Style.BASE_FONT);
 			cancelButton.setBackground(Style.LIGHT_GREEN);
-			cancelButton.setForeground(Style.BALTIC_BLUE); 
+			cancelButton.setForeground(Style.BALTIC_BLUE);
 			ui.addButtonImg(cancelButton, new ImageIcon("assets/UI/xicon.png"), 20, 30, 30);
 			cancelButton.addActionListener(e -> {
 				editWindow.dispose();
@@ -253,7 +256,7 @@ public class AdminMediaPage extends AdminUserPage {
 			JButton okButton = new JButton("Ok");
 			okButton.setFont(Style.BASE_FONT);
 			okButton.setBackground(Style.LIGHT_GREEN);
-			okButton.setForeground(Style.BALTIC_BLUE); 
+			okButton.setForeground(Style.BALTIC_BLUE);
 			ui.addButtonImg(okButton, new ImageIcon("assets/UI/okicon.png"), 20, 40, 40);
 			okButton.addActionListener(e -> {
 				editedMedia.setType(typeEdit.getSelectedIndex() + 1);
@@ -281,11 +284,36 @@ public class AdminMediaPage extends AdminUserPage {
 		btnPanel.add(editBtn);
 	}
 
+	private void createWipeBtn() {
+		wipeMediaBtn = new JButton("Wipe All Media");
+		wipeMediaBtn.setFont(Style.BASE_FONT);
+		wipeMediaBtn.setBackground(Style.LIGHT_GREEN);
+		wipeMediaBtn.setForeground(Style.BALTIC_BLUE);
+		ui.addButtonImg(wipeMediaBtn, new ImageIcon("assets/UI/shredicon.png"), 20, 30, 30);
+		wipeMediaBtn.addActionListener(e -> {
+			int result = JOptionPane.showConfirmDialog(this,
+					"Are you sure you want to wipe all Media data? This Will remove every Movie, Show, Anime and all User Data Related to It",
+					"Confirm Wipe",
+					JOptionPane.YES_NO_OPTION);
+			if (result == JOptionPane.YES_OPTION) {
+				if (ui.remakeMediaTable()) {
+					JOptionPane.showMessageDialog(this, "User data wiped successfully. You will be logged out.",
+							"Success", JOptionPane.INFORMATION_MESSAGE);
+					loadData();
+				}
+			}
+		});
+	}
+
+	private void addWipeBtn() {
+		btnPanel.add(wipeMediaBtn);
+	}
+
 	private void createDelBtn() {
 		delBtn = new JButton("Delete Media");
 		delBtn.setFont(Style.BASE_FONT);
 		delBtn.setBackground(Style.LIGHT_GREEN);
-		delBtn.setForeground(Style.BALTIC_BLUE); 
+		delBtn.setForeground(Style.BALTIC_BLUE);
 		ui.addButtonImg(delBtn, new ImageIcon("assets/UI/binicon.png"), 20, 30, 30);
 
 		delBtn.addActionListener(e -> {
@@ -316,6 +344,9 @@ public class AdminMediaPage extends AdminUserPage {
 	public void loadData() {
 		tableModel.setRowCount(0);
 		MediaTable = ui.pullMedia();
+		if (MediaTable == null) {
+			return;
+		}
 		for (Media m : MediaTable) {
 			// { "Id", "Type", "Name", "Ep. Count", "PosterPath", "PosterLink" };
 			Object[] data = new Object[] { m.getId(), ui.getMeidaTypeFromInt(m.getType()), m.getName(),
