@@ -447,6 +447,7 @@ public class MediaPage extends Page {
 			// if user hit the okay button
 			if (result == JOptionPane.OK_OPTION) {
 				addReview(comment.getText());
+				media = ui.locateMedia(media);
 				updateUserData();
 
 				// ui rework
@@ -618,7 +619,7 @@ public class MediaPage extends Page {
 	private void addReview(String Review) {
 		// Set Review to Null if No Text
 		if (Review.isBlank() || Review.isEmpty()) {
-			userReview = null;
+			userReview = "";
 		} else {
 			userReview = Review;
 		}
