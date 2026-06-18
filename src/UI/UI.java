@@ -61,7 +61,7 @@ public class UI extends JFrame implements EventListener {
 	private boolean loadedAdminUserPage = false;
 	private boolean loadedAdminMediaPage = false;
 
-	private final int HTML_FORMAT_MAX_CHAR_LENGTH = 200; 
+	private final int HTML_FORMAT_MAX_CHAR_LENGTH = 200;
 
 	/**
 	 * This Create the UI and Display it for the User
@@ -204,6 +204,16 @@ public class UI extends JFrame implements EventListener {
 	public boolean editPassword(String newPassword) {
 		this.currentUser.setPassword(newPassword); // Change Username on the Object
 		return db.editUser(this.currentUser); // Change the Username on the DB
+	}
+
+	/**
+	 * Edit the User with the Given User Object
+	 *
+	 * @param editedUser the Object to Overide the Object in the DB
+	 * @return if it work
+	 */
+	public boolean editUser(User editedUser) {
+		return db.editUser(editedUser);
 	}
 
 	/**
@@ -651,8 +661,14 @@ public class UI extends JFrame implements EventListener {
 	}
 
 	public boolean isAdmin() {
-		System.out.println(this.currentUser.getIsAdmin());
 		return this.currentUser.getIsAdmin();
+	}
+
+	/**
+	 * Return the Id of the Current User
+	 */
+	public int getId() {
+		return this.currentUser.getId();
 	}
 
 	public void showAdmin(boolean admin) {
