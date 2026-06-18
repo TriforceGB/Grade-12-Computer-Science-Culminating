@@ -205,6 +205,16 @@ public class UI extends JFrame implements EventListener {
 	}
 
 	/**
+	 * Edit the User with the Given User Object
+	 *
+	 * @param editedUser the Object to Overide the Object in the DB
+	 * @return if it work
+	 */
+	public boolean editUser(User editedUser) {
+		return db.editUser(editedUser);
+	}
+
+	/**
 	 * Delete the Current User. Only works if your Not an Admin
 	 *
 	 * @return True if Changed on DB, False Otherwise
@@ -649,8 +659,14 @@ public class UI extends JFrame implements EventListener {
 	}
 
 	public boolean isAdmin() {
-		System.out.println(this.currentUser.getIsAdmin());
 		return this.currentUser.getIsAdmin();
+	}
+
+	/**
+	 * Return the Id of the Current User
+	 */
+	public int getId() {
+		return this.currentUser.getId();
 	}
 
 	public void showAdmin(boolean admin) {

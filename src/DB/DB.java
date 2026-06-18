@@ -641,7 +641,7 @@ public class DB {
 		} catch (Exception e) {
 			System.err.println("Exception While Finding User Review:");
 			e.printStackTrace();
-			return null;
+			return new String[0][0];
 		}
 	}
 
