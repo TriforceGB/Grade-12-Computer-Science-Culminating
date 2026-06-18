@@ -9,6 +9,7 @@ import java.awt.GridLayout;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -31,6 +32,8 @@ import UI.UI;
  * Other pages in the admin settings will use this as a base.
  */
 public class AdminMediaPage extends AdminUserPage {
+
+	Media[] MediaTable;
 
 	JPanel contentPanel;
 	JLabel tableTitleLbl;
@@ -144,7 +147,11 @@ public class AdminMediaPage extends AdminUserPage {
 		// { "Id", "Type", "Name", "Ep. Count", "PosterPath", "PosterLink" };
 		// TODO get selected row and only create if valid
 		if (userTable.getSelectedRow() != -1) {
+			Media editedMedia = MediaTable[userTable.getSelectedRow()];
 			JDialog editWindow = new JDialog();
+			editWindow.setLocationRelativeTo(ui);
+			editWindow.setModal(true);
+
 			editWindow.setTitle("Edit Media Data");
 			editWindow.setSize(new Dimension(800, 600));
 			editWindow.setResizable(false);
@@ -161,6 +168,8 @@ public class AdminMediaPage extends AdminUserPage {
 			idEdit.setBackground(Style.TEA_GREEN);
 			idEdit.setForeground(Style.BALTIC_BLUE);
 			idEdit.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR, 2));
+			idEdit.setText(String.valueOf(editedMedia.getId()));
+			idEdit.setEditable(false);
 			editWindow.add(idEdit);
 
 			JLabel typeLbl = new JLabel("Type: ");
@@ -168,11 +177,12 @@ public class AdminMediaPage extends AdminUserPage {
 			typeLbl.setForeground(Style.TEA_GREEN);
 			editWindow.add(typeLbl);
 
-			JTextField typeEdit = new JTextField(18);
+			JComboBox<String> typeEdit = new JComboBox<String>(new String[] { "Movie", "TV Show", "Anime" });
 			typeEdit.setFont(Style.BASE_FONT);
 			typeEdit.setBackground(Style.TEA_GREEN);
 			typeEdit.setForeground(Style.BALTIC_BLUE);
 			typeEdit.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR, 2));
+			typeEdit.setSelectedIndex(editedMedia.getType() - 1);
 			editWindow.add(typeEdit);
 
 			JLabel nameLbl = new JLabel("Name: ");
@@ -185,6 +195,7 @@ public class AdminMediaPage extends AdminUserPage {
 			nameEdit.setBackground(Style.TEA_GREEN);
 			nameEdit.setForeground(Style.BALTIC_BLUE);
 			nameEdit.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR, 2));
+			nameEdit.setText(editedMedia.getName());
 			editWindow.add(nameEdit);
 
 			JLabel epCountLbl = new JLabel("Ep Count: ");
@@ -200,31 +211,34 @@ public class AdminMediaPage extends AdminUserPage {
 			epCountEditTextfield.setBorder(BorderFactory.createEmptyBorder());
 			epCountEdit.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR, 2));
 			epCountEdit.setFont(Style.BASE_FONT);
+			epCountEdit.setValue(editedMedia.getEpisodeCount());
 			editWindow.add(epCountEdit);
 
-			JLabel dateCLbl = new JLabel("Poster Path: ");
-			dateCLbl.setFont(Style.BASE_FONT);
-			dateCLbl.setForeground(Style.TEA_GREEN);
-			editWindow.add(dateCLbl);
+			JLabel posterPLbl = new JLabel("Poster Path: ");
+			posterPLbl.setFont(Style.BASE_FONT);
+      posterPLbl.setForeground(Style.TEA_GREEN);
+			editWindow.add(posterPLbl);
 
-			JTextField dateCEdit = new JTextField(18);
-			dateCEdit.setFont(Style.BASE_FONT);
-			dateCEdit.setBackground(Style.TEA_GREEN);
-			dateCEdit.setForeground(Style.BALTIC_BLUE);
-			dateCEdit.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR, 2));
-			editWindow.add(dateCEdit);
+			JTextField posterPEdit = new JTextField(18);
+			posterPEdit.setFont(Style.BASE_FONT);
+      posterPEdit.setBackground(Style.TEA_GREEN);
+			posterPEdit.setForeground(Style.BALTIC_BLUE);
+			posterPEdit.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR, 2));
+			posterPEdit.setText(editedMedia.getPosterPath());
+			editWindow.add(posterPEdit);
 
-			JLabel dateLLbl = new JLabel("Poster Link: ");
-			dateLLbl.setFont(Style.BASE_FONT);
-			dateLLbl.setForeground(Style.TEA_GREEN);
-			editWindow.add(dateLLbl);
+			JLabel posterLLbl = new JLabel("Poster Link: ");
+			posterLLbl.setFont(Style.BASE_FONT);
+      posterLLbl.setForeground(Style.TEA_GREEN);
+			editWindow.add(posterLLbl);
 
-			JTextField dateLEdit = new JTextField(18);
-			dateLEdit.setFont(Style.BASE_FONT);
-			dateLEdit.setBackground(Style.TEA_GREEN);
-			dateLEdit.setForeground(Style.BALTIC_BLUE);
-			dateLEdit.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR, 2));
-			editWindow.add(dateLEdit);
+			JTextField posterLEdit = new JTextField(18);
+			posterLEdit.setFont(Style.BASE_FONT);
+			posterLEdit.setText(editedMedia.getPosterLink());
+			posterLEdit.setBackground(Style.TEA_GREEN);
+			posterLEdit.setForeground(Style.BALTIC_BLUE);
+			posterLEdit.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR, 2));
+			editWindow.add(posterLEdit);
 
 			JButton cancelButton = new JButton("Cancel");
 			cancelButton.setFont(Style.BASE_FONT);
@@ -242,8 +256,15 @@ public class AdminMediaPage extends AdminUserPage {
 			okButton.setForeground(Style.BALTIC_BLUE); 
 			ui.addButtonImg(okButton, new ImageIcon("assets/UI/okicon.png"), 20, 40, 40);
 			okButton.addActionListener(e -> {
-				// TODO edit and update real variables
+				editedMedia.setType(typeEdit.getSelectedIndex() + 1);
+				editedMedia.setName(nameEdit.getText());
+				editedMedia.setEpisodeCount((Integer) epCountEdit.getValue());
+				editedMedia.setPosterPath(posterPEdit.getText());
+				editedMedia.setPosterLink(posterLEdit.getText());
 
+				ui.editMedia(editedMedia);
+
+				loadData();
 				editWindow.dispose();
 			});
 			editWindow.add(okButton);
@@ -266,6 +287,21 @@ public class AdminMediaPage extends AdminUserPage {
 		delBtn.setBackground(Style.LIGHT_GREEN);
 		delBtn.setForeground(Style.BALTIC_BLUE); 
 		ui.addButtonImg(delBtn, new ImageIcon("assets/UI/binicon.png"), 20, 30, 30);
+
+		delBtn.addActionListener(e -> {
+			int selectedRow = userTable.getSelectedRow();
+			if (selectedRow != -1) {
+				Media deleteMedia = MediaTable[selectedRow];
+
+				int result = JOptionPane.showConfirmDialog(this,
+						"Are you sure you want to delete %s?".formatted(deleteMedia.getName()), "Delete User",
+						JOptionPane.YES_NO_OPTION);
+				if (result == JOptionPane.YES_OPTION) {
+					ui.deleteMedia(deleteMedia);
+					loadData();
+				}
+			}
+		});
 	}
 
 	private void addDelBtn() {
@@ -278,10 +314,12 @@ public class AdminMediaPage extends AdminUserPage {
 
 	@Override
 	public void loadData() {
-		Media[] media = ui.pullMedia();
-		for (Media m : media) {
+		tableModel.setRowCount(0);
+		MediaTable = ui.pullMedia();
+		for (Media m : MediaTable) {
 			// { "Id", "Type", "Name", "Ep. Count", "PosterPath", "PosterLink" };
-			Object[] data = new Object[] { m.getId(), ui.getStatusString(m.getType()), m.getName(), m.getEpisodeCount(),
+			Object[] data = new Object[] { m.getId(), ui.getMeidaTypeFromInt(m.getType()), m.getName(),
+					m.getEpisodeCount(),
 					m.getPosterPath(),
 					m.getPosterLink() };
 			tableModel.addRow(data);

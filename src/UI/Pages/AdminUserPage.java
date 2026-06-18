@@ -28,20 +28,22 @@ import UI.UI;
 
 public class AdminUserPage extends Page {
 
-	JPanel contentPanel;
-	JLabel tableTitleLbl;
+	private User[] userList;
 
-	JScrollPane tableScrollPane;
-	final String[] colNames = { "Id", "Username", "Password", "Is Admin", "Date Created", "Last Login" };
-	JTable userTable;
-	DefaultTableModel tableModel;
+	private JPanel contentPanel;
+	private JLabel tableTitleLbl;
 
-	JPanel btnPanel;
-	JButton editBtn;
-	JButton delBtn;
+	private JScrollPane tableScrollPane;
+	private final String[] colNames = { "Id", "Username", "Password", "Is Admin", "Date Created", "Last Login" };
+	private JTable userTable;
+	private DefaultTableModel tableModel;
 
-	protected final Border BORDER = BorderFactory.createLineBorder(Style.BORDER_COLOR, 2, true); // true allows for
-																									// rounded
+	private JPanel btnPanel;
+	private JButton editBtn;
+	private JButton delBtn;
+
+	// true allows for rounded
+	protected final Border BORDER = BorderFactory.createLineBorder(Style.BORDER_COLOR, 2, true);
 
 	public AdminUserPage(UI ui) {
 		super(ui);
@@ -137,14 +139,18 @@ public class AdminUserPage extends Page {
 		editBtn.setBackground(Style.LIGHT_GREEN);
 		editBtn.setForeground(Style.BALTIC_BLUE); 
 		ui.addButtonImg(editBtn, new ImageIcon("assets/UI/editicon.png"), 20, 30, 30);
-		editBtn.addActionListener(e -> editRow());
+		editBtn.addActionListener(e -> editRow(userTable.getSelectedRow()));
 	}
 
-	private void editRow() {
+	private void editRow(int selectedRow) {
 		// { "Id", "Username", "Password", "Is Admin", "Date Created", "Last Login" };
 		// TODO get selected row and only create if valid
-		if (userTable.getSelectedRow() != -1) {
+		if (selectedRow != -1) {
+			User editedUser = userList[selectedRow];
 			JDialog editWindow = new JDialog();
+			editWindow.setLocationRelativeTo(ui);
+			editWindow.setModal(true);
+
 			editWindow.setTitle("Edit User Data");
 			editWindow.setSize(new Dimension(800, 600));
 			editWindow.setResizable(false);
@@ -161,6 +167,8 @@ public class AdminUserPage extends Page {
 			idEdit.setBackground(Style.TEA_GREEN);
 			idEdit.setForeground(Style.BALTIC_BLUE);
 			idEdit.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR, 2));
+			idEdit.setText(String.valueOf(editedUser.getId()));
+			idEdit.setEditable(false);
 			editWindow.add(idEdit);
 
 			JLabel usrLbl = new JLabel("Username: ");
@@ -173,6 +181,7 @@ public class AdminUserPage extends Page {
 			usrEdit.setBackground(Style.TEA_GREEN);
 			usrEdit.setForeground(Style.BALTIC_BLUE);
 			usrEdit.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR, 2));
+			usrEdit.setText(editedUser.getUsername());
 			editWindow.add(usrEdit);
 
 			JLabel pwdLbl = new JLabel("Password: ");
@@ -185,6 +194,7 @@ public class AdminUserPage extends Page {
 			pwdEdit.setBackground(Style.TEA_GREEN);
 			pwdEdit.setForeground(Style.BALTIC_BLUE);
 			pwdEdit.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR, 2));
+			pwdEdit.setText(editedUser.getPassword());
 			editWindow.add(pwdEdit);
 
 			JLabel isAdminLbl = new JLabel("Is Admin: ");
@@ -198,6 +208,11 @@ public class AdminUserPage extends Page {
 			isAdminEdit.setForeground(Style.BALTIC_BLUE);
 			isAdminEdit.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR, 2));
 			isAdminEdit.setFocusable(false);
+			if (editedUser.getIsAdmin()) {
+				isAdminEdit.setSelectedIndex(0);
+			} else {
+				isAdminEdit.setSelectedIndex(1);
+			}
 			editWindow.add(isAdminEdit);
 
 			JLabel dateCLbl = new JLabel("Date Created: ");
@@ -210,6 +225,8 @@ public class AdminUserPage extends Page {
 			dateCEdit.setBackground(Style.TEA_GREEN);
 			dateCEdit.setForeground(Style.BALTIC_BLUE);
 			dateCEdit.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR, 2));
+			dateCEdit.setText(editedUser.getCreated());
+			dateCEdit.setEditable(false);
 			editWindow.add(dateCEdit);
 
 			JLabel dateLLbl = new JLabel("Last Login: ");
@@ -222,6 +239,8 @@ public class AdminUserPage extends Page {
 			dateLEdit.setBackground(Style.TEA_GREEN);
 			dateLEdit.setForeground(Style.BALTIC_BLUE);
 			dateLEdit.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR, 2));
+			dateLEdit.setText(editedUser.getLastLogin());
+			dateLEdit.setEditable(false);
 			editWindow.add(dateLEdit);
 
 			JButton cancelButton = new JButton("Cancel");
@@ -241,8 +260,26 @@ public class AdminUserPage extends Page {
 			ui.addButtonImg(okButton, new ImageIcon("assets/UI/okicon.png"), 20, 40, 40);
 			
 			okButton.addActionListener(e -> {
-				// TODO edit and update real variables
+				if (ui.getId() == editedUser.getId()) {
+					JOptionPane.showMessageDialog(this,
+							"Unable to Edit Yourself", "Error",
+							JOptionPane.ERROR_MESSAGE);
+					editWindow.dispose();
+				}
+				editedUser.setUsername(usrEdit.getText());
+				editedUser.setPassword(pwdEdit.getText());
 
+				editedUser.setAdmin(isAdminEdit.getSelectedIndex() == 0);
+				if (ui.editUser(editedUser)) {
+					JOptionPane.showMessageDialog(this,
+							"Change to User was Made", "Info",
+							JOptionPane.INFORMATION_MESSAGE);
+				} else {
+					JOptionPane.showMessageDialog(this,
+							"Failed to Update User", "Error",
+							JOptionPane.ERROR_MESSAGE);
+				}
+				loadData();
 				editWindow.dispose();
 			});
 			editWindow.add(okButton);
@@ -265,6 +302,22 @@ public class AdminUserPage extends Page {
 		delBtn.setBackground(Style.LIGHT_GREEN);
 		delBtn.setForeground(Style.BALTIC_BLUE); 
 		ui.addButtonImg(delBtn, new ImageIcon("assets/UI/binicon.png"), 20, 30, 30);
+
+		delBtn.addActionListener(e -> {
+			int selectedRow = userTable.getSelectedRow();
+			if (selectedRow != -1) {
+				User deleteUser = userList[selectedRow];
+
+				int result = JOptionPane.showConfirmDialog(this,
+						"Are you sure you want to delete %s?".formatted(deleteUser.getUsername()), "Delete User",
+						JOptionPane.YES_NO_OPTION);
+				if (result == JOptionPane.YES_OPTION) {
+					ui.deleteUser(deleteUser);
+					loadData();
+				}
+
+			}
+		});
 	}
 
 	private void addDelBtn() {
@@ -276,8 +329,9 @@ public class AdminUserPage extends Page {
 	}
 
 	public void loadData() {
-		User[] users = ui.pullUsers();
-		for (User user : users) {
+		tableModel.setRowCount(0);
+		userList = ui.pullUsers();
+		for (User user : userList) {
 			// { "Id", "Username", "Password", "Is Admin", "Date Created", "Last Login" };
 			Object[] data = new Object[] { user.getId(), user.getUsername(), user.getPassword(), user.getIsAdmin(),
 					user.getCreated(), user.getLastLogin() };
