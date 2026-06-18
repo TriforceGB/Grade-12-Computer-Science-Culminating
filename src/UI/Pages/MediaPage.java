@@ -38,6 +38,7 @@ public class MediaPage extends Page {
 
 	// Variables
 	Media media; // Media that is being displayed
+	String userReview; // Review that the User has written
 
 	private JPanel westSidePanel;
 	private GridBagConstraints gbc;
@@ -359,6 +360,7 @@ public class MediaPage extends Page {
 				JOptionPane.showMessageDialog(this, "Successfully Saved!", "Success",
 						JOptionPane.INFORMATION_MESSAGE);
 				media = ui.locateMedia(media);
+				userReview = media.getReview();
 			} else {
 				JOptionPane.showMessageDialog(this, "Failed to Save!", "Error",
 						JOptionPane.ERROR_MESSAGE);
@@ -479,7 +481,7 @@ public class MediaPage extends Page {
 	private boolean updateUserData() {
 		UserData newUserData = new UserData(statusSelector.getSelectedIndex(), startDateField.getText(),
 				finishDateField.getText(), (Integer) usrRatingSelector.getValue(), (Integer) cEpSelector.getValue(),
-				null,
+				userReview,
 				(Integer) rewatchesSelector.getValue());
 		if (newUserData.getStatus() == 0 && media.getStatus() == 0) {
 			JOptionPane.showMessageDialog(this,
@@ -499,5 +501,21 @@ public class MediaPage extends Page {
 		} else {
 			return ui.editUserData(media.getId(), newUserData);
 		}
+	}
+
+	/**
+	 * This Function that setup the Review for when we Save
+	 *
+	 * @param Review the Review to Add
+	 * @return if the Change was Made
+	 */
+	private boolean addReview(String Review) {
+		// Set Review to Null if No Text
+		if (Review.isBlank() || Review.isEmpty()) {
+			userReview = null;
+		} else {
+			userReview = Review;
+		}
+
 	}
 }
