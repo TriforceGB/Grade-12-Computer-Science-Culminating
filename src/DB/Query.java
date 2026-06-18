@@ -193,7 +193,7 @@ class Query {
 				COUNT(*) OVER() AS count
 			FROM "UserData" AS ud
 			JOIN "User" AS u ON ud.userId = u.id
-			WHERE ud.mediaId = ?
+			WHERE ud.mediaId = ? AND u.review IS NOT NULL
 			""";
 	public static final String MEDIA_STATS = """
 			SELECT

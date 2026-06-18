@@ -8,6 +8,7 @@ import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -29,6 +30,8 @@ import UI.UI;
  * Other pages in the admin settings will use this as a base.
  */
 public class AdminMediaPage extends AdminUserPage {
+
+	Media[] MediaTable;
 
 	JPanel contentPanel;
 	JLabel tableTitleLbl;
@@ -133,7 +136,11 @@ public class AdminMediaPage extends AdminUserPage {
 		// { "Id", "Type", "Name", "Ep. Count", "PosterPath", "PosterLink" };
 		// TODO get selected row and only create if valid
 		if (userTable.getSelectedRow() != -1) {
+			Media editedMedia = MediaTable[userTable.getSelectedRow()];
 			JDialog editWindow = new JDialog();
+			editWindow.setLocationRelativeTo(ui);
+			editWindow.setModal(true);
+
 			editWindow.setTitle("Edit Media Data");
 			editWindow.setSize(new Dimension(800, 600));
 			editWindow.setResizable(false);
@@ -145,14 +152,17 @@ public class AdminMediaPage extends AdminUserPage {
 
 			JTextField idEdit = new JTextField(18);
 			idEdit.setFont(Style.BASE_FONT);
+			idEdit.setText(String.valueOf(editedMedia.getId()));
+			idEdit.setEditable(false);
 			editWindow.add(idEdit);
 
 			JLabel typeLbl = new JLabel("Type: ");
 			typeLbl.setFont(Style.BASE_FONT);
 			editWindow.add(typeLbl);
 
-			JTextField typeEdit = new JTextField(18);
+			JComboBox<String> typeEdit = new JComboBox<String>(new String[] { "Movie", "TV Show", "Anime" });
 			typeEdit.setFont(Style.BASE_FONT);
+			typeEdit.setSelectedIndex(editedMedia.getType() - 1);
 			editWindow.add(typeEdit);
 
 			JLabel nameLbl = new JLabel("Name: ");
@@ -161,6 +171,7 @@ public class AdminMediaPage extends AdminUserPage {
 
 			JTextField nameEdit = new JTextField(18);
 			nameEdit.setFont(Style.BASE_FONT);
+			nameEdit.setText(editedMedia.getName());
 			editWindow.add(nameEdit);
 
 			JLabel epCountLbl = new JLabel("Ep Count: ");
@@ -169,23 +180,26 @@ public class AdminMediaPage extends AdminUserPage {
 
 			JSpinner epCountEdit = new JSpinner(new SpinnerNumberModel(0, 0, Integer.MAX_VALUE, 1));
 			epCountEdit.setFont(Style.BASE_FONT);
+			epCountEdit.setValue(editedMedia.getEpisodeCount());
 			editWindow.add(epCountEdit);
 
-			JLabel dateCLbl = new JLabel("Poster Path: ");
-			dateCLbl.setFont(Style.BASE_FONT);
-			editWindow.add(dateCLbl);
+			JLabel posterPLbl = new JLabel("Poster Path: ");
+			posterPLbl.setFont(Style.BASE_FONT);
+			editWindow.add(posterPLbl);
 
-			JTextField dateCEdit = new JTextField(18);
-			dateCEdit.setFont(Style.BASE_FONT);
-			editWindow.add(dateCEdit);
+			JTextField posterPEdit = new JTextField(18);
+			posterPEdit.setFont(Style.BASE_FONT);
+			posterPEdit.setText(editedMedia.getPosterPath());
+			editWindow.add(posterPEdit);
 
-			JLabel dateLLbl = new JLabel("Poster Link: ");
-			dateLLbl.setFont(Style.BASE_FONT);
-			editWindow.add(dateLLbl);
+			JLabel posterLLbl = new JLabel("Poster Link: ");
+			posterLLbl.setFont(Style.BASE_FONT);
+			editWindow.add(posterLLbl);
 
-			JTextField dateLEdit = new JTextField(18);
-			dateLEdit.setFont(Style.BASE_FONT);
-			editWindow.add(dateLEdit);
+			JTextField posterLEdit = new JTextField(18);
+			posterLEdit.setFont(Style.BASE_FONT);
+			posterLEdit.setText(editedMedia.getPosterLink());
+			editWindow.add(posterLEdit);
 
 			JButton cancelButton = new JButton("Cancel");
 			cancelButton.setFont(Style.BASE_FONT);
@@ -197,8 +211,15 @@ public class AdminMediaPage extends AdminUserPage {
 			JButton okButton = new JButton("Ok");
 			okButton.setFont(Style.BASE_FONT);
 			okButton.addActionListener(e -> {
-				// TODO edit and update real variables
+				editedMedia.setType(typeEdit.getSelectedIndex() + 1);
+				editedMedia.setName(nameEdit.getText());
+				editedMedia.setEpisodeCount((Integer) epCountEdit.getValue());
+				editedMedia.setPosterPath(posterPEdit.getText());
+				editedMedia.setPosterLink(posterLEdit.getText());
 
+				ui.editMedia(editedMedia);
+
+				loadData();
 				editWindow.dispose();
 			});
 			editWindow.add(okButton);
@@ -218,6 +239,21 @@ public class AdminMediaPage extends AdminUserPage {
 	private void createDelBtn() {
 		delBtn = new JButton("Del");
 		delBtn.setFont(Style.BASE_FONT);
+
+		delBtn.addActionListener(e -> {
+			int selectedRow = userTable.getSelectedRow();
+			if (selectedRow != -1) {
+				Media deleteMedia = MediaTable[selectedRow];
+
+				int result = JOptionPane.showConfirmDialog(this,
+						"Are you sure you want to delete %s?".formatted(deleteMedia.getName()), "Delete User",
+						JOptionPane.YES_NO_OPTION);
+				if (result == JOptionPane.YES_OPTION) {
+					ui.deleteMedia(deleteMedia);
+					loadData();
+				}
+			}
+		});
 	}
 
 	private void addDelBtn() {
@@ -230,10 +266,12 @@ public class AdminMediaPage extends AdminUserPage {
 
 	@Override
 	public void loadData() {
-		Media[] media = ui.pullMedia();
-		for (Media m : media) {
+		tableModel.setRowCount(0);
+		MediaTable = ui.pullMedia();
+		for (Media m : MediaTable) {
 			// { "Id", "Type", "Name", "Ep. Count", "PosterPath", "PosterLink" };
-			Object[] data = new Object[] { m.getId(), ui.getStatusString(m.getType()), m.getName(), m.getEpisodeCount(),
+			Object[] data = new Object[] { m.getId(), ui.getMeidaTypeFromInt(m.getType()), m.getName(),
+					m.getEpisodeCount(),
 					m.getPosterPath(),
 					m.getPosterLink() };
 			tableModel.addRow(data);
