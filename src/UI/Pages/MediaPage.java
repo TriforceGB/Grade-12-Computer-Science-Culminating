@@ -453,12 +453,6 @@ public class MediaPage extends Page {
 				usrReviewsScrollContentPanel.add(getReviewPanel(reviews[i]));
 			}
 		}
-
-		if (reviews.length == 0) {
-			usrReviewsSidePanel.removeAll();
-		} else {
-			createFormatUsrReviewsSidePanel();
-		}
 	}
 
 	/**
