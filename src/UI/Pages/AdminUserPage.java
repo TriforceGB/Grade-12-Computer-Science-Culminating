@@ -138,6 +138,9 @@ public class AdminUserPage extends Page {
 		if (selectedRow != -1) {
 			User editedUser = userList[selectedRow];
 			JDialog editWindow = new JDialog();
+			editWindow.setLocationRelativeTo(ui);
+			editWindow.setModal(true);
+
 			editWindow.setTitle("Edit User Data");
 			editWindow.setSize(new Dimension(800, 600));
 			editWindow.setResizable(false);
@@ -253,6 +256,22 @@ public class AdminUserPage extends Page {
 	private void createDelBtn() {
 		delBtn = new JButton("Del");
 		delBtn.setFont(Style.BASE_FONT);
+
+		delBtn.addActionListener(e -> {
+			int selectedRow = userTable.getSelectedRow();
+			if (selectedRow != -1) {
+				User deleteUser = userList[selectedRow];
+
+				int result = JOptionPane.showConfirmDialog(this,
+						"Are you sure you want to delete %s?".formatted(deleteUser.getUsername()), "Delete User",
+						JOptionPane.YES_NO_OPTION);
+				if (result == JOptionPane.YES_OPTION) {
+					ui.deleteUser(deleteUser);
+					loadData();
+				}
+
+			}
+		});
 	}
 
 	private void addDelBtn() {

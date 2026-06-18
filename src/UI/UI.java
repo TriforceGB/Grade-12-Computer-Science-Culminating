@@ -234,6 +234,23 @@ public class UI extends JFrame implements EventListener {
 	}
 
 	/**
+	 * Delete the Current User. Only works if your Not an Admin. Taken in a User
+	 *
+	 * @return True if Changed on DB, False Otherwise
+	 */
+	public boolean deleteUser(User delUser) {
+		// Check if User is Admin
+		if (delUser.getIsAdmin()) {
+			JOptionPane.showMessageDialog(this,
+					"Cannot Delete a Admin User, Please Have Another Admin Remove Power Before Deletion", "Error",
+					JOptionPane.ERROR_MESSAGE);
+			return false;
+		} else {
+			return db.deleteUser(delUser.getId());
+		}
+	}
+
+	/**
 	 * Pulls all Users from the DB
 	 *
 	 * @return An array of all Users
