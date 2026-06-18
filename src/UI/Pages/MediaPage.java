@@ -133,6 +133,7 @@ public class MediaPage extends Page {
 		startDateLabel = new JLabel("Start Date: ");
 		startDateLabel.setFont(Style.BASE_FONT);
 		startDateLabel.setForeground(Style.TEA_GREEN);
+		
 
 		finishDateLabel = new JLabel("End Date: ");
 		finishDateLabel.setFont(Style.BASE_FONT);
@@ -145,6 +146,8 @@ public class MediaPage extends Page {
 		startDateField.setFocusable(false);
 		startDateField.setBackground(Style.TEA_GREEN);
 		startDateField.setForeground(Style.BALTIC_BLUE);
+		startDateField.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+		
 
 		finishDateField = new JTextField(12);
 		finishDateField.setText("YYYY-MM-DD");
@@ -153,6 +156,7 @@ public class MediaPage extends Page {
 		finishDateField.setFocusable(false);
 		finishDateField.setBackground(Style.TEA_GREEN);
 		finishDateField.setForeground(Style.BALTIC_BLUE);
+		finishDateField.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
 	}
 
 	void formatEastSideDisplayComponents() {
@@ -206,6 +210,7 @@ public class MediaPage extends Page {
 		statusSelector.setFocusable(false);
 		statusSelector.setBackground(Style.TEA_GREEN);
 		statusSelector.setForeground(Style.BALTIC_BLUE);
+		statusSelector.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
 
 		// When you Change the Status, Update UI
 		statusSelector.addActionListener(e -> {
@@ -365,6 +370,7 @@ public class MediaPage extends Page {
 				JOptionPane.showMessageDialog(this, "Failed to Save!", "Error",
 						JOptionPane.ERROR_MESSAGE);
 			}
+			ui.callreset();
 		});
 		ui.addButtonImg(saveButton, new ImageIcon("assets/UI/saveicon.png"), GAP, IMAGE_DIMENSIONS, IMAGE_DIMENSIONS);
 
@@ -385,8 +391,8 @@ public class MediaPage extends Page {
 	JPanel getReviewPanel(String[] review) {
 		JPanel result = new JPanel(new GridBagLayout());
 		result.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2, true));
-		result.setBackground(Style.BORDER_COLOR);
-
+		result.setBackground(Style.BALTIC_BLUE);
+		
 		GridBagConstraints gbc2 = new GridBagConstraints();
 
 		String name = review[0];
@@ -434,7 +440,7 @@ public class MediaPage extends Page {
 		finishDateField.setText(obj.getFinishDate());
 		titleLabel.setText(obj.getName());
 		int showTypeInt = obj.getType();
-		showType.setText(ui.getMovieTypeFromInt(showTypeInt));
+		showType.setText(ui.getMeidaTypeFromInt(showTypeInt));
 		descLabel.setText(ui.getHtmlFormatText(obj.getDescription(), CPERLINE_DESC, MAXPASS_DESC));
 		statusSelector.setSelectedIndex(obj.getStatus()); // but we love you for this one now. only for now
 		usrRatingSelector.setValue(obj.getRating());

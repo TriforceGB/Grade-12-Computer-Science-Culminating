@@ -85,8 +85,8 @@ public class ListPage extends Page {
 	private JSpinner maxRating;
 
 	private JButton searchButton;
-	private JButton refreshButton;
-	private JButton openButton;
+	private JButton resetButton;
+	private JButton openMedia;
 
 	private final String PATH_FOR_DEFAULT_IMAGE = "assets/UI/filal.png";
 	private final int POSTER_WIDTH = 100;
@@ -116,8 +116,8 @@ public class ListPage extends Page {
 		addNameStatusButtons();
 		addRatingSelectorButtons();
 		addSearchButton();
-		addRefreshButton();
-		addOpenButton();
+		addResetButton();
+		addOpenMedia();
 
 		createListPanel();
 
@@ -211,7 +211,7 @@ public class ListPage extends Page {
 		nameFilter.setFont(Style.BASE_FONT);
 		nameFilter.setBackground(Style.TEA_GREEN);
 		nameFilter.setForeground(Style.BALTIC_BLUE);
-		nameFilter.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR));
+		nameFilter.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR, 2));
 
 		statusFilterLbl = new JLabel("Status: ");
 		statusFilterLbl.setFont(Style.BASE_FONT);
@@ -220,7 +220,7 @@ public class ListPage extends Page {
 		statusFilter.setFont(Style.BASE_FONT);
 		statusFilter.setBackground(Style.TEA_GREEN);
 		statusFilter.setForeground(Style.BALTIC_BLUE);
-		statusFilter.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR));
+		statusFilter.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR, 2));
 		statusFilter.setFocusable(false);
 
 		statusFilter.addActionListener(e -> {
@@ -298,10 +298,10 @@ public class ListPage extends Page {
 		JTextField minratingtextfield = mineditor.getTextField();
 		minRating.setBackground(Style.TEA_GREEN);
 		minRating.setForeground(Style.BALTIC_BLUE);
-		minRating.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR));
+		minRating.setBorder(BorderFactory.createEmptyBorder());
 		minratingtextfield.setBackground(Style.TEA_GREEN);
 		minratingtextfield.setForeground(Style.BALTIC_BLUE);
-		minratingtextfield.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR));
+		minratingtextfield.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR, 2));
 
 		maxRatingLbl = new JLabel("Max Rating: ");
 		maxRatingLbl.setFont(Style.BASE_FONT);
@@ -310,12 +310,12 @@ public class ListPage extends Page {
 		maxRating.setFont(Style.BASE_FONT);
 		maxRating.setBackground(Style.TEA_GREEN);
 		maxRating.setForeground(Style.BALTIC_BLUE);
-		maxRating.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR));
+		maxRating.setBorder(BorderFactory.createEmptyBorder());
 		JSpinner.DefaultEditor maxeditor = (JSpinner.DefaultEditor) maxRating.getEditor();
 		JTextField maxratingtextfield = maxeditor.getTextField();
 		maxratingtextfield.setBackground(Style.TEA_GREEN);
 		maxratingtextfield.setForeground(Style.BALTIC_BLUE);
-		maxratingtextfield.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR));
+		maxratingtextfield.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR, 2));
 
 		// change listeners for both ratings
 		// adds the listeners that do the things to ensure bounds are set properly
@@ -419,30 +419,36 @@ public class ListPage extends Page {
 	}
 
 	// TODO prepare default search
-	void addRefreshButton() {
-		refreshButton = new JButton("Refresh");
-		refreshButton.setBackground(Style.LIGHT_GREEN);
-		refreshButton.setForeground(Style.BALTIC_BLUE);
-		refreshButton.setFont(Style.BASE_FONT);
-		ui.addButtonImg(refreshButton, new ImageIcon("assets/UI/changeicon.png"), 20, 30, 30);
-		refreshButton.setFocusable(false);
-		refreshButton.addActionListener(e -> {
-			clearListTable();
-			addDefaultListToTable();
-		});
+	void addResetButton() {
+		resetButton = new JButton("Reset");
+		resetButton.setBackground(Style.LIGHT_GREEN);
+		resetButton.setForeground(Style.BALTIC_BLUE);
+		resetButton.setFont(Style.BASE_FONT);
+		ui.addButtonImg(resetButton, new ImageIcon("assets/UI/changeicon.png"), 20, 30, 30);
+		resetButton.setFocusable(false);
+		resetButton.addActionListener(e -> resetfunction());
 
 		gbc.gridy = 6; // row 7
 		gbc.gridx = 1; // col 2
-		filterPanel.add(refreshButton, gbc);
+		filterPanel.add(resetButton, gbc);
 	}
 
-	void addOpenButton() {
-		openButton = new JButton("Open Button");
-		openButton.setBackground(Style.LIGHT_GREEN);
-		openButton.setForeground(Style.BALTIC_BLUE);
-		openButton.setFont(Style.BASE_FONT);
-		ui.addButtonImg(openButton, new ImageIcon("assets/UI/exporticon.png"), 20, 30, 30);
-		openButton.addActionListener(e -> {
+
+	public void resetfunction(){
+
+			clearListTable();
+			addDefaultListToTable();
+
+
+	}
+
+	void addOpenMedia() {
+		openMedia = new JButton("Open Media");
+		openMedia.setBackground(Style.LIGHT_GREEN);
+		openMedia.setForeground(Style.BALTIC_BLUE);
+		openMedia.setFont(Style.BASE_FONT);
+		ui.addButtonImg(openMedia, new ImageIcon("assets/UI/exporticon.png"), 20, 30, 30);
+		openMedia.addActionListener(e -> {
 			int row = listTable.getSelectedRow();
 
 			if (row != -1) {
@@ -458,7 +464,7 @@ public class ListPage extends Page {
 
 		gbc.gridy = 6; // row 7
 		gbc.gridx = 2; // col 3
-		filterPanel.add(openButton, gbc);
+		filterPanel.add(openMedia, gbc);
 	}
 
 	void createListPanel() {

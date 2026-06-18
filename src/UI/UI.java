@@ -120,7 +120,7 @@ public class UI extends JFrame implements EventListener {
 
 		if (panelName.equals("list") && !loadedMediaPageOnce) {
 			loadedMediaPageOnce = true;
-			listPage.addDefaultListToTable();
+			callreset();
 		}
 		if (panelName.equals("home")) {
 			homePage.createWidgets();
@@ -229,6 +229,33 @@ public class UI extends JFrame implements EventListener {
 		} else {
 			return db.deleteUser(this.currentUser.getId());
 		}
+	}
+
+	/**
+	 * Delete the Current User. Only works if your Not an Admin. Taken in a User
+	 *
+	 * @return True if Changed on DB, False Otherwise
+	 */
+	public boolean deleteUser(User delUser) {
+		// Check if User is Admin
+		if (delUser.getIsAdmin()) {
+			JOptionPane.showMessageDialog(this,
+					"Cannot Delete a Admin User, Please Have Another Admin Remove Power Before Deletion", "Error",
+					JOptionPane.ERROR_MESSAGE);
+			return false;
+		} else {
+			return db.deleteUser(delUser.getId());
+		}
+	}
+
+	/**
+	 * Delete Media Given Object
+	 *
+	 * @param delMedia The Media Object to Delete
+	 * @return if it was delete
+	 */
+	public boolean deleteMedia(Media delMedia) {
+		return db.deleteMedia(delMedia.getId());
 	}
 
 	/**
@@ -393,6 +420,12 @@ public class UI extends JFrame implements EventListener {
 		return reviews;
 	}
 
+	public void callreset(){
+
+		listPage.resetfunction();
+
+	}
+
 	/**
 	 * Pulls the user's stats from the DB and returns them as a 2D array
 	 *
@@ -418,6 +451,17 @@ public class UI extends JFrame implements EventListener {
 	public Media locateMedia(Media refMedia) {
 		Media locatedMedia = db.locateMedia(refMedia.getName(), refMedia.getType(), refMedia.getExternalId());
 		return locatedMedia;
+	}
+
+	/**
+	 * Given Media Object Overrides Object in DB
+	 *
+	 * @param editedMedia The New Media Object
+	 * @return if the change was made
+	 */
+	public Boolean editMedia(Media editedMedia) {
+		return db.editMedia(editedMedia);
+
 	}
 
 	public boolean createUserData(int mediaId, UserData userData) {
@@ -684,7 +728,7 @@ public class UI extends JFrame implements EventListener {
 		this.homePage.createWidgets();
 	}
 
-	public String getMovieTypeFromInt(int movieType) {
+	public String getMeidaTypeFromInt(int movieType) {
 		switch (movieType) {
 			case 1:
 				return "Movie";
