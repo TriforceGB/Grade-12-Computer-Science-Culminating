@@ -61,8 +61,6 @@ public class UI extends JFrame implements EventListener {
 	private boolean loadedAdminUserPage = false;
 	private boolean loadedAdminMediaPage = false;
 
-	private final int HTML_FORMAT_MAX_CHAR_LENGTH = 200; 
-
 	/**
 	 * This Create the UI and Display it for the User
 	 */
