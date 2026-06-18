@@ -200,7 +200,7 @@ public class AdminMediaPage extends AdminUserPage {
 
 			JLabel epCountLbl = new JLabel("Ep Count: ");
 			epCountLbl.setFont(Style.BASE_FONT);
-			epCountLbl.setForeground(PageColor);
+			epCountLbl.setForeground(Style.TEA_GREEN);
 			editWindow.add(epCountLbl);
 
 			JSpinner epCountEdit = new JSpinner(new SpinnerNumberModel(0, 0, Integer.MAX_VALUE, 1));
