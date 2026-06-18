@@ -122,6 +122,9 @@ public class UI extends JFrame implements EventListener {
 			loadedMediaPageOnce = true;
 			listPage.addDefaultListToTable();
 		}
+		if (panelName.equals("home")) {
+			homePage.createWidgets();
+		}
 		if (panelName.equals("adminUsr") && !loadedAdminUserPage) {
 			loadedAdminUserPage = true;
 			adminUsrPage.loadData();
