@@ -20,6 +20,7 @@ import DTO.LocalDB.User;
 import UI.Style;
 import UI.UI;
 
+// second page to the login page that allow user creation
 public class CreateUserPage extends Page {
 	// Variables
 	GridBagConstraints gbc; // GridBagConstraints for layout
@@ -98,8 +99,6 @@ public class CreateUserPage extends Page {
 
 		// Add to panel
 		this.add(usernameField, gbc);
-
-		// TODO: add extra icon to display whether username available or not
 	}
 
 	/**
@@ -107,7 +106,6 @@ public class CreateUserPage extends Page {
 	 * password
 	 */
 	private void createPasswordField() {
-		// TODO Hide the First Password
 		// label for password creation
 		JLabel pwdLabel = new JLabel("Password:");
 		pwdLabel.setFont(Style.BASE_FONT); // Set the font of the password label

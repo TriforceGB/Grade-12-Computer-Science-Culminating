@@ -40,6 +40,7 @@ public class HomePage extends Page {
 	private final int HGAP = 20;
 	private final int COLS = 3;
 
+	// constants used for layouts
 	private final int POSTER_WIDTH = 150;
 	private final int POSTER_HEIGHT = 225;
 	private final Dimension STANDARD_WIDGET_SIZE = new Dimension(POSTER_WIDTH, POSTER_HEIGHT);
@@ -85,6 +86,8 @@ public class HomePage extends Page {
 		Media[] backloggedMedia = ui.findMedia(true, true, true, false, false, true,
 				false, false, "", 0, 10);
 		if (backloggedMedia != null) {
+			// then dynamically add buttons for media access.
+			// all the three other panels follow the same method
 			for (int i = 0; i < backloggedMedia.length; i++) {
 				JButton backLogBtn = new JButton();
 				backLogBtn.setPreferredSize(STANDARD_WIDGET_SIZE);
@@ -92,7 +95,8 @@ public class HomePage extends Page {
 				backLogBtn.addActionListener(e -> {
 					ui.openMediaPage(displayMedia, "home");
 				});
-				backLogBtn.setIcon(ui.resizeImg(new ImageIcon(displayMedia.getPosterPath()), POSTER_WIDTH, POSTER_HEIGHT));
+				backLogBtn.setIcon(
+						ui.resizeImg(new ImageIcon(displayMedia.getPosterPath()), POSTER_WIDTH, POSTER_HEIGHT));
 				backlogBtnPanel.add(backLogBtn);
 			}
 		} else {
@@ -128,7 +132,6 @@ public class HomePage extends Page {
 		cWatchPanel = new JPanel();
 		cWatchPanel.setLayout(new BorderLayout());
 		cWatchPanel.setBackground(this.PageColor);
-		
 
 		cWatchBtnPanel = new JPanel();
 		cWatchBtnPanel.setBackground(this.PageColor);
@@ -143,7 +146,12 @@ public class HomePage extends Page {
 				cWatchingBtn.addActionListener(e -> {
 					ui.openMediaPage(displayMedia, "home");
 				});
-				cWatchingBtn.setIcon(ui.resizeImg(new ImageIcon(displayMedia.getPosterPath()), POSTER_WIDTH, POSTER_HEIGHT));
+				cWatchingBtn.setIcon(
+						ui.resizeImg(new ImageIcon(displayMedia.getPosterPath()), POSTER_WIDTH, POSTER_HEIGHT));
+
+				cWatchingBtn.setContentAreaFilled(false);
+				cWatchingBtn.setBorderPainted(false);
+
 				cWatchBtnPanel.add(cWatchingBtn);
 			}
 		} else {
@@ -194,6 +202,10 @@ public class HomePage extends Page {
 					ui.openMediaPage(displayMedia, "home");
 				});
 				finBtn.setIcon(ui.resizeImg(new ImageIcon(displayMedia.getPosterPath()), POSTER_WIDTH, POSTER_HEIGHT));
+
+				finBtn.setContentAreaFilled(false);
+				finBtn.setBorderPainted(false);
+
 				finBtnPanel.add(finBtn);
 			}
 		} else {

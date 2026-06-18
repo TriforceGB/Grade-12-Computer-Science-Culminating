@@ -27,6 +27,9 @@ import UI.Style;
 import UI.UI;
 
 public class AdminUserPage extends Page {
+	// very similar layout to media page except all things are laid out for the users
+	// different calls are made, but styles are same
+	// differenet row column exists for the table
 
 	private User[] userList;
 
@@ -80,7 +83,7 @@ public class AdminUserPage extends Page {
 		tableTitleLbl.setFont(Style.HEADER_FONT);
 		tableTitleLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		tableTitleLbl.setFont(Style.HEADER_FONT);
-		
+
 		tableTitleLbl.setForeground(Style.TEA_GREEN);
 		tableTitleLbl.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
 	}
@@ -140,7 +143,7 @@ public class AdminUserPage extends Page {
 		editBtn = new JButton("Edit User Data");
 		editBtn.setFont(Style.BASE_FONT);
 		editBtn.setBackground(Style.LIGHT_GREEN);
-		editBtn.setForeground(Style.BALTIC_BLUE); 
+		editBtn.setForeground(Style.BALTIC_BLUE);
 		ui.addButtonImg(editBtn, new ImageIcon("assets/UI/editicon.png"), 20, 30, 30);
 		editBtn.addActionListener(e -> editRow(userTable.getSelectedRow()));
 	}
@@ -152,7 +155,17 @@ public class AdminUserPage extends Page {
 		wipeUsersBtn.setForeground(Style.BALTIC_BLUE);
 		ui.addButtonImg(wipeUsersBtn, new ImageIcon("assets/UI/shredicon.png"), 20, 30, 30);
 		wipeUsersBtn.addActionListener(e -> {
-
+			int result = JOptionPane.showConfirmDialog(this,
+					"Are you sure you want to wipe all user data? This Will Remove Every Account Including You and Log you Out",
+					"Confirm Wipe",
+					JOptionPane.YES_NO_OPTION);
+			if (result == JOptionPane.YES_OPTION) {
+				if (ui.remakeUserTable()) {
+					JOptionPane.showMessageDialog(this, "User data wiped successfully. You will be logged out.",
+							"Success", JOptionPane.INFORMATION_MESSAGE);
+					ui.logout();
+				}
+			}
 		});
 	}
 
@@ -264,7 +277,7 @@ public class AdminUserPage extends Page {
 			JButton cancelButton = new JButton("Cancel");
 			cancelButton.setFont(Style.BASE_FONT);
 			cancelButton.setBackground(Style.LIGHT_GREEN);
-			cancelButton.setForeground(Style.BALTIC_BLUE); 
+			cancelButton.setForeground(Style.BALTIC_BLUE);
 			ui.addButtonImg(cancelButton, new ImageIcon("assets/UI/xicon.png"), 20, 30, 30);
 			cancelButton.addActionListener(e -> {
 				editWindow.dispose();
@@ -274,9 +287,9 @@ public class AdminUserPage extends Page {
 			JButton okButton = new JButton("Ok");
 			okButton.setFont(Style.BASE_FONT);
 			okButton.setBackground(Style.LIGHT_GREEN);
-			okButton.setForeground(Style.BALTIC_BLUE); 
+			okButton.setForeground(Style.BALTIC_BLUE);
 			ui.addButtonImg(okButton, new ImageIcon("assets/UI/okicon.png"), 20, 40, 40);
-			
+
 			okButton.addActionListener(e -> {
 				if (ui.getId() == editedUser.getId()) {
 					JOptionPane.showMessageDialog(this,
@@ -318,7 +331,7 @@ public class AdminUserPage extends Page {
 		delBtn = new JButton("Delete User");
 		delBtn.setFont(Style.BASE_FONT);
 		delBtn.setBackground(Style.LIGHT_GREEN);
-		delBtn.setForeground(Style.BALTIC_BLUE); 
+		delBtn.setForeground(Style.BALTIC_BLUE);
 		ui.addButtonImg(delBtn, new ImageIcon("assets/UI/binicon.png"), 20, 30, 30);
 
 		delBtn.addActionListener(e -> {
@@ -422,8 +435,12 @@ public class AdminUserPage extends Page {
 		exitBtn.setFocusable(false);
 
 		// Action listener
-		userDbBtn.addActionListener(e -> ui.switchPanel("adminUsr"));
-		mediaDbBtn.addActionListener(e -> ui.switchPanel("adminMedia"));
+		userDbBtn.addActionListener(e -> {
+			ui.switchPanel("adminUsr");
+		});
+		mediaDbBtn.addActionListener(e -> {
+			ui.switchPanel("adminMedia");
+		});
 		backBtn.addActionListener(e -> ui.switchPanel("setting"));
 		exitBtn.addActionListener(e -> ui.logout());
 

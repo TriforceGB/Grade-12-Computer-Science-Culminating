@@ -40,7 +40,8 @@ public class MediaPage extends Page {
 	private final String DEFAULT_POSTER_IMAGE_PATH = "assets/UI/filal.png";
 
 	// Variables
-	private Media media; // Media that is being displayed
+	Media media; // Media that is being displayed
+	String userReview; // Review that the User has written
 
 	private JPanel westSidePanel;
 	private GridBagConstraints gbc;
@@ -421,7 +422,7 @@ public class MediaPage extends Page {
 		gbc.gridx = 0;
 		gbc.insets = new Insets(0, 40, 10, 0);
 		selectorsContainerPanel.add(cEpSelector, gbc);
-
+		;
 		// add selector panel
 		gbc.gridy = 2;
 		gbc.gridx = 0;
@@ -521,6 +522,9 @@ public class MediaPage extends Page {
 				JOptionPane.showMessageDialog(this, "Successfully Saved!", "Success",
 						JOptionPane.INFORMATION_MESSAGE);
 				media = ui.locateMedia(media);
+				userReview = media.getReview();
+				setupMediaPanel(media, panelToSendBackTo);
+
 			} else {
 				JOptionPane.showMessageDialog(this, "Failed to Save!", "Error",
 						JOptionPane.ERROR_MESSAGE);
@@ -542,6 +546,7 @@ public class MediaPage extends Page {
 		// functionality, prompts up a new mini window where the user is able to input text and choose to actually add the review or cancel it
 		addEditReviewButton.addActionListener(e -> {
 			JTextArea comment = new JTextArea();
+			comment.setText(userReview);
 			comment.setLineWrap(true);
 			comment.setWrapStyleWord(true);
 
@@ -549,17 +554,35 @@ public class MediaPage extends Page {
 			commentContainer.setPreferredSize(new Dimension(400, 150));
 			
 
-			int result = JOptionPane.showConfirmDialog(null, commentContainer, "Add/Edit Review Comment",
-					JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+			Object[] options = { "Save", "Delete", "Cancel" };
 
-			// if user hit the okay button
-			if (result == JOptionPane.OK_OPTION) {
+			int result = JOptionPane.showOptionDialog(
+					null,
+					commentContainer,
+					"Add/Edit Review Comment",
+					JOptionPane.YES_NO_CANCEL_OPTION,
+					JOptionPane.PLAIN_MESSAGE,
+					null,
+					options,
+					options[0]);
+
+			// if user hit the save button
+			if (result == 0) {
+				addReview(comment.getText());
+				media = ui.locateMedia(media);
+				updateUserData();
 
 				// ui rework
 				setupReviews(media);
 				// if user hit the cancel option and closed option
-			} else if (result == JOptionPane.CANCEL_OPTION || result == JOptionPane.CLOSED_OPTION) {
-
+			} else if (result == 1) {
+				addReview(""); // Remove Review
+				media = ui.locateMedia(media); // Update Media
+				updateUserData(); // Update DB
+				setupReviews(media); // Rebuilt UI
+			} else {
+				// Do Nothing
+				// Close Panel
 			}
 		});
 
@@ -627,6 +650,7 @@ public class MediaPage extends Page {
 	public void setupMediaPanel(Media obj, String panelName) {
 		media = obj; // Stores it for the Rest of the UI to Use
 		panelToSendBackTo = panelName;
+		userReview = media.getReview();
 
 		// then load data
 		File posterFile = new File(obj.getPosterPath());
@@ -661,7 +685,7 @@ public class MediaPage extends Page {
 	private void setupReviews(Media obj) {
 		usrReviewsScrollContentPanel.removeAll();
 		String[][] reviews = ui.pullReview(obj.getId());
-		if (reviews.length == 0) 
+		if (reviews.length == 0)
 			setBlankReviews();
 		else
 			placeReviews(reviews);
@@ -672,7 +696,11 @@ public class MediaPage extends Page {
 	 */
 	private void setBlankReviews() {
 		JPanel wrapperPanel = new JPanel(new GridBagLayout());
+		wrapperPanel.setBackground(Style.BALTIC_BLUE);
 		JLabel blankLbl = new JLabel("No user reviews.");
+		blankLbl.setFont(Style.BASE_FONT_BIG);
+		blankLbl.setForeground(Style.TEA_GREEN);
+
 		wrapperPanel.add(blankLbl);
 		usrReviewsScrollPane.setViewportView(wrapperPanel);
 
@@ -721,7 +749,7 @@ public class MediaPage extends Page {
 	private boolean updateUserData() {
 		UserData newUserData = new UserData(statusSelector.getSelectedIndex(), startDateField.getText(),
 				finishDateField.getText(), (Integer) usrRatingSelector.getValue(), (Integer) cEpSelector.getValue(),
-				null,
+				userReview,
 				(Integer) rewatchesSelector.getValue());
 		if (newUserData.getStatus() == 0 && media.getStatus() == 0) {
 			JOptionPane.showMessageDialog(this,
@@ -741,5 +769,21 @@ public class MediaPage extends Page {
 		} else {
 			return ui.editUserData(media.getId(), newUserData);
 		}
+	}
+
+	/**
+	 * This Function that setup the Review for when we Save
+	 *
+	 * @param Review the Review to Add
+	 * @return if the Change was Made
+	 */
+	private void addReview(String Review) {
+		// Set Review to Null if No Text
+		if (Review.isBlank() || Review.isEmpty()) {
+			userReview = "";
+		} else {
+			userReview = Review;
+		}
+
 	}
 }

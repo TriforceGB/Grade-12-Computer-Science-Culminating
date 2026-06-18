@@ -57,6 +57,7 @@ public class UI extends JFrame implements EventListener {
 	private AdminUserPage adminUsrPage;
 	private AdminMediaPage adminMediaPage;
 
+	// these variables store load conditions to ensure unneed loading doesn't occur
 	private boolean loadedMediaPageOnce = false;
 	private boolean loadedAdminUserPage = false;
 	private boolean loadedAdminMediaPage = false;
@@ -105,6 +106,7 @@ public class UI extends JFrame implements EventListener {
 		this.panelContainer.add(this.adminUsrPage, "adminUsr");
 		this.panelContainer.add(this.adminMediaPage, "adminMedia");
 
+		// show the starting layout
 		this.card.show(this.panelContainer, "login"); // Show the Login Panel by Default
 
 		this.setVisible(true); // Display the Window
@@ -119,6 +121,7 @@ public class UI extends JFrame implements EventListener {
 	public void switchPanel(String panelName) {
 		this.card.show(this.panelContainer, panelName);
 
+		// additional checks to do loading and reset functions upon loading certain windows
 		if (panelName.equals("list") && !loadedMediaPageOnce) {
 			loadedMediaPageOnce = true;
 			callreset();
@@ -136,11 +139,20 @@ public class UI extends JFrame implements EventListener {
 		}
 	}
 
+	// a share point for the media page to open from any panel and send back to that panel
 	public void openMediaPage(Media ref, String panelNameCalledFrom) {
 		// setup page
 		mediaPage.setupMediaPanel(ref, panelNameCalledFrom);
 		// then swap
 		switchPanel("media");
+	}
+
+	/**
+	 * Update Both Table when the Admin Panel is Loaded
+	 */
+	public void updateAdminPanel() {
+		adminMediaPage.loadData();
+		adminUsrPage.loadData();
 	}
 
 	/**
@@ -399,7 +411,7 @@ public class UI extends JFrame implements EventListener {
 
 			// Recreate the media with the new ID
 			UserData userData = media.getUserData();
-			media = db.locateMedia(media.getName(), media.getType(), media.getExternalId());
+			media = db.locateMedia(media.getName(), media.getType(), media.getExternalId(), this.currentUser.getId());
 
 			// Add UserDate to DB
 			if (!db.createUserData(newUser.getId(), media.getId(), userData)) {
@@ -421,7 +433,7 @@ public class UI extends JFrame implements EventListener {
 		return reviews;
 	}
 
-	public void callreset(){
+	public void callreset() {
 
 		listPage.resetfunction();
 
@@ -450,7 +462,8 @@ public class UI extends JFrame implements EventListener {
 	 * @return The located Media, or null if not found
 	 */
 	public Media locateMedia(Media refMedia) {
-		Media locatedMedia = db.locateMedia(refMedia.getName(), refMedia.getType(), refMedia.getExternalId());
+		Media locatedMedia = db.locateMedia(refMedia.getName(), refMedia.getType(), refMedia.getExternalId(),
+				this.currentUser.getId());
 		return locatedMedia;
 	}
 
@@ -554,6 +567,16 @@ public class UI extends JFrame implements EventListener {
 	 */
 	public Media[] searchAnime(String query, int amount) {
 		return this.api.searchAnime(query, amount);
+	}
+
+	/**
+	 * Override the Current API Key to a New one
+	 *
+	 * @param api The API Key to Add
+	 * @return if the file was Made
+	 */
+	public boolean addAPIKey(String api) {
+		return this.api.updateKey(api);
 	}
 
 	// Image and Other UI Methods
@@ -729,6 +752,7 @@ public class UI extends JFrame implements EventListener {
 		this.homePage.createWidgets();
 	}
 
+	// a switch case to transform the int stored for status to a string id
 	public String getMeidaTypeFromInt(int movieType) {
 		switch (movieType) {
 			case 1:
@@ -742,6 +766,7 @@ public class UI extends JFrame implements EventListener {
 		}
 	}
 
+	// a switch case to transform the int stored in db for status to a string id
 	public String getStatusString(int status) {
 		switch (status) {
 			case 0:
@@ -757,5 +782,16 @@ public class UI extends JFrame implements EventListener {
 			default:
 				return "Unknown";
 		}
+	}
+
+	// allowing public functions to formulate db tables
+	public boolean remakeMediaTable() {
+		db.remakeMediaDB();
+		return true;
+	}
+
+	public boolean remakeUserTable() {
+		db.remakeUserDB();
+		return true;
 	}
 }

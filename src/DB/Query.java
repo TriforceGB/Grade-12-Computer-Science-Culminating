@@ -57,6 +57,18 @@ class Query {
 				FOREIGN KEY ("mediaId") REFERENCES "Media"("id") ON DELETE CASCADE
 				)
 			""";
+	// Remove the Media DB
+	public static final String REMOVE_MEDIA_TABLE = """
+					DROP TABLE IF EXISTS "Media";
+			""";
+	// Remove the USER DB
+	public static final String REMOVE_USER_TABLE = """
+					DROP TABLE IF EXISTS "User";
+			""";
+	// Remove the USERDATA DB
+	public static final String REMOVE_USERDATA_TABLE = """
+					DROP TABLE IF EXISTS "UserData";
+			""";
 	// User Queries
 	// Creation, Editing, Deletion of Users
 	public static final String CREATE_USER = """
@@ -136,22 +148,22 @@ class Query {
 				FROM Media AS m
 			""";
 	public static final String LOCATE_MEDIA = """
-				SELECT
-					m.*,
-					ud.status,
-					COALESCE(ud.startDate, 'yyyy-mm-dd') as startDate,
-					COALESCE(ud.finishDate, 'yyyy-mm-dd') as finishDate,
-					ud.rating,
-					ud.lastEpisode,
-					ud.review,
-					ud.rewatched,
-					count(*) OVER() AS count
-				FROM Media AS m
-				LEFT JOIN "UserData" AS ud ON m.id = ud.mediaId
-				WHERE
-					m.name = ? AND
-					m.type = ? AND
-					m.externalId = ?
+			SELECT
+				m.*,
+				ud.status,
+				COALESCE(ud.startDate, 'yyyy-mm-dd') as startDate,
+				COALESCE(ud.finishDate, 'yyyy-mm-dd') as finishDate,
+				ud.rating,
+				ud.lastEpisode,
+				ud.review,
+				ud.rewatched,
+				count(*) OVER() AS count
+			FROM Media AS m
+			LEFT JOIN "UserData" AS ud ON m.id = ud.mediaId AND ud.userId = ?
+			WHERE
+				m.name = ? AND
+				m.type = ? AND
+				m.externalId = ?
 			""";
 	// User Data Query
 	// Create Edit Delete
@@ -193,7 +205,7 @@ class Query {
 				COUNT(*) OVER() AS count
 			FROM "UserData" AS ud
 			JOIN "User" AS u ON ud.userId = u.id
-			WHERE ud.mediaId = ? AND u.review IS NOT NULL
+			WHERE ud.mediaId = ? AND ud.review IS NOT NULL AND ud.review <> ''
 			""";
 	public static final String MEDIA_STATS = """
 			SELECT

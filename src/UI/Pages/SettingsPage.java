@@ -41,8 +41,7 @@ public class SettingsPage extends Page {
 	/**
 	 * Gets News Stats for when the User Logins
 	 *
-	 * @param username The Username Name
-	 * @param stats    The Stats for the Media and the
+	 * @param stats The Stats for the Media and the
 	 */
 	public void getStats(int[][] stats) {
 		statistics.setText("""
@@ -61,7 +60,7 @@ public class SettingsPage extends Page {
 				Total Movies: %d
 
 				Total Shows: %d
-				
+
 				Total Anime: %d
 				""".formatted(stats[0][4], stats[0][0], stats[0][1], stats[0][2], stats[0][3], stats[1][3], stats[1][0],
 				stats[1][1], stats[1][2]));
@@ -253,9 +252,24 @@ public class SettingsPage extends Page {
 			}
 
 		});
-		adminButton.addActionListener(e -> ui.switchPanel("adminUsr"));
+		adminButton.addActionListener(e -> {
+			ui.updateAdminPanel();
+			ui.switchPanel("adminUsr");
+		});
 		addApiKeyButton.addActionListener(e -> {
-
+			String api = JOptionPane.showInputDialog(this, "Enter your API Key:");
+			if (api != null && !api.isEmpty()) {
+				if (ui.addAPIKey(api)) {
+					JOptionPane.showMessageDialog(this, "API Key successfully added", "Success",
+							JOptionPane.INFORMATION_MESSAGE);
+				} else {
+					JOptionPane.showMessageDialog(this, "Failed to add API Key", "Error",
+							JOptionPane.ERROR_MESSAGE);
+				}
+			} else {
+				JOptionPane.showMessageDialog(this, "Please Enter the API Key", "Error",
+						JOptionPane.ERROR_MESSAGE);
+			}
 		});
 
 		// buttonPanel.setPreferredSize(new Dimension(600, 400));
