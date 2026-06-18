@@ -14,6 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
+import javax.swing.plaf.basic.BasicScrollBarUI;
 
 import DTO.LocalDB.Media;
 
@@ -116,6 +117,13 @@ public class HomePage extends Page {
 		backlogScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		backlogScrollPane.getVerticalScrollBar().setUnitIncrement(16);
 		backlogScrollPane.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR, 2));
+		backlogScrollPane.getVerticalScrollBar().setUI(new BasicScrollBarUI() { // changing scroll bar color
+			@Override
+			protected void configureScrollBarColors() {
+				this.thumbColor = Style.BORDER_COLOR;
+				this.trackColor = Style.TEA_GREEN;
+			}
+		});
 		JLabel backlogLbl = new JLabel("Backlog", SwingConstants.CENTER);
 		backlogLbl.setForeground(Style.TEA_GREEN);
 		backlogLbl.setFont(Style.BASE_FONT);
@@ -169,8 +177,15 @@ public class HomePage extends Page {
 		cWatchScrollPane = new JScrollPane(wrapperPanel);
 		cWatchScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		cWatchScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		cWatchScrollPane.getVerticalScrollBar().getUnitIncrement(16);
+		cWatchScrollPane.getVerticalScrollBar().setUnitIncrement(16);
 		cWatchScrollPane.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR, 2));
+		cWatchScrollPane.getVerticalScrollBar().setUI(new BasicScrollBarUI() { // changing scroll bar color
+			@Override
+			protected void configureScrollBarColors() {
+				this.thumbColor = Style.BORDER_COLOR;
+				this.trackColor = Style.TEA_GREEN;
+			}
+		});
 		JLabel cWatchLbl = new JLabel("Currently Watching", SwingConstants.CENTER);
 		cWatchLbl.setFont(Style.BASE_FONT);
 		cWatchLbl.setForeground(Style.TEA_GREEN);
@@ -223,8 +238,15 @@ public class HomePage extends Page {
 		finScrollPane = new JScrollPane(wrapperPanel);
 		finScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		finScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		finScrollPane.getVerticalScrollBar().getUnitIncrement(16);
+		finScrollPane.getVerticalScrollBar().setUnitIncrement(16);
 		finScrollPane.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR, 2));
+		finScrollPane.getVerticalScrollBar().setUI(new BasicScrollBarUI() { // changing scroll bar color
+			@Override
+			protected void configureScrollBarColors() {
+				this.thumbColor = Style.BORDER_COLOR;
+				this.trackColor = Style.TEA_GREEN;
+			}
+		});
 		JLabel finLbl = new JLabel("Finished", SwingConstants.CENTER);
 		finLbl.setFont(Style.BASE_FONT);
 		finLbl.setForeground(Style.TEA_GREEN);
