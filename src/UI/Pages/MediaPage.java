@@ -23,6 +23,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingConstants;
 
 import DTO.LocalDB.Media;
 import DTO.LocalDB.Media.UserData;
@@ -81,6 +82,9 @@ public class MediaPage extends Page {
 
 	private String panelToSendBackTo;
 
+	private int gap = 20;
+	private int imagedimensions = 30;
+
 	/**
 	 * Create the Media Page
 	 *
@@ -113,9 +117,12 @@ public class MediaPage extends Page {
 
 	void createPagePanels() {
 		westSidePanel = new JPanel(new GridBagLayout());
+		westSidePanel.setBackground(Style.BORDER_COLOR);
 		gbc = new GridBagConstraints();
 		eastSidePanel = new JPanel(new BorderLayout());
-		southEastSidePanel = new JPanel(new GridBagLayout());
+		eastSidePanel.setBackground(Style.BORDER_COLOR);
+		southEastSidePanel = new JPanel(new GridLayout(1, 3, 20, 0));
+		southEastSidePanel.setBackground(Style.BALTIC_BLUE);
 	}
 
 	void createEastDisplayComponents() {
@@ -125,18 +132,27 @@ public class MediaPage extends Page {
 
 		startDateLabel = new JLabel("Start Date: ");
 		startDateLabel.setFont(Style.BASE_FONT);
+		startDateLabel.setForeground(Style.TEA_GREEN);
 
 		finishDateLabel = new JLabel("End Date: ");
 		finishDateLabel.setFont(Style.BASE_FONT);
+		finishDateLabel.setForeground(Style.TEA_GREEN);
 
 		startDateField = new JTextField(12);
 		startDateField.setText("YYYY-MM-DD");
 		startDateField.setFont(Style.BASE_FONT);
 		startDateField.setEditable(false);
+		startDateField.setFocusable(false);
+		startDateField.setBackground(Style.TEA_GREEN);
+		startDateField.setForeground(Style.BALTIC_BLUE);
+		
 		finishDateField = new JTextField(12);
 		finishDateField.setText("YYYY-MM-DD");
 		finishDateField.setFont(Style.BASE_FONT);
 		finishDateField.setEditable(false);
+		finishDateField.setFocusable(false);
+		finishDateField.setBackground(Style.TEA_GREEN);
+		finishDateField.setForeground(Style.BALTIC_BLUE);
 	}
 
 	void formatEastSideDisplayComponents() {
@@ -164,24 +180,32 @@ public class MediaPage extends Page {
 
 	void createMainInfDisplayComponents() {
 		infEastSidePanel = new JPanel(new GridBagLayout());
+		infEastSidePanel.setBackground(Style.BORDER_COLOR);
 		gbc = new GridBagConstraints(); // refresh components
 
 		titleLabel = new JLabel("Blank Insert Placeholder Title");
+		titleLabel.setForeground(Style.TEA_GREEN);
 		titleLabel.setFont(Style.TITLE_FONT);
 
 		showType = new JLabel("Blank Type");
+		showType.setForeground(Style.TEA_GREEN);
 		showType.setFont(Style.BASE_FONT);
 
 		descLabel = new JLabel(ui.getHtmlFormatText(
 				"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc faucibus urna justo, ac egestas nibh malesuada sed. Cras sit amet mi aliquet, accumsan quam a, hendrerit libero. Nullam aliquet augue et arcu facilisis, quis fermentum est pellentesque. Vivamus sodales, eros sit amet aliquet placerat, felis metus hendrerit ex, a molestie nunc tortor ut erat. Ut placerat laoreet erat, auctor pulvinar urna aliquam at. Mauris varius nisi eget faucibus blandit. Duis at ornare libero. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean imperdiet elementum neque fermentum sagittis. Suspendisse potenti. Maecenas cursus pellentesque blandit. Nulla quis erat massa. Donec a sapien.",
 				CPERLINE_DESC, MAXPASS_DESC));
 		descLabel.setFont(Style.SMALL_DESC_FONT);
+		descLabel.setForeground(Style.TEA_GREEN);
 
 		statusLabel = new JLabel("Status");
 		statusLabel.setFont(Style.BASE_FONT);
+		statusLabel.setForeground(Style.TEA_GREEN);
 
 		statusSelector = new JComboBox<String>(TYPES);
 		statusSelector.setFont(Style.BASE_FONT);
+		statusSelector.setFocusable(false);
+		statusSelector.setBackground(Style.TEA_GREEN);
+		statusSelector.setForeground(Style.BALTIC_BLUE);
 
 		// When you Change the Status, Update UI
 		statusSelector.addActionListener(e -> {
@@ -191,22 +215,45 @@ public class MediaPage extends Page {
 
 		usrRatingLabel = new JLabel("Your Rating: ");
 		usrRatingLabel.setFont(Style.BASE_FONT);
+		usrRatingLabel.setForeground(Style.TEA_GREEN);
 
 		usrRatingSelector = new JSpinner(new SpinnerNumberModel(0, 0, 10, 1));
 		usrRatingSelector.setFont(Style.BASE_FONT);
-
+		usrRatingSelector.setBackground(Style.TEA_GREEN);
+		usrRatingSelector.setForeground(Style.BALTIC_BLUE);
+		usrRatingSelector.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		JSpinner.DefaultEditor userRatingEditor = (JSpinner.DefaultEditor) usrRatingSelector.getEditor();
+		JTextField usrRatingTextfield = userRatingEditor.getTextField();
+		usrRatingTextfield.setBackground(Style.TEA_GREEN);
+		usrRatingTextfield.setForeground(Style.BALTIC_BLUE);
+		usrRatingTextfield.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		
 		rewatchLabel = new JLabel("Rewatch: ");
 		rewatchLabel.setFont(Style.BASE_FONT);
+		rewatchLabel.setForeground(Style.TEA_GREEN);
 
 		rewatchesSelector = new JSpinner(new SpinnerNumberModel(0, 0, Integer.MAX_VALUE, 1));
 		rewatchesSelector.setFont(Style.BASE_FONT);
+		rewatchesSelector.setBackground(Style.TEA_GREEN);
+		rewatchesSelector.setForeground(Style.BALTIC_BLUE);
+		rewatchesSelector.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		JSpinner.DefaultEditor rewatchesEditor = (JSpinner.DefaultEditor) rewatchesSelector.getEditor();
+		JTextField rewatchesTextfield = rewatchesEditor.getTextField();
+		rewatchesTextfield.setBackground(Style.TEA_GREEN);
+		rewatchesTextfield.setForeground(Style.BALTIC_BLUE);
+		rewatchesTextfield.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
 		cEpLabel = new JLabel("Current Episode: ");
 		cEpLabel.setFont(Style.BASE_FONT);
+		cEpLabel.setForeground(Style.TEA_GREEN);
 
 		cEpSpinnerModel = new SpinnerNumberModel(0, 0, 0, 0);
 		cEpSelector = new JSpinner(cEpSpinnerModel);
 		cEpSelector.setFont(Style.BASE_FONT);
+		cEpSelector.setBackground(Style.TEA_GREEN);
+		cEpSelector.setForeground(Style.BALTIC_BLUE);
+		cEpSelector.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		// had to put the textfield color setter where the model is set
 	}
 
 	void formatMainInfDisplayComponents() {
@@ -268,10 +315,13 @@ public class MediaPage extends Page {
 
 	void createFormatUsrReviewsSidePanel() {
 		usrReviewsSidePanel = new JPanel(new BorderLayout());
-
-		usrReviewsTitleLabel = new JLabel("User Reviews: ");
+		usrReviewsSidePanel.setBackground(Style.BORDER_COLOR);
+		usrReviewsTitleLabel = new JLabel("User Reviews");
+		usrReviewsTitleLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		usrReviewsTitleLabel.setFont(Style.BASE_FONT);
+		usrReviewsTitleLabel.setForeground(Style.TEA_GREEN);
 		scrollContentPanel = new JPanel(new GridLayout(0, 1, 0, 10));
+		scrollContentPanel.setBackground(Style.BALTIC_BLUE);
 		usrReviewsScrollPane = new JScrollPane(scrollContentPanel);
 		usrReviewsScrollPane.setPreferredSize(new Dimension(250, 0));
 		usrReviewsScrollPane.getVerticalScrollBar().setUnitIncrement(16);
@@ -286,24 +336,24 @@ public class MediaPage extends Page {
 	}
 
 	void addButtonsToSouth() {
-		gbc = new GridBagConstraints();
+		
 
 		backButton = new JButton("Back");
 		backButton.setFont(Style.BASE_FONT);
-		backButton.setPreferredSize(new Dimension(300, 50));
+		backButton.setBackground(Style.LIGHT_GREEN);
+		backButton.setForeground(Style.BALTIC_BLUE);
+		backButton.setPreferredSize(new Dimension(600, 50));
 		backButton.addActionListener(e -> {
 			ui.switchPanel(panelToSendBackTo);
 		});
-
-		gbc.gridy = 0; // constant
-		gbc.gridx = 0;
-		gbc.insets = new Insets(0, 870, 0, 20);
-
-		southEastSidePanel.add(backButton, gbc);
+		ui.addButtonImg(backButton, new ImageIcon("assets/UI/backicon.png"), gap, imagedimensions, imagedimensions);
+		southEastSidePanel.add(backButton);
 
 		saveButton = new JButton("Save");
-		saveButton.setPreferredSize(new Dimension(300, 50));
+		saveButton.setPreferredSize(new Dimension(600, 50));
 		saveButton.setFont(Style.BASE_FONT);
+		saveButton.setBackground(Style.LIGHT_GREEN);
+		saveButton.setForeground(Style.BALTIC_BLUE);
 
 		saveButton.addActionListener(e -> {
 			if (updateUserData()) {
@@ -316,35 +366,41 @@ public class MediaPage extends Page {
 			}
 			ui.callreset();
 		});
+		ui.addButtonImg(saveButton, new ImageIcon("assets/UI/saveicon.png"), gap, imagedimensions, imagedimensions);
 
-		gbc.gridx = 1;
-		gbc.insets = new Insets(0, 0, 0, 20);
-
-		southEastSidePanel.add(saveButton, gbc);
+		southEastSidePanel.add(saveButton);
 
 		addEditReviewButton = new JButton("Add/Edit Review");
-		addEditReviewButton.setPreferredSize(new Dimension(300, 50));
+		addEditReviewButton.setPreferredSize(new Dimension(600, 50));
 		addEditReviewButton.setFont(Style.BASE_FONT);
+		addEditReviewButton.setBackground(Style.LIGHT_GREEN);
+		addEditReviewButton.setForeground(Style.BALTIC_BLUE);
 
-		gbc.gridx = 2;
-		gbc.insets = new Insets(0, 0, 0, 0);
+		ui.addButtonImg(addEditReviewButton, new ImageIcon("assets/UI/reviewicon.png"), gap, imagedimensions, imagedimensions);
 
-		southEastSidePanel.add(addEditReviewButton, gbc);
+		southEastSidePanel.add(addEditReviewButton);
 	}
 
 	JPanel getReviewPanel(String[] review) {
 		JPanel result = new JPanel(new GridBagLayout());
-		result.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3, true));
+		result.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2, true));
+		result.setBackground(Style.BORDER_COLOR);
+		
 		GridBagConstraints gbc2 = new GridBagConstraints();
 
 		String name = review[0];
 		JLabel usrName = new JLabel(name);
+		usrName.setFont(Style.BASE_FONT_BIG);
+		usrName.setForeground(Style.TEA_GREEN);
 
 		String comment = review[1];
 		JLabel usrComment = new JLabel(ui.getHtmlFormatText(comment, CPERLINE_REVIEW_COMMENT, MAXPASS_REVIEW_COMMENT));
-		usrComment.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1, true));
+		usrComment.setForeground(Style.TEA_GREEN);
+		usrComment.setFont(Style.BASE_FONT);
 
 		JLabel usrRating = new JLabel(review[2] + "/10");
+		usrRating.setForeground(Style.TEA_GREEN);
+		usrRating.setFont(Style.BASE_FONT);
 
 		gbc2.gridy = 0;
 		gbc2.gridx = 0;
@@ -383,6 +439,11 @@ public class MediaPage extends Page {
 		usrRatingSelector.setValue(obj.getRating());
 		rewatchesSelector.setValue(obj.getRewatched());
 		cEpSelector.setModel(new SpinnerNumberModel(obj.getLastEpisode(), 0, obj.getEpisodeCount(), 1));
+		JSpinner.DefaultEditor cEpEditor = (JSpinner.DefaultEditor) cEpSelector.getEditor();
+		JTextField cEpTextField = cEpEditor.getTextField();
+		cEpTextField.setBackground(Style.TEA_GREEN);
+		cEpTextField.setForeground(Style.BALTIC_BLUE);
+		cEpTextField.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
 		scrollContentPanel.removeAll();
 		String[][] reviews = ui.pullReview(obj.getId());
@@ -393,6 +454,7 @@ public class MediaPage extends Page {
 		}
 	}
 
+	
 	/**
 	 * Handle the Logic for if to Edit or Create or Remove Status
 	 *
