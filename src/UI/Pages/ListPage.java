@@ -86,7 +86,7 @@ public class ListPage extends Page {
 
 	private JButton searchButton;
 	private JButton resetButton;
-	private JButton openButton;
+	private JButton openMedia;
 
 	private final String PATH_FOR_DEFAULT_IMAGE = "assets/UI/filal.png";
 	private final int POSTER_WIDTH = 100;
@@ -117,7 +117,7 @@ public class ListPage extends Page {
 		addRatingSelectorButtons();
 		addSearchButton();
 		addResetButton();
-		addOpenButton();
+		addOpenMedia();
 
 		createListPanel();
 
@@ -442,13 +442,13 @@ public class ListPage extends Page {
 
 	}
 
-	void addOpenButton() {
-		openButton = new JButton("Open Button");
-		openButton.setBackground(Style.LIGHT_GREEN);
-		openButton.setForeground(Style.BALTIC_BLUE);
-		openButton.setFont(Style.BASE_FONT);
-		ui.addButtonImg(openButton, new ImageIcon("assets/UI/exporticon.png"), 20, 30, 30);
-		openButton.addActionListener(e -> {
+	void addOpenMedia() {
+		openMedia = new JButton("Open Media");
+		openMedia.setBackground(Style.LIGHT_GREEN);
+		openMedia.setForeground(Style.BALTIC_BLUE);
+		openMedia.setFont(Style.BASE_FONT);
+		ui.addButtonImg(openMedia, new ImageIcon("assets/UI/exporticon.png"), 20, 30, 30);
+		openMedia.addActionListener(e -> {
 			int row = listTable.getSelectedRow();
 
 			if (row != -1) {
@@ -464,7 +464,7 @@ public class ListPage extends Page {
 
 		gbc.gridy = 6; // row 7
 		gbc.gridx = 2; // col 3
-		filterPanel.add(openButton, gbc);
+		filterPanel.add(openMedia, gbc);
 	}
 
 	void createListPanel() {
