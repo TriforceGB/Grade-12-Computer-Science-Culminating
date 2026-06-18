@@ -1,3 +1,8 @@
+//Name:Zach.S, Michael.R, Ryan.B, Bilal.F
+//Date: June 5th 2026 - June 18th 2026
+//Description: A Media Tracker that allows the user to find Shows Movies and Anime and Save them to a local database to rate and keep track of them
+//Purpose: To Satisfy the clients craving for a Media Tracker
+
 import UI.UI;
 import DB.DB;
 import API.API;
