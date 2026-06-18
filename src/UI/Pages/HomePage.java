@@ -3,10 +3,12 @@ package UI.Pages;
 import UI.Style;
 import UI.UI;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -61,7 +63,7 @@ public class HomePage extends Page {
 	private void panelLayout() {
 		contentPanel = new JPanel(); // Create the Panel
 		contentPanel.setBackground(PageColor);
-		contentPanel.setLayout(new GridLayout(1, 3, 0, 0));
+		contentPanel.setLayout(new GridLayout(1, 3, -1, 0));
 		add(contentPanel, BorderLayout.CENTER);
 
 		SOUTH_PADDING_PANEL.setBackground(PageColor);
@@ -106,6 +108,7 @@ public class HomePage extends Page {
 		backlogScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		backlogScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		backlogScrollPane.getVerticalScrollBar().setUnitIncrement(16);
+		backlogScrollPane.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR, 2));
 		JLabel backlogLbl = new JLabel("Backlog", SwingConstants.CENTER);
 		backlogLbl.setForeground(Style.TEA_GREEN);
 		backlogLbl.setFont(Style.BASE_FONT);
@@ -126,6 +129,7 @@ public class HomePage extends Page {
 		cWatchPanel = new JPanel();
 		cWatchPanel.setLayout(new BorderLayout());
 		cWatchPanel.setBackground(this.PageColor);
+		
 
 		cWatchBtnPanel = new JPanel();
 		cWatchBtnPanel.setBackground(this.PageColor);
@@ -155,6 +159,7 @@ public class HomePage extends Page {
 		cWatchScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		cWatchScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		cWatchScrollPane.getVerticalScrollBar().getUnitIncrement(16);
+		cWatchScrollPane.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR, 2));
 		JLabel cWatchLbl = new JLabel("Currently Watching", SwingConstants.CENTER);
 		cWatchLbl.setFont(Style.BASE_FONT);
 		cWatchLbl.setForeground(Style.TEA_GREEN);
@@ -204,6 +209,7 @@ public class HomePage extends Page {
 		finScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		finScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		finScrollPane.getVerticalScrollBar().getUnitIncrement(16);
+		finScrollPane.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR, 2));
 		JLabel finLbl = new JLabel("Finished", SwingConstants.CENTER);
 		finLbl.setFont(Style.BASE_FONT);
 		finLbl.setForeground(Style.TEA_GREEN);
