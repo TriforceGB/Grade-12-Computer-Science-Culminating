@@ -44,13 +44,21 @@ public class SettingsPage extends Page {
 	public void getStats(int[][] stats) {
 		statistics.setText("""
 				Total Media Tracked: %d
+
 				Media Dropped: %d
+
 				Media Backlogged: %d
+
 				Media Watching: %d
+
 				Media Complete: %d
+
 				Total Media in DB: %d
+
 				Total Movies: %d
+
 				Total Shows: %d
+				
 				Total Anime: %d
 				""".formatted(stats[0][4], stats[0][0], stats[0][1], stats[0][2], stats[0][3], stats[1][3], stats[1][0],
 				stats[1][1], stats[1][2]));
@@ -260,7 +268,7 @@ public class SettingsPage extends Page {
 		statLabel.setForeground(Style.TEA_GREEN);
 
 		statistics = new JTextArea();
-		statistics.setFont(Style.BASE_FONT);
+		statistics.setFont(Style.BASE_FONT_BIG);
 		statistics.setEditable(false);
 		statistics.setPreferredSize(new Dimension(500, 600));
 		statistics.setBackground(Style.BORDER_COLOR);

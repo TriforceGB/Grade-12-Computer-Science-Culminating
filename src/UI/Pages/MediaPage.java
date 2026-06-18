@@ -363,6 +363,7 @@ public class MediaPage extends Page {
 				JOptionPane.showMessageDialog(this, "Failed to Save!", "Error",
 						JOptionPane.ERROR_MESSAGE);
 			}
+			ui.callreset();
 		});
 		ui.addButtonImg(saveButton, new ImageIcon("assets/UI/saveicon.png"), gap, imagedimensions, imagedimensions);
 
