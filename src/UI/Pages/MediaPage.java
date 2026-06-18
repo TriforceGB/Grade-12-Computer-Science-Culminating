@@ -48,14 +48,13 @@ public class MediaPage extends Page {
 	private JLabel finishDateLabel;
 	private JTextField startDateField;
 	private JTextField finishDateField;
-
 	private JPanel infEastSidePanel;
-
-	private JLabel titleLabel;
+	private JScrollPane titleScrollPane;
+	private JLabel titleText;
 	private JLabel showType;
-	private JLabel descLabel;
-	private final int CPERLINE_DESC = 40;
-	private final int MAXPASS_DESC = 5;
+	private JScrollPane descScrollPane;
+	private JLabel descText;
+
 	private JLabel statusLabel;
 	private final String[] TYPES = new String[] { "Undecided", "Dropped", "Backlog", "Watching", "Completed" };
 	private JComboBox<String> statusSelector;
@@ -76,6 +75,10 @@ public class MediaPage extends Page {
 	private JButton saveButton;
 	private JButton addEditReviewButton;
 
+	private final int CPERLINE_DESC = 40;
+	private final int MAXPASS_DESC = 5;
+	private final int CPERLINE_TITLE = 20;
+	private final int MAXPASS_TITLE = 3;
 	private final int CPERLINE_REVIEW_COMMENT = 80;
 	private final int MAXPASS_REVIEW_COMMENT = 5;
 
@@ -166,22 +169,30 @@ public class MediaPage extends Page {
 		infEastSidePanel = new JPanel(new GridBagLayout());
 		gbc = new GridBagConstraints(); // refresh components
 
-		titleLabel = new JLabel("Blank Insert Placeholder Title");
-		titleLabel.setFont(Style.TITLE_FONT);
+		titleText = new JLabel("Place holder title");
+		titleText.setFont(Style.TITLE_FONT);
+
+		titleScrollPane = new JScrollPane(titleText);
+		titleScrollPane.setBorder(BorderFactory.createEmptyBorder());
+		titleScrollPane.setPreferredSize(new Dimension(500, 200));
 
 		showType = new JLabel("Blank Type");
 		showType.setFont(Style.BASE_FONT);
 
-		descLabel = new JLabel(ui.getHtmlFormatText(
-				"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc faucibus urna justo, ac egestas nibh malesuada sed. Cras sit amet mi aliquet, accumsan quam a, hendrerit libero. Nullam aliquet augue et arcu facilisis, quis fermentum est pellentesque. Vivamus sodales, eros sit amet aliquet placerat, felis metus hendrerit ex, a molestie nunc tortor ut erat. Ut placerat laoreet erat, auctor pulvinar urna aliquam at. Mauris varius nisi eget faucibus blandit. Duis at ornare libero. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean imperdiet elementum neque fermentum sagittis. Suspendisse potenti. Maecenas cursus pellentesque blandit. Nulla quis erat massa. Donec a sapien.",
-				CPERLINE_DESC, MAXPASS_DESC));
-		descLabel.setFont(Style.SMALL_DESC_FONT);
+		descText = new JLabel("Place Holder desc");
+		descText.setFont(Style.SMALL_DESC_FONT);
+
+		descScrollPane = new JScrollPane(descText);
+		descScrollPane.setBorder(BorderFactory.createEmptyBorder());
+		descScrollPane.setPreferredSize(new Dimension(700, 400));
 
 		statusLabel = new JLabel("Status");
 		statusLabel.setFont(Style.BASE_FONT);
+		statusLabel.setPreferredSize(new Dimension(250, 30));
 
 		statusSelector = new JComboBox<String>(TYPES);
 		statusSelector.setFont(Style.BASE_FONT);
+		statusSelector.setPreferredSize(new Dimension());
 
 		// When you Change the Status, Update UI
 		statusSelector.addActionListener(e -> {
@@ -212,8 +223,8 @@ public class MediaPage extends Page {
 	void formatMainInfDisplayComponents() {
 		gbc.gridy = 0;
 		gbc.gridx = 0;
-		gbc.insets = new Insets(20, 40, 0, 0);
-		infEastSidePanel.add(titleLabel, gbc);
+		gbc.insets = new Insets(20, 0, 0, 0);
+		infEastSidePanel.add(titleScrollPane, gbc);
 
 		gbc.gridy = 0;
 		gbc.gridx = 1;
@@ -222,17 +233,17 @@ public class MediaPage extends Page {
 
 		gbc.gridy = 1;
 		gbc.gridx = 0;
-		gbc.insets = new Insets(10, 40, 80, 0);
-		infEastSidePanel.add(descLabel, gbc);
+		gbc.insets = new Insets(10, 190, 80, 0);
+		infEastSidePanel.add(descScrollPane, gbc);
 
 		gbc.gridy = 2;
 		gbc.gridx = 0;
-		gbc.insets = new Insets(0, 40, 10, 0);
+		gbc.insets = new Insets(0, 0, 10, 0);
 		infEastSidePanel.add(statusLabel, gbc);
 
 		gbc.gridy = 3;
 		gbc.gridx = 0;
-		gbc.insets = new Insets(0, 40, 10, 0);
+		gbc.insets = new Insets(0, 0, 10, 0);
 		infEastSidePanel.add(statusSelector, gbc);
 
 		gbc.gridy = 2;
@@ -257,12 +268,12 @@ public class MediaPage extends Page {
 
 		gbc.gridy = 4;
 		gbc.gridx = 0;
-		gbc.insets = new Insets(0, 40, 10, 0);
+		gbc.insets = new Insets(0, 0, 10, 0);
 		infEastSidePanel.add(cEpLabel, gbc);
 
 		gbc.gridy = 5;
 		gbc.gridx = 0;
-		gbc.insets = new Insets(0, 40, 10, 0);
+		gbc.insets = new Insets(0, 0, 10, 0);
 		infEastSidePanel.add(cEpSelector, gbc);
 	}
 
@@ -374,10 +385,10 @@ public class MediaPage extends Page {
 			poster.setIcon(ui.resizeImg(new ImageIcon(DEFAULT_POSTER_IMAGE_PATH), POSTER_WIDTH, POSTER_HEIGHT));
 		startDateField.setText(obj.getStartDate());
 		finishDateField.setText(obj.getFinishDate());
-		titleLabel.setText(obj.getName());
+		titleText.setText(ui.getHtmlFormatText(obj.getName(), CPERLINE_TITLE, MAXPASS_TITLE));
 		int showTypeInt = obj.getType();
 		showType.setText(ui.getMovieTypeFromInt(showTypeInt));
-		descLabel.setText(ui.getHtmlFormatText(obj.getDescription(), CPERLINE_DESC, MAXPASS_DESC));
+		descText.setText(ui.getHtmlFormatText(obj.getDescription(), CPERLINE_DESC, MAXPASS_DESC));
 		statusSelector.setSelectedIndex(obj.getStatus()); // but we love you for this one now. only for now
 		usrRatingSelector.setValue(obj.getRating());
 		rewatchesSelector.setValue(obj.getRewatched());

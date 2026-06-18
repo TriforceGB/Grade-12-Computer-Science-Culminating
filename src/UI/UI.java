@@ -61,8 +61,6 @@ public class UI extends JFrame implements EventListener {
 	private boolean loadedAdminUserPage = false;
 	private boolean loadedAdminMediaPage = false;
 
-	private final int HTML_FORMAT_MAX_CHAR_LENGTH = 200; 
-
 	/**
 	 * This Create the UI and Display it for the User
 	 */
@@ -515,6 +513,9 @@ public class UI extends JFrame implements EventListener {
 	 * @return The string of text formatted via html with line breaks at parts
 	 *         attempting to match cPerLine, but based on number of words
 	 */
+
+	// this function may or may not be R.I.P
+	// if it is, please commment it out. I like my functino too much to delete it
 	public String getHtmlFormatText(String toFormat, int cPerLine, int maxPass) {
 		String[] words = toFormat.split(" "); // split @ each space for each word
 		String result = "<html><body style='width: 300px;'>"; // result string to return
