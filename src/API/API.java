@@ -1,5 +1,7 @@
 package API;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.net.http.HttpClient;
 import java.time.Duration;
 
@@ -23,8 +25,10 @@ public class API {
 	private AniList aniList; // Reference to the AniList API
 	private TheTVDB theTVDB; // Reference to the TheTVDB API
 	private ImageDownloader imageDownloader; // Reference to the ImageDownloader
+	private String key_path; // Path to API Key
 
 	public API(String tvdb_api_key, Gson gson) {
+		this.key_path = tvdb_api_key;
 		this.gson = gson;
 		this.aniList = new AniList(this.CLIENT, this.gson);
 		this.theTVDB = new TheTVDB(this.CLIENT, this.gson, tvdb_api_key);
@@ -84,5 +88,15 @@ public class API {
 
 	public boolean downloadImage(Media media) {
 		return imageDownloader.downloadImage(media.getPosterLink(), media.getPosterPath());
+	}
+
+	/**
+	 * Update the TheTVDB file with a new key and re-init the Token
+	 *
+	 * @param key The New Key
+	 * @return if the File was Made
+	 */
+	public boolean updateKey(String key) {
+		return theTVDB.updateKey(key, this.key_path);
 	}
 }

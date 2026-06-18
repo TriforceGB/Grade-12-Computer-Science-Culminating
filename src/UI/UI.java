@@ -762,5 +762,6 @@ public class UI extends JFrame implements EventListener {
 
 	public void remakeMediaTable() {
 		db.remakeMediaDB();
+
 	}
 }

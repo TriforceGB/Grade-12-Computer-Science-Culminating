@@ -1,7 +1,9 @@
 package API;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -35,9 +37,19 @@ public class TheTVDB {
 			String key = br.readLine();
 			return key;
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 			return null;
+		}
+	}
+
+	public boolean updateKey(String newKey, String key_path) {
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter(key_path))) {
+			writer.write(newKey);
+			this.getKey(key_path);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
 		}
 	}
 
