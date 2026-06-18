@@ -422,6 +422,17 @@ public class UI extends JFrame implements EventListener {
 		return locatedMedia;
 	}
 
+	/**
+	 * Given Media Object Overrides Object in DB
+	 *
+	 * @param editedMedia The New Media Object
+	 * @return if the change was made
+	 */
+	public Boolean editMedia(Media editedMedia) {
+		return db.editMedia(editedMedia);
+
+	}
+
 	public boolean createUserData(int mediaId, UserData userData) {
 		return db.createUserData(this.currentUser.getId(), mediaId, userData);
 	}
@@ -686,7 +697,7 @@ public class UI extends JFrame implements EventListener {
 		this.homePage.createWidgets();
 	}
 
-	public String getMovieTypeFromInt(int movieType) {
+	public String getMeidaTypeFromInt(int movieType) {
 		switch (movieType) {
 			case 1:
 				return "Movie";
