@@ -85,7 +85,7 @@ public class SearchPage extends Page {
 
 	/**
 	 * Creates content panel that will contain all the components of the page
-	 * 
+	 *
 	 * Includes border styling and coloring
 	 */
 	void createContentPanel() {
@@ -98,7 +98,7 @@ public class SearchPage extends Page {
 
 	/**
 	 * Creates the search panel that will contain all the search components
-	 * 
+	 *
 	 * Includes border styling and coloring
 	 */
 	void createSearchPanel() {
@@ -112,7 +112,7 @@ public class SearchPage extends Page {
 
 	/**
 	 * Creates the list panel that will contain all the list components
-	 * 
+	 *
 	 * Includes border styling and coloring
 	 */
 	void createListPanel() {
@@ -124,8 +124,8 @@ public class SearchPage extends Page {
 	}
 
 	/**
-	 *  Creates search label for the search panel
-	 * 
+	 * Creates search label for the search panel
+	 *
 	 * Includes styling and formatting
 	 */
 	void addSearchLabel() {
@@ -143,13 +143,13 @@ public class SearchPage extends Page {
 
 	/**
 	 * Adds the search bar for the search panel
-	 * 
+	 *
 	 * Includes styling and formatting
 	 */
 	void addSearchField() {
 		searchField = new JTextField(20);
 
-		//Styling
+		// Styling
 		searchField.setFont(Style.BASE_FONT);
 		searchField.setBackground(Style.TEA_GREEN);
 		searchField.setForeground(Style.BALTIC_BLUE);
@@ -167,8 +167,9 @@ public class SearchPage extends Page {
 	}
 
 	/**
-	 * Adds the media search type dropdown box, switches button icons depending on the type of media being searched for the search panel
-	 * 
+	 * Adds the media search type dropdown box, switches button icons depending on
+	 * the type of media being searched for the search panel
+	 *
 	 * Includes stlying and formatting
 	 */
 	void addSearchTypeBox() {
@@ -205,7 +206,7 @@ public class SearchPage extends Page {
 
 	/**
 	 * Adds search button for the search panel
-	 * 
+	 *
 	 * Includes styling and formatting
 	 */
 	void addSearchBtn() {
@@ -239,7 +240,7 @@ public class SearchPage extends Page {
 
 	/**
 	 * Creates the scrolling area for all the media searched
-	 * 
+	 *
 	 * Includes styling and some formatting
 	 */
 	void addListScrollContainer() {
@@ -269,7 +270,6 @@ public class SearchPage extends Page {
 		});
 		listPanel.add(listScrollPane);
 	}
-
 
 	JPanel getSearchResultPanel(Media givenMedia) {
 		JPanel result = new JPanel();
@@ -356,8 +356,6 @@ public class SearchPage extends Page {
 					// TODO Knowing existing search data and current user data, find the show again,
 					// and change user information based on:
 					int showStatusToUpdate = showStatus.getSelectedIndex();
-					System.out.println(showStatusToUpdate);
-					System.out.println(locatedMedia.getStatus());
 					ui.editStatus(showStatusToUpdate, locatedMedia);
 				});
 
@@ -386,7 +384,7 @@ public class SearchPage extends Page {
 
 	/**
 	 * Takes the url path for the poster image and gets the media's poster image
-	 * 
+	 *
 	 * @param url url that leads toward the poster image
 	 * @return poster image
 	 */
@@ -399,8 +397,9 @@ public class SearchPage extends Page {
 	}
 
 	/**
-	 * If there is no image found that gets updated, this method returns a set placeholder image
-	 * 
+	 * If there is no image found that gets updated, this method returns a set
+	 * placeholder image
+	 *
 	 * @return the placeholder image (our mascot Filal Baruqi)
 	 */
 	ImageIcon getDefaultPoster() {
