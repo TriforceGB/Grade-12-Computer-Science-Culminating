@@ -85,7 +85,7 @@ public class ListPage extends Page {
 	private JSpinner maxRating;
 
 	private JButton searchButton;
-	private JButton refreshButton;
+	private JButton resetButton;
 	private JButton openButton;
 
 	private final String PATH_FOR_DEFAULT_IMAGE = "assets/UI/filal.png";
@@ -116,7 +116,7 @@ public class ListPage extends Page {
 		addNameStatusButtons();
 		addRatingSelectorButtons();
 		addSearchButton();
-		addRefreshButton();
+		addResetButton();
 		addOpenButton();
 
 		createListPanel();
@@ -419,18 +419,18 @@ public class ListPage extends Page {
 	}
 
 	// TODO prepare default search
-	void addRefreshButton() {
-		refreshButton = new JButton("Refresh");
-		refreshButton.setBackground(Style.LIGHT_GREEN);
-		refreshButton.setForeground(Style.BALTIC_BLUE);
-		refreshButton.setFont(Style.BASE_FONT);
-		ui.addButtonImg(refreshButton, new ImageIcon("assets/UI/changeicon.png"), 20, 30, 30);
-		refreshButton.setFocusable(false);
-		refreshButton.addActionListener(e -> resetfunction());
+	void addResetButton() {
+		resetButton = new JButton("Reset");
+		resetButton.setBackground(Style.LIGHT_GREEN);
+		resetButton.setForeground(Style.BALTIC_BLUE);
+		resetButton.setFont(Style.BASE_FONT);
+		ui.addButtonImg(resetButton, new ImageIcon("assets/UI/changeicon.png"), 20, 30, 30);
+		resetButton.setFocusable(false);
+		resetButton.addActionListener(e -> resetfunction());
 
 		gbc.gridy = 6; // row 7
 		gbc.gridx = 1; // col 2
-		filterPanel.add(refreshButton, gbc);
+		filterPanel.add(resetButton, gbc);
 	}
 
 
