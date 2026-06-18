@@ -133,6 +133,7 @@ public class MediaPage extends Page {
 		startDateLabel = new JLabel("Start Date: ");
 		startDateLabel.setFont(Style.BASE_FONT);
 		startDateLabel.setForeground(Style.TEA_GREEN);
+		
 
 		finishDateLabel = new JLabel("End Date: ");
 		finishDateLabel.setFont(Style.BASE_FONT);
@@ -145,6 +146,7 @@ public class MediaPage extends Page {
 		startDateField.setFocusable(false);
 		startDateField.setBackground(Style.TEA_GREEN);
 		startDateField.setForeground(Style.BALTIC_BLUE);
+		startDateField.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
 		
 		finishDateField = new JTextField(12);
 		finishDateField.setText("YYYY-MM-DD");
@@ -153,6 +155,7 @@ public class MediaPage extends Page {
 		finishDateField.setFocusable(false);
 		finishDateField.setBackground(Style.TEA_GREEN);
 		finishDateField.setForeground(Style.BALTIC_BLUE);
+		finishDateField.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
 	}
 
 	void formatEastSideDisplayComponents() {
@@ -206,6 +209,7 @@ public class MediaPage extends Page {
 		statusSelector.setFocusable(false);
 		statusSelector.setBackground(Style.TEA_GREEN);
 		statusSelector.setForeground(Style.BALTIC_BLUE);
+		statusSelector.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
 
 		// When you Change the Status, Update UI
 		statusSelector.addActionListener(e -> {

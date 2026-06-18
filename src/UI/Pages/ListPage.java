@@ -211,7 +211,7 @@ public class ListPage extends Page {
 		nameFilter.setFont(Style.BASE_FONT);
 		nameFilter.setBackground(Style.TEA_GREEN);
 		nameFilter.setForeground(Style.BALTIC_BLUE);
-		nameFilter.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR));
+		nameFilter.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR, 2));
 
 		statusFilterLbl = new JLabel("Status: ");
 		statusFilterLbl.setFont(Style.BASE_FONT);
@@ -220,7 +220,7 @@ public class ListPage extends Page {
 		statusFilter.setFont(Style.BASE_FONT);
 		statusFilter.setBackground(Style.TEA_GREEN);
 		statusFilter.setForeground(Style.BALTIC_BLUE);
-		statusFilter.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR));
+		statusFilter.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR, 2));
 		statusFilter.setFocusable(false);
 
 		statusFilter.addActionListener(e -> {
@@ -298,10 +298,10 @@ public class ListPage extends Page {
 		JTextField minratingtextfield = mineditor.getTextField();
 		minRating.setBackground(Style.TEA_GREEN);
 		minRating.setForeground(Style.BALTIC_BLUE);
-		minRating.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR));
+		minRating.setBorder(BorderFactory.createEmptyBorder());
 		minratingtextfield.setBackground(Style.TEA_GREEN);
 		minratingtextfield.setForeground(Style.BALTIC_BLUE);
-		minratingtextfield.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR));
+		minratingtextfield.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR, 2));
 
 		maxRatingLbl = new JLabel("Max Rating: ");
 		maxRatingLbl.setFont(Style.BASE_FONT);
@@ -310,12 +310,12 @@ public class ListPage extends Page {
 		maxRating.setFont(Style.BASE_FONT);
 		maxRating.setBackground(Style.TEA_GREEN);
 		maxRating.setForeground(Style.BALTIC_BLUE);
-		maxRating.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR));
+		maxRating.setBorder(BorderFactory.createEmptyBorder());
 		JSpinner.DefaultEditor maxeditor = (JSpinner.DefaultEditor) maxRating.getEditor();
 		JTextField maxratingtextfield = maxeditor.getTextField();
 		maxratingtextfield.setBackground(Style.TEA_GREEN);
 		maxratingtextfield.setForeground(Style.BALTIC_BLUE);
-		maxratingtextfield.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR));
+		maxratingtextfield.setBorder(BorderFactory.createLineBorder(Style.BORDER_COLOR, 2));
 
 		// change listeners for both ratings
 		// adds the listeners that do the things to ensure bounds are set properly
