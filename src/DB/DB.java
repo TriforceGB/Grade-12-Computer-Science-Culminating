@@ -109,6 +109,14 @@ public class DB {
 	}
 
 	/**
+	 * Delete all the data in Media DB and remakes the Table
+	 */
+	public void remakeMediaDB() {
+		this.executeCommand(Query.REMOVE_MEDIA_TABLE);
+		this.executeCommand(Query.CREATE_MEDIA_TABLE);
+	}
+
+	/**
 	 * Create a User into the DB with the Given Username.
 	 * Both the Creation Date and Last Login are already set to Today Date
 	 *

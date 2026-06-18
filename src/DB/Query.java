@@ -57,6 +57,10 @@ class Query {
 				FOREIGN KEY ("mediaId") REFERENCES "Media"("id") ON DELETE CASCADE
 				)
 			""";
+	// Remove the Media DB
+	public static final String REMOVE_MEDIA_TABLE = """
+					DROP TABLE IF EXISTS "Media";
+			""";
 	// User Queries
 	// Creation, Editing, Deletion of Users
 	public static final String CREATE_USER = """

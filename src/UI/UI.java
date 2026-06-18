@@ -422,7 +422,7 @@ public class UI extends JFrame implements EventListener {
 		return reviews;
 	}
 
-	public void callreset(){
+	public void callreset() {
 
 		listPage.resetfunction();
 
@@ -758,5 +758,9 @@ public class UI extends JFrame implements EventListener {
 			default:
 				return "Unknown";
 		}
+	}
+
+	public void remakeMediaTable() {
+		db.remakeMediaDB();
 	}
 }
