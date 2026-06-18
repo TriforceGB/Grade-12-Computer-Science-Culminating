@@ -6,6 +6,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Insets;
 
 import java.io.File;
@@ -84,6 +85,7 @@ public class ListPage extends Page {
 	private JLabel maxRatingLbl;
 	private JSpinner maxRating;
 
+	private JPanel btnWrapper;
 	private JButton searchButton;
 	private JButton resetButton;
 	private JButton openMedia;
@@ -115,10 +117,17 @@ public class ListPage extends Page {
 		addTypeCheckboxes();
 		addNameStatusButtons();
 		addRatingSelectorButtons();
+		btnWrapper = new JPanel(new GridLayout());
 		addSearchButton();
 		addResetButton();
 		addOpenMedia();
 
+		gbc.gridy = 8;
+		gbc.gridx = 0;
+		gbc.gridwidth = 2;
+		filterPanel.add(btnWrapper, gbc);
+
+		gbc = new GridBagConstraints(); // reset for safety
 		createListPanel();
 
 		addTableToListPanel();
@@ -273,18 +282,24 @@ public class ListPage extends Page {
 
 		gbc.gridy = 4; // row 5
 		gbc.gridx = 0; // col 1
-		// insets still exist
+		gbc.insets = new Insets(40, 0, 0, 0);
 		filterPanel.add(nameFilterLbl, gbc);
 
 		gbc.gridx = 1; // col 2
+		gbc.fill = GridBagConstraints.HORIZONTAL;
 		filterPanel.add(nameFilter, gbc);
 
-		gbc.gridx = 2; // col 3
+		gbc.gridy = 5; // row 6
+		gbc.gridx = 0; // col 1
+		gbc.insets = new Insets(20, 0, 0, 0);
+		gbc.fill = GridBagConstraints.NONE;
 		filterPanel.add(statusFilterLbl, gbc);
 
-		gbc.gridx = 3; // col 4
+		gbc.gridx = 1; // col 2
+		gbc.fill = GridBagConstraints.HORIZONTAL;
 		filterPanel.add(statusFilter, gbc);
 
+		gbc = new GridBagConstraints();
 	}
 
 	void addRatingSelectorButtons() {
@@ -342,19 +357,24 @@ public class ListPage extends Page {
 				minRating.setValue(maxVal);
 		});
 
-		gbc.gridy = 5; // row 6
+		gbc.gridy = 6; // row 7
 		gbc.gridx = 0; // col 1
+		gbc.insets = new Insets(40, 0, 0, 0);
 		filterPanel.add(minRatingLbl, gbc);
 
 		gbc.gridx = 1; // col 2
 		filterPanel.add(minRating, gbc);
 
-		gbc.gridx = 2; // col 3
+		gbc.gridy = 7; // row 8
+		gbc.gridx = 0; // col 1
+		gbc.insets = new Insets(0, 0, 40, 0);
 		filterPanel.add(maxRatingLbl, gbc);
 
-		gbc.gridx = 3; // col 4
+		gbc.gridx = 1; // col 2
+		gbc.insets = new Insets(0, 0, 40, 0);
 		filterPanel.add(maxRating, gbc);
 
+		gbc = new GridBagConstraints(); // reset for safety
 	}
 
 	void addSearchButton() {
@@ -413,9 +433,7 @@ public class ListPage extends Page {
 			}
 		});
 
-		gbc.gridy = 6; // row 7
-		gbc.gridx = 0; // col 1
-		filterPanel.add(searchButton, gbc);
+		btnWrapper.add(searchButton);
 	}
 
 	// TODO prepare default search
@@ -428,18 +446,12 @@ public class ListPage extends Page {
 		resetButton.setFocusable(false);
 		resetButton.addActionListener(e -> resetfunction());
 
-		gbc.gridy = 6; // row 7
-		gbc.gridx = 1; // col 2
-		filterPanel.add(resetButton, gbc);
+		btnWrapper.add(resetButton);
 	}
 
-
-	public void resetfunction(){
-
-			clearListTable();
-			addDefaultListToTable();
-
-
+	public void resetfunction() {
+		clearListTable();
+		addDefaultListToTable();
 	}
 
 	void addOpenMedia() {
@@ -462,9 +474,7 @@ public class ListPage extends Page {
 			}
 		});
 
-		gbc.gridy = 6; // row 7
-		gbc.gridx = 2; // col 3
-		filterPanel.add(openMedia, gbc);
+		btnWrapper.add(openMedia);
 	}
 
 	void createListPanel() {
@@ -510,7 +520,7 @@ public class ListPage extends Page {
 		cM.getColumn(2).setPreferredWidth(90);
 		cM.getColumn(3).setPreferredWidth(50);
 		cM.getColumn(4).setPreferredWidth(50);
-		cM.getColumn(5).setPreferredWidth(50);
+		cM.getColumn(5).setPreferredWidth(80);
 
 		// set table renderer for main objects
 		listTable.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
