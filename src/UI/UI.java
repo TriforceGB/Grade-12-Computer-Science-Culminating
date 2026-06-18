@@ -58,7 +58,6 @@ public class UI extends JFrame implements EventListener {
 	private AdminMediaPage adminMediaPage;
 
 	// these variables store load conditions to ensure unneed loading doesn't occur
-	private boolean loadedMediaPageOnce = false;
 	private boolean loadedAdminUserPage = false;
 	private boolean loadedAdminMediaPage = false;
 
@@ -122,8 +121,7 @@ public class UI extends JFrame implements EventListener {
 		this.card.show(this.panelContainer, panelName);
 
 		// additional checks to do loading and reset functions upon loading certain windows
-		if (panelName.equals("list") && !loadedMediaPageOnce) {
-			loadedMediaPageOnce = true;
+		if (panelName.equals("list")) {
 			callreset();
 		}
 		if (panelName.equals("home")) {

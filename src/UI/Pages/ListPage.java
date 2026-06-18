@@ -14,6 +14,7 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 
 import javax.swing.BorderFactory;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -462,6 +463,20 @@ public class ListPage extends Page {
 	public void resetfunction() {
 		clearListTable();
 		addDefaultListToTable();
+
+		// reset filters
+		movieType.setSelected(true);
+		showType.setSelected(true);
+		animeType.setSelected(true);
+
+		nameFilter.setText("");
+		selectedOptions = new MoniagaStringList(SHOW_STATUS_DEFAULT_OPTIONS);
+		DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(SHOW_STATUS_COMBO_OPTIONS);
+		statusFilter.setModel(model);
+		statusFilter.revalidate();
+		statusFilter.repaint();
+		minRating.setValue(0);
+		maxRating.setValue(10);
 	}
 
 	private void addOpenMedia() {
