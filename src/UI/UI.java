@@ -122,7 +122,7 @@ public class UI extends JFrame implements EventListener {
 
 		if (panelName.equals("list") && !loadedMediaPageOnce) {
 			loadedMediaPageOnce = true;
-			listPage.addDefaultListToTable();
+			callreset();
 		}
 		if (panelName.equals("home")) {
 			homePage.createWidgets();
@@ -383,6 +383,12 @@ public class UI extends JFrame implements EventListener {
 	public String[][] pullReview(int mediaId) {
 		String[][] reviews = db.UserReview(mediaId);
 		return reviews;
+	}
+
+	public void callreset(){
+
+		listPage.resetfunction();
+
 	}
 
 	/**

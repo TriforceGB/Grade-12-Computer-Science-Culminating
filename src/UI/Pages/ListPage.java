@@ -426,14 +426,20 @@ public class ListPage extends Page {
 		refreshButton.setFont(Style.BASE_FONT);
 		ui.addButtonImg(refreshButton, new ImageIcon("assets/UI/changeicon.png"), 20, 30, 30);
 		refreshButton.setFocusable(false);
-		refreshButton.addActionListener(e -> {
-			clearListTable();
-			addDefaultListToTable();
-		});
+		refreshButton.addActionListener(e -> resetfunction());
 
 		gbc.gridy = 6; // row 7
 		gbc.gridx = 1; // col 2
 		filterPanel.add(refreshButton, gbc);
+	}
+
+
+	public void resetfunction(){
+
+			clearListTable();
+			addDefaultListToTable();
+
+
 	}
 
 	void addOpenButton() {

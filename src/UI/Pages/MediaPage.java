@@ -314,6 +314,7 @@ public class MediaPage extends Page {
 				JOptionPane.showMessageDialog(this, "Failed to Save!", "Error",
 						JOptionPane.ERROR_MESSAGE);
 			}
+			ui.callreset();
 		});
 
 		gbc.gridx = 1;
