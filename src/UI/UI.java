@@ -564,6 +564,16 @@ public class UI extends JFrame implements EventListener {
 		return this.api.searchAnime(query, amount);
 	}
 
+	/**
+	 * Override the Current API Key to a New one
+	 *
+	 * @param api The API Key to Add
+	 * @return if the file was Made
+	 */
+	public boolean addAPIKey(String api) {
+		return this.api.updateKey(api);
+	}
+
 	// Image and Other UI Methods
 	public ImageIcon resizeImg(ImageIcon original, int width, int height) {
 		Image ogImage = original.getImage();

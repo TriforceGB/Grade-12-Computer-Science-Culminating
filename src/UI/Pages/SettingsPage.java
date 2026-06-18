@@ -257,7 +257,19 @@ public class SettingsPage extends Page {
 			ui.switchPanel("adminUsr");
 		});
 		addApiKeyButton.addActionListener(e -> {
-
+			String api = JOptionPane.showInputDialog(this, "Enter your API Key:");
+			if (api != null && !api.isEmpty()) {
+				if (ui.addAPIKey(api)) {
+					JOptionPane.showMessageDialog(this, "API Key successfully added", "Success",
+							JOptionPane.INFORMATION_MESSAGE);
+				} else {
+					JOptionPane.showMessageDialog(this, "Failed to add API Key", "Error",
+							JOptionPane.ERROR_MESSAGE);
+				}
+			} else {
+				JOptionPane.showMessageDialog(this, "Please Enter the API Key", "Error",
+						JOptionPane.ERROR_MESSAGE);
+			}
 		});
 
 		// buttonPanel.setPreferredSize(new Dimension(600, 400));
